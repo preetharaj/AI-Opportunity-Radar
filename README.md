@@ -56,7 +56,7 @@ Instead of checking dozens of websites, readers can:
 
 Subscribe via RSS — works in Feedly, Reeder, NetNewsWire, or any feed reader:
 
-https://preetharaj.github.io/ai-opportunity-radar/feed.xml
+https://preetharaj.github.io/AI-Opportunity-Radar/feed.xml
 
 New opportunities are added through weekly updates. Closing-soon items are clearly highlighted.
 
@@ -72,7 +72,7 @@ Current opportunities include:
 - 📚 **AWS AI & ML Scholars** — Free · 100,000 global scholarships · Closes Jun 24
 - 🏆 **MLRC Reproducibility Challenge** — TMLR publication · Closes Jun 4
 
-[→ View all active opportunities](https://preetharaj.github.io/ai-opportunity-radar)
+[→ View all active opportunities](https://preetharaj.github.io/AI-Opportunity-Radar)
 
 ---
 
@@ -93,7 +93,7 @@ Current opportunities include:
 
 ```bash
 # Clone
-git clone https://github.com/PreethaRaj/ai-opportunity-radar.git
+git clone https://github.com/PreethaRaj/AI-Opportunity-Radar.git
 cd ai-opportunity-radar
 
 # Install
@@ -143,7 +143,7 @@ Add screenshots after deployment:
 ---
 ## Found an Opportunity We Missed?
 
-[Open an issue →](https://github.com/PreethaRaj/ai-opportunity-radar/issues/new?template=submit_opportunity.md&title=%5BOpportunity%5D+Your+Title+Here)
+[Open an issue →](https://github.com/PreethaRaj/AI-Opportunity-Radar/issues/new?template=submit_opportunity.md&title=%5BOpportunity%5D+Your+Title+Here)
 It takes 2 minutes. Include the official source URL and deadline.
 
 All submissions are verified before publication.
@@ -156,7 +156,7 @@ All submissions are verified before publication.
 Every listing links to an official source. We verify deadlines before publishing and do not list unverified opportunities.
 
 **What if I miss a week?**
-All past digests are archived at [/digests/](https://preetharaj.github.io/ai-opportunity-radar/digests/). Subscribe to RSS to never miss one.
+All past digests are archived at [/digests/](https://preetharaj.github.io/AI-Opportunity-Radar/digests/). Subscribe to RSS to never miss one.
 
 **How often is it updated?**
 Weekly.
