@@ -57,7 +57,7 @@ const icon = categoryIcons[category] ?? '⬡';
       {sampleData && <span class="badge badge-sample" style="margin-bottom:0.4rem;display:block;">⚠ Sample</span>}
       <h3 class="opp-card-title">
         <a
-          href={import.meta.env.BASE_URL + `opportunities/${category}/${slug}/`}
+          href={import.meta.env.BASE_URL + `/opportunities/${category}/${slug}/`}
           onclick={`trackEvent('opportunity-detail-view', { slug: '${slug}', category: '${category}' })`}
         >
           {icon} {title}
@@ -99,7 +99,7 @@ const icon = categoryIcons[category] ?? '⬡';
     </div>
     {status !== 'archived' && (
       <a
-        href={import.meta.env.BASE_URL + `opportunities/${category}/${slug}/`}
+        href={import.meta.env.BASE_URL + `/opportunities/${category}/${slug}/`}
         class="btn btn-ghost"
         onclick={`trackEvent('opportunity-detail-view', { slug: '${slug}' })`}
       >

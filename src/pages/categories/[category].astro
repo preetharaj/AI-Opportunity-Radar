@@ -74,7 +74,7 @@ const liveCount = active.length + closing.length;
       </div>
       <div style="margin-top:2rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
         {CATEGORIES.filter(c => c.slug !== categorySlug).map(c => (
-          <a href={import.meta.env.BASE_URL + `categories/${c.slug}/`} class="btn btn-ghost" style="font-size:0.75rem;">
+          <a href={import.meta.env.BASE_URL + `/categories/${c.slug}/`} class="btn btn-ghost" style="font-size:0.75rem;">
             {c.icon} {c.label}
           </a>
         ))}
@@ -120,7 +120,7 @@ const liveCount = active.length + closing.length;
           <div class="icon">{icon}</div>
           <p>No active {label.toLowerCase()} right now — check back next week.</p>
           {archived.length > 0 && (
-            <a href={import.meta.env.BASE_URL + `archive/#${categorySlug}`} class="btn btn-ghost" style="margin-top:1rem;">
+            <a href={import.meta.env.BASE_URL + `/archive/#${categorySlug}`} class="btn btn-ghost" style="margin-top:1rem;">
               View {archived.length} archived →
             </a>
           )}
@@ -137,7 +137,7 @@ const liveCount = active.length + closing.length;
             <p class="section-eyebrow">Closed</p>
             <h2 id="archived-heading">Archived {label}</h2>
           </div>
-          <a href={import.meta.env.BASE_URL + "archive/"} class="btn btn-ghost">Full archive →</a>
+          <a href={import.meta.env.BASE_URL + "/archive/"} class="btn btn-ghost">Full archive →</a>
         </div>
         <div class="archive-list" id={categorySlug}>
           {archived.map((opp: any) => (
@@ -146,7 +146,7 @@ const liveCount = active.length + closing.length;
                 {new Date(opp.deadline).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
               </span>
               <div>
-                <a href={import.meta.env.BASE_URL + `opportunities/${opp.category}/${opp.slug}/`} class="archive-title">{opp.title}</a>
+                <a href={import.meta.env.BASE_URL + `/opportunities/${opp.category}/${opp.slug}/`} class="archive-title">{opp.title}</a>
                 <span class="badge badge-archived" style="margin-left:0.5rem;">Archived</span>
               </div>
             </div>

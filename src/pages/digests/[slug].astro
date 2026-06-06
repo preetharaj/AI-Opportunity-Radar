@@ -45,7 +45,7 @@ const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
   <div class="container">
     <div style="max-width:860px; margin:0 auto;">
 
-      <a href={import.meta.env.BASE_URL + "digests/"} class="back-link" style="margin-top:2rem;display:inline-flex;">← All Digests</a>
+      <a href={import.meta.env.BASE_URL + "/digests/"} class="back-link" style="margin-top:2rem;display:inline-flex;">← All Digests</a>
 
       <header style="padding:3rem 0 2rem; border-bottom:2px solid var(--color-border);">
         <p class="section-eyebrow">Week #{weekNumber} · {formattedDate}</p>
@@ -75,7 +75,7 @@ const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
       )}
 
       <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-border); display:flex; gap:1rem; flex-wrap:wrap;">
-        <a href={import.meta.env.BASE_URL + "digests/"} class="btn btn-ghost">← All Digests</a>
+        <a href={import.meta.env.BASE_URL + "/digests/"} class="btn btn-ghost">← All Digests</a>
         <a href={import.meta.env.BASE_URL} class="btn btn-ghost">All Opportunities →</a>
       </div>
 

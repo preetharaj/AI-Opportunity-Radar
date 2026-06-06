@@ -40,11 +40,11 @@ const isDev = import.meta.env.DEV;
   <meta property="og:description" content={description} />
   <meta property="og:type" content="website" />
 
-  <link rel="alternate" type="application/rss+xml" title="AI Opportunity Radar — RSS Feed" href={import.meta.env.BASE_URL + "feed.xml"} />
+  <link rel="alternate" type="application/rss+xml" title="AI Opportunity Radar — RSS Feed" href={import.meta.env.BASE_URL + "/feed.xml"} />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href={import.meta.env.BASE_URL + "styles/global.css"} />
+  <link rel="stylesheet" href={import.meta.env.BASE_URL + "/styles/global.css"} />
   <meta name="page-type" content={pageType} />
 
   {umamiWebsiteId.length > 0 && (
@@ -95,14 +95,14 @@ const isDev = import.meta.env.DEV;
 
       <nav class="main-nav" aria-label="Main navigation">
         <a href={import.meta.env.BASE_URL}>Opportunities</a>
-        <a href={import.meta.env.BASE_URL + "categories/grants/"}>Grants</a>
-        <a href={import.meta.env.BASE_URL + "categories/fellowships/"}>Fellowships</a>
-        <a href={import.meta.env.BASE_URL + "categories/startup-programs/"}>Startups</a>
-        <a href={import.meta.env.BASE_URL + "categories/competitions/"}>Competitions</a>
-        <a href={import.meta.env.BASE_URL + "categories/courses/"}>Courses</a>
-        <a href={import.meta.env.BASE_URL + "digests/"}>Digests</a>
-        <a href={import.meta.env.BASE_URL + "archive/"}>Archive</a>
-        <a href={import.meta.env.BASE_URL + "feed.xml"} class="nav-rss" aria-label="RSS Feed" target="_blank" rel="noopener noreferrer" onclick="trackEvent('rss-click')">RSS</a>
+        <a href={import.meta.env.BASE_URL + "/categories/grants/"}>Grants</a>
+        <a href={import.meta.env.BASE_URL + "/categories/fellowships/"}>Fellowships</a>
+        <a href={import.meta.env.BASE_URL + "/categories/startup-programs/"}>Startups</a>
+        <a href={import.meta.env.BASE_URL + "/categories/competitions/"}>Competitions</a>
+        <a href={import.meta.env.BASE_URL + "/categories/courses/"}>Courses</a>
+        <a href={import.meta.env.BASE_URL + "/digests/"}>Digests</a>
+        <a href={import.meta.env.BASE_URL + "/archive/"}>Archive</a>
+        <a href={import.meta.env.BASE_URL + "/feed.xml"} class="nav-rss" aria-label="RSS Feed" target="_blank" rel="noopener noreferrer" onclick="trackEvent('rss-click')">RSS</a>
       </nav>
 
       <div class="header-actions">
@@ -135,9 +135,9 @@ const isDev = import.meta.env.DEV;
       </div>
       <nav class="footer-links" aria-label="Footer navigation">
         <a href={import.meta.env.BASE_URL}>Home</a>
-        <a href={import.meta.env.BASE_URL + "categories/"}>Categories</a>
-        <a href={import.meta.env.BASE_URL + "digests/"}>Weekly</a>
-        <a href={import.meta.env.BASE_URL + "feed.xml"} onclick="trackEvent('rss-click')">RSS</a>
+        <a href={import.meta.env.BASE_URL + "/categories/"}>Categories</a>
+        <a href={import.meta.env.BASE_URL + "/digests/"}>Weekly</a>
+        <a href={import.meta.env.BASE_URL + "/feed.xml"} onclick="trackEvent('rss-click')">RSS</a>
       </nav>
     </div>
   </footer>
@@ -196,7 +196,7 @@ const isDev = import.meta.env.DEV;
         target.scrollIntoView({ behavior: 'smooth' });
       } else {
         // On another page — navigate to home with anchor
-        window.location.href = base + '#subscribe';
+        window.location.href = base + (base.endsWith('/') ? '' : '/') + '#subscribe';
       }
     };
 

@@ -43,7 +43,7 @@ const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', a
   <div class="container">
     <div class="opp-detail">
 
-      <a href={import.meta.env.BASE_URL + `categories/${category}/`} class="back-link" style="margin-top:2rem;display:inline-flex;">
+      <a href={import.meta.env.BASE_URL + `/categories/${category}/`} class="back-link" style="margin-top:2rem;display:inline-flex;">
         ← {categoryMeta?.icon} {categoryMeta?.label ?? category}
       </a>
 
@@ -127,7 +127,7 @@ const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', a
       )}
 
       <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-border); display:flex; gap:1rem; flex-wrap:wrap;">
-        <a href={import.meta.env.BASE_URL + `categories/${category}/`} class="btn btn-ghost">← More {categoryMeta?.label}</a>
+        <a href={import.meta.env.BASE_URL + `/categories/${category}/`} class="btn btn-ghost">← More {categoryMeta?.label}</a>
         <a href={import.meta.env.BASE_URL} class="btn btn-ghost">← All Opportunities</a>
       </div>
 

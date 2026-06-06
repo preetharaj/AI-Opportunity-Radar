@@ -58,7 +58,7 @@ function formatDate(date: string) {
             <p>Curated for founders, researchers and builders.<br/>Updated weekly.</p>
             <div class="hero-actions">
               <a href="#latest" class="btn btn-primary">Get New Opportunities</a>
-              <a href={import.meta.env.BASE_URL + "categories/"} class="btn btn-outline">Browse All Opportunities</a>
+              <a href={import.meta.env.BASE_URL + "/categories/"} class="btn btn-outline">Browse All Opportunities</a>
             </div>
           </div>
 
@@ -89,7 +89,7 @@ function formatDate(date: string) {
                 </div>
               </div>
               <div class="featured-logo">AI</div>
-              <a class="featured-link" href={import.meta.env.BASE_URL + `opportunities/${featured.category}/${featured.slug}/`}>View Opportunity →</a>
+              <a class="featured-link" href={import.meta.env.BASE_URL + `/opportunities/${featured.category}/${featured.slug}/`}>View Opportunity →</a>
             </article>
           </section>
         )}
@@ -98,7 +98,7 @@ function formatDate(date: string) {
           <p class="section-label" id="latest-heading">Latest Opportunities</p>
           <div class="latest-list">
             {latest.map((opp: any) => (
-              <a class="latest-row" href={import.meta.env.BASE_URL + `opportunities/${opp.category}/${opp.slug}/`}>
+              <a class="latest-row" href={import.meta.env.BASE_URL + `/opportunities/${opp.category}/${opp.slug}/`}>
                 <span class="latest-icon">{opp.provider?.[0] ?? 'A'}</span>
                 <span class="soft-pill">{categoryLabel[opp.category] ?? opp.category}</span>
                 <strong>{opp.title}</strong>
@@ -107,7 +107,7 @@ function formatDate(date: string) {
                 <span class="row-arrow">→</span>
               </a>
             ))}
-            <a class="view-all-link" href={import.meta.env.BASE_URL + "categories/"}>View all opportunities →</a>
+            <a class="view-all-link" href={import.meta.env.BASE_URL + "/categories/"}>View all opportunities →</a>
           </div>
         </section>
       </div>
@@ -128,7 +128,7 @@ function formatDate(date: string) {
           <h3>Popular Categories</h3>
           <ul class="category-list">
             {Object.entries(categoryLabel).map(([slug, label]) => (
-              <li><a href={import.meta.env.BASE_URL + `categories/${slug}/`}><span>{label}</span><b>{countsByCategory[slug] ?? 0}</b></a></li>
+              <li><a href={import.meta.env.BASE_URL + `/categories/${slug}/`}><span>{label}</span><b>{countsByCategory[slug] ?? 0}</b></a></li>
             ))}
           </ul>
         </section>
@@ -136,7 +136,7 @@ function formatDate(date: string) {
         <section class="sidebar-card about-card">
           <h3>About AI Opportunity Radar</h3>
           <p>We curate high-quality AI opportunities from top organizations worldwide so you can focus on building and researching.</p>
-          <a href={import.meta.env.BASE_URL + "archive/"}>Learn more about our mission →</a>
+          <a href={import.meta.env.BASE_URL + "/archive/"}>Learn more about our mission →</a>
         </section>
       </aside>
     </div>
