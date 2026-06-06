@@ -10,7 +10,7 @@ summary: "IAPS runs a competitive summer AI policy fellowship (June–August 202
 applyLink: "https://www.iaps.ai/fellowship"
 sourceLink: "https://www.iaps.ai/fellowship"
 publicationDate: "2026-06-03"
-status: "active"
+status: "closing-soon"
 tags: ["fellowship", "AI-policy", "governance", "USA", "remote", "summer", "Washington-DC"]
 ---
 
