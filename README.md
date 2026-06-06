@@ -48,7 +48,7 @@ Instead of checking dozens of websites, readers can:
 ---
 ## Live Site
 
-**[preetharaj.github.io/ai-opportunity-radar](https://preetharaj.github.io/ai-opportunity-radar)**
+**[preetharaj.github.io/AI-Opportunity-Radar](https://preetharaj.github.io/AI-Opportunity-Radar)**
 
 ---
 
