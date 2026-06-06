@@ -1,16 +1,18 @@
 name: Build and Deploy
 
 on:
-  schedule:
-    - cron: '0 8 * * 1'
   workflow_dispatch:
   push:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   build-and-deploy:
@@ -35,19 +37,8 @@ jobs:
       - name: Archive expired opportunities
         run: node scripts/archive-expired.mjs --write
 
-      - name: Commit archived changes (if any)
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git add content/
-          git diff --staged --quiet || git commit -m "chore: auto-archive expired opportunities [skip ci]"
-          git push || true
-
       - name: Build Astro site
         env:
-          # Set these in GitHub repo Settings → Secrets → Actions
-          # Leave PUBLIC_UMAMI_WEBSITE_ID out of .env to keep local
-          # dev traffic off your real analytics dashboard.
           PUBLIC_UMAMI_WEBSITE_ID: ${{ secrets.PUBLIC_UMAMI_WEBSITE_ID }}
           PUBLIC_UMAMI_SRC: ${{ secrets.PUBLIC_UMAMI_SRC }}
           SITE: ${{ secrets.SITE }}
