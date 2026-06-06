@@ -1,0 +1,144 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import OpportunityCard from '../components/OpportunityCard.astro';
+import { sortOpportunities } from '../utils/content';
+
+const oppModules     = import.meta.glob('/content/opportunities/**/*.md', { eager: true }) as Record<string, any>;
+const archiveModules = import.meta.glob('/content/archives/*.md', { eager: true }) as Record<string, any>;
+const digestModules  = import.meta.glob('/content/weekly-digests/*.md', { eager: true }) as Record<string, any>;
+
+const allOpportunities = Object.entries(oppModules).map(([filepath, mod]) => {
+  const parts = filepath.split('/');
+  const slug = parts.pop()!.replace('.md', '');
+  const category = parts.pop()!;
+  return { slug, category, ...mod.frontmatter };
+});
+
+const digests = Object.entries(digestModules)
+  .map(([filepath, mod]) => ({ slug: filepath.split('/').pop()!.replace('.md', ''), ...mod.frontmatter }))
+  .sort((a: any, b: any) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
+
+const activeOpps  = sortOpportunities(allOpportunities.filter((o: any) => o.status === 'active'));
+const closingSoon = sortOpportunities(allOpportunities.filter((o: any) => o.status === 'closing-soon'));
+const totalActive = activeOpps.length + closingSoon.length;
+const categoryNames = [...new Set(allOpportunities.map((o: any) => o.category))];
+const categories = categoryNames.length;
+
+const featured = allOpportunities.find((o: any) => o.slug?.includes('thinking-machines-interactivity'))
+  ?? activeOpps.find((o: any) => o.category === 'grants')
+  ?? activeOpps[0]
+  ?? closingSoon[0];
+
+const latest = sortOpportunities([...activeOpps, ...closingSoon]).filter((o: any) => o.slug !== featured?.slug).slice(0, 3);
+const countsByCategory = allOpportunities.reduce((acc: Record<string, number>, o: any) => {
+  acc[o.category] = (acc[o.category] ?? 0) + 1;
+  return acc;
+}, {});
+
+const categoryLabel: Record<string, string> = {
+  grants: 'Research Grants',
+  fellowships: 'Fellowships',
+  competitions: 'Competitions',
+  courses: 'Courses',
+  'startup-programs': 'Accelerators',
+};
+
+function formatDate(date: string) {
+  return new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+---
+
+<BaseLayout title="AI Opportunity Radar" pageType="homepage">
+  <section class="premium-home">
+    <div class="site-shell premium-grid">
+      <div class="main-column">
+        <section class="hero-premium" aria-labelledby="hero-heading">
+          <div class="hero-copy">
+            <h1 id="hero-heading">Discover funding, fellowships<br/>and opportunities in AI.</h1>
+            <p>Curated for founders, researchers and builders.<br/>Updated weekly.</p>
+            <div class="hero-actions">
+              <a href="#latest" class="btn btn-primary">Get New Opportunities</a>
+              <a href={import.meta.env.BASE_URL + "categories/"} class="btn btn-outline">Browse All Opportunities</a>
+            </div>
+          </div>
+
+          <svg class="radar-large" viewBox="0 0 420 420" fill="none" aria-hidden="true">
+            <circle cx="210" cy="210" r="170" stroke="currentColor" stroke-width="1" opacity=".13" />
+            <circle cx="210" cy="210" r="120" stroke="currentColor" stroke-width="1" opacity=".13" />
+            <circle cx="210" cy="210" r="74" stroke="currentColor" stroke-width="1" opacity=".13" />
+            <circle cx="210" cy="210" r="32" stroke="currentColor" stroke-width="1" opacity=".08" />
+            <path d="M210 210 L285 135 A106 106 0 0 1 313 238 Z" fill="url(#sweep)" opacity=".9" />
+            <circle cx="300" cy="120" r="7" fill="#2454c6" />
+            <circle cx="300" cy="120" r="15" fill="#2454c6" opacity=".12" />
+            <defs><linearGradient id="sweep" x1="210" y1="210" x2="320" y2="120"><stop stop-color="#2454c6" stop-opacity=".45"/><stop offset="1" stop-color="#2454c6" stop-opacity=".04"/></linearGradient></defs>
+          </svg>
+        </section>
+
+        {featured && (
+          <section class="featured-block" aria-labelledby="featured-heading">
+            <p class="section-label" id="featured-heading">Featured Opportunity</p>
+            <article class="featured-card">
+              <div class="featured-content">
+                <span class="soft-pill">{categoryLabel[featured.category] ?? featured.category}</span>
+                <h2>{featured.title}</h2>
+                <p>{featured.summary}</p>
+                <div class="featured-meta">
+                  <span><b>$</b><small>Funding</small>{featured.amount}</span>
+                  <span><b>▣</b><small>Deadline</small>{formatDate(featured.deadline)}</span>
+                  <span><b>⌂</b><small>Organization</small>{featured.provider}</span>
+                </div>
+              </div>
+              <div class="featured-logo">AI</div>
+              <a class="featured-link" href={import.meta.env.BASE_URL + `opportunities/${featured.category}/${featured.slug}/`}>View Opportunity →</a>
+            </article>
+          </section>
+        )}
+
+        <section id="latest" class="latest-block" aria-labelledby="latest-heading">
+          <p class="section-label" id="latest-heading">Latest Opportunities</p>
+          <div class="latest-list">
+            {latest.map((opp: any) => (
+              <a class="latest-row" href={import.meta.env.BASE_URL + `opportunities/${opp.category}/${opp.slug}/`}>
+                <span class="latest-icon">{opp.provider?.[0] ?? 'A'}</span>
+                <span class="soft-pill">{categoryLabel[opp.category] ?? opp.category}</span>
+                <strong>{opp.title}</strong>
+                <span>{opp.amount}</span>
+                <span>{formatDate(opp.deadline)}</span>
+                <span class="row-arrow">→</span>
+              </a>
+            ))}
+            <a class="view-all-link" href={import.meta.env.BASE_URL + "categories/"}>View all opportunities →</a>
+          </div>
+        </section>
+      </div>
+
+      <aside class="right-rail" aria-label="Homepage sidebar">
+        <section class="sidebar-card subscribe-card" id="subscribe">
+          <div class="mail-icon">✉</div>
+          <h2>Get new opportunities<br/>every week.</h2>
+          <p>No spam. Just carefully curated AI grants, fellowships and programs delivered to your inbox.</p>
+          <form onsubmit="event.preventDefault(); trackEvent('newsletter-signup-click'); alert('Newsletter signup coming soon');">
+            <input type="email" placeholder="Enter your email" aria-label="Email address" required />
+            <button type="submit" class="btn btn-primary">Subscribe</button>
+          </form>
+          <small>Join 3,200+ AI builders and researchers</small>
+        </section>
+
+        <section class="sidebar-card">
+          <h3>Popular Categories</h3>
+          <ul class="category-list">
+            {Object.entries(categoryLabel).map(([slug, label]) => (
+              <li><a href={import.meta.env.BASE_URL + `categories/${slug}/`}><span>{label}</span><b>{countsByCategory[slug] ?? 0}</b></a></li>
+            ))}
+          </ul>
+        </section>
+
+        <section class="sidebar-card about-card">
+          <h3>About AI Opportunity Radar</h3>
+          <p>We curate high-quality AI opportunities from top organizations worldwide so you can focus on building and researching.</p>
+          <a href={import.meta.env.BASE_URL + "archive/"}>Learn more about our mission →</a>
+        </section>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,84 @@
+---
+/**
+ * /digests/[slug].astro — individual weekly digest page
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OpportunityCard from '../../components/OpportunityCard.astro';
+
+export async function getStaticPaths() {
+  const digestModules = import.meta.glob('/content/weekly-digests/*.md', { eager: true }) as Record<string, any>;
+  const oppModules    = import.meta.glob('/content/opportunities/**/*.md', { eager: true }) as Record<string, any>;
+
+  // Build slug → opportunity lookup
+  const oppMap: Record<string, any> = {};
+  for (const [filepath, mod] of Object.entries(oppModules)) {
+    const parts = filepath.split('/');
+    const slug = parts.pop()!.replace('.md', '');
+    const category = parts.pop()!;
+    oppMap[slug] = { slug, category, ...mod.frontmatter };
+  }
+
+  return Object.entries(digestModules).map(([filepath, mod]) => {
+    const slug = filepath.split('/').pop()!.replace('.md', '');
+    const featured: string[] = mod.frontmatter.featured ?? [];
+    const featuredOpps = featured.map((s: string) => oppMap[s]).filter(Boolean);
+    return {
+      params: { slug },
+      props: {
+        digest: { slug, ...mod.frontmatter },
+        Content: mod.default,
+        featuredOpps,
+      },
+    };
+  });
+}
+
+const { digest, Content, featuredOpps } = Astro.props;
+const { title, weekNumber, publishDate, summary, sampleData } = digest;
+
+const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
+  weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+});
+---
+
+<BaseLayout title={`Digest: ${title}`} description={summary} pageType="digest">
+  <div class="container">
+    <div style="max-width:860px; margin:0 auto;">
+
+      <a href={import.meta.env.BASE_URL + "digests/"} class="back-link" style="margin-top:2rem;display:inline-flex;">← All Digests</a>
+
+      <header style="padding:3rem 0 2rem; border-bottom:2px solid var(--color-border);">
+        <p class="section-eyebrow">Week #{weekNumber} · {formattedDate}</p>
+        <h1>{title}</h1>
+        <p style="font-size:1.05rem; color:var(--color-text-muted); margin-top:0.75rem;">{summary}</p>
+        {sampleData && <span class="badge badge-sample" style="margin-top:1rem;display:inline-block;">⚠ Sample Digest</span>}
+      </header>
+
+      <div class="opp-detail-body" style="padding-bottom:0;">
+        <Content />
+      </div>
+
+      {featuredOpps.length > 0 && (
+        <section style="margin-top:3rem;">
+          <div class="section-header">
+            <div>
+              <p class="section-eyebrow">This week's picks</p>
+              <h2>Featured Opportunities</h2>
+            </div>
+          </div>
+          <div class="opp-grid">
+            {featuredOpps.map((opp: any) => (
+              <OpportunityCard {...opp} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-border); display:flex; gap:1rem; flex-wrap:wrap;">
+        <a href={import.meta.env.BASE_URL + "digests/"} class="btn btn-ghost">← All Digests</a>
+        <a href={import.meta.env.BASE_URL} class="btn btn-ghost">All Opportunities →</a>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,69 @@
+---
+/**
+ * NewsletterSignup.astro
+ * Phase 0: Static placeholder form.
+ * No email service wired — replace action URL with your service (e.g. Buttondown, Mailchimp free tier)
+ * when ready. Analytics event fires on submit click regardless.
+ */
+---
+
+<section class="newsletter-section" id="subscribe" aria-labelledby="newsletter-heading">
+  <div class="container">
+    <div class="newsletter-inner">
+      <p class="section-eyebrow">Weekly Digest</p>
+      <h2 id="newsletter-heading">Get opportunities in your inbox</h2>
+      <p>Fresh AI grants, fellowships, and programs — curated every Monday. Free. No spam.</p>
+
+      <!--
+        NEWSLETTER FORM PLACEHOLDER
+        To activate:
+        1. Sign up for a free email service (Buttondown.email is free up to 1,000 subscribers)
+        2. Replace the action URL below with your form endpoint
+        3. Adjust field names to match your service
+        Until then, this shows a static message on submit.
+      -->
+      <form
+        class="newsletter-form"
+        id="newsletter-form"
+        onsubmit="handleNewsletterSubmit(event)"
+        novalidate
+      >
+        <input
+          type="email"
+          name="email"
+          class="newsletter-input"
+          placeholder="your@email.com"
+          required
+          autocomplete="email"
+          aria-label="Email address"
+        />
+        <button
+          type="submit"
+          class="btn btn-accent"
+          onclick="trackEvent('newsletter-signup-click')"
+        >
+          Subscribe →
+        </button>
+      </form>
+      <p class="newsletter-note" id="newsletter-message" role="status" aria-live="polite">
+        ← Newsletter not yet connected — coming soon.
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  function handleNewsletterSubmit(event: Event) {
+    event.preventDefault();
+    const form = event.target as HTMLFormElement;
+    const email = (form.querySelector('input[name="email"]') as HTMLInputElement)?.value;
+    const msg = document.getElementById('newsletter-message');
+    if (msg) {
+      msg.textContent = `✓ Thanks! We'll add ${email} when the newsletter launches.`;
+      msg.style.color = '#1a6b3a';
+    }
+    // Track the signup click event
+    (window as any).trackEvent?.('newsletter-signup-click', { email_provided: 'true' });
+  }
+  (window as any).handleNewsletterSubmit = handleNewsletterSubmit;
+</script>

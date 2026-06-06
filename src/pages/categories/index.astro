@@ -1,0 +1,49 @@
+---
+/**
+ * /categories/index.astro — browse all categories with live counts
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CATEGORIES } from '../../utils/content';
+
+const oppModules = import.meta.glob('/content/opportunities/**/*.md', { eager: true }) as Record<string, any>;
+
+// Count active opps per category
+const counts: Record<string, number> = {};
+for (const [filepath, mod] of Object.entries(oppModules)) {
+  const parts = filepath.split('/');
+  parts.pop(); // slug
+  const category = parts.pop()!; // category folder
+  if (mod.frontmatter?.status !== 'archived') {
+    counts[category] = (counts[category] ?? 0) + 1;
+  }
+}
+---
+
+<BaseLayout title="Browse Categories" description="Browse AI opportunities by category" pageType="category">
+  <section class="category-hero">
+    <div class="container">
+      <a href={import.meta.env.BASE_URL} class="back-link">← Home</a>
+      <h1>Browse by Category</h1>
+      <p style="color:var(--color-text-muted); margin-top:0.5rem;">Find opportunities that match your goals.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="opp-grid-wide">
+        {CATEGORIES.map(cat => (
+          <a href={import.meta.env.BASE_URL + `categories/${cat.slug}/`} style="text-decoration:none;" onclick={`trackEvent('category-page-view', { category: '${cat.slug}' })`}>
+            <article class="digest-card" style="cursor:pointer; height:100%;">
+              <div style="font-size:2.5rem; margin-bottom:1rem;">{cat.icon}</div>
+              <h2 style="font-size:1.2rem; margin-bottom:0.5rem;">{cat.label}</h2>
+              <p style="font-size:0.88rem; color:var(--color-text-muted); margin-bottom:1rem;">{cat.description}</p>
+              <span style="font-family:var(--font-mono); font-size:0.78rem; color:var(--color-accent);">
+                {counts[cat.slug] ?? 0} active →
+              </span>
+            </article>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>

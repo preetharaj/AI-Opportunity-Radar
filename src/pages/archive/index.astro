@@ -1,0 +1,114 @@
+---
+/**
+ * /archive/index.astro — all archived (expired) opportunities
+ */
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { CATEGORIES } from '../../utils/content';
+
+const archiveModules = import.meta.glob('/content/archives/*.md', { eager: true }) as Record<string, any>;
+const oppModules     = import.meta.glob('/content/opportunities/**/*.md', { eager: true }) as Record<string, any>;
+
+// Parse explicit archive folder files
+const archiveFiles = Object.entries(archiveModules).map(([filepath, mod]) => {
+  const slug = filepath.split('/').pop()!.replace('.md', '');
+  return { slug, category: mod.frontmatter?.category ?? 'grants', ...mod.frontmatter, fromArchiveFolder: true };
+});
+
+// Parse all opportunity files that are marked archived
+const archivedOpps = Object.entries(oppModules)
+  .map(([filepath, mod]) => {
+    const parts = filepath.split('/');
+    const slug = parts.pop()!.replace('.md', '');
+    const category = parts.pop()!;
+    return { slug, category, ...mod.frontmatter };
+  })
+  .filter(o => o.status === 'archived');
+
+// Merge both lists, deduplicate by slug
+const seen = new Set<string>();
+const allArchived: any[] = [];
+for (const opp of [...archiveFiles, ...archivedOpps]) {
+  if (!seen.has(opp.slug)) {
+    seen.add(opp.slug);
+    allArchived.push(opp);
+  }
+}
+
+// Group by category, sort newest deadline first
+const grouped: Record<string, typeof allArchived> = {};
+for (const opp of allArchived) {
+  const cat = opp.category ?? 'grants';
+  if (!grouped[cat]) grouped[cat] = [];
+  grouped[cat].push(opp);
+}
+for (const cat in grouped) {
+  grouped[cat].sort((a, b) => new Date(b.deadline).getTime() - new Date(a.deadline).getTime());
+}
+
+const total = allArchived.length;
+---
+
+<BaseLayout
+  title="Archive"
+  description="Archived AI opportunities — expired grants, fellowships, programs, and competitions."
+  pageType="archive"
+>
+  <section class="category-hero">
+    <div class="container">
+      <a href={import.meta.env.BASE_URL} class="back-link">← Home</a>
+      <div class="category-icon" aria-hidden="true">🗂</div>
+      <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1>Archive</h1>
+          <p style="color:var(--color-text-muted); margin-top:0.5rem;">Past opportunities, retained for reference.</p>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--font-display); font-size:2.5rem; font-weight:800; color:var(--color-text-muted); line-height:1;">{total}</div>
+          <div style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--color-text-faint);">Archived</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      {total === 0 ? (
+        <div class="empty-state">
+          <div class="icon">🗂</div>
+          <p>No archived opportunities yet.</p>
+        </div>
+      ) : (
+        <div>
+          {CATEGORIES.map(cat => grouped[cat.slug]?.length > 0 && (
+            <div id={cat.slug} style="margin-bottom:3rem;">
+              <h2 style="margin-bottom:1.5rem;">{cat.icon} {cat.label}</h2>
+              <div class="archive-list">
+                {grouped[cat.slug].map((opp: any) => (
+                  <div class="archive-entry">
+                    <span class="archive-date">
+                      {new Date(opp.deadline).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+                    </span>
+                    <div style="flex:1;">
+                      <a
+                        href={import.meta.env.BASE_URL + `opportunities/${opp.category}/${opp.slug}/`}
+                        class="archive-title"
+                        onclick={`trackEvent('opportunity-detail-view', { slug: '${opp.slug}', status: 'archived' })`}
+                      >
+                        {opp.title}
+                      </a>
+                      <div style="font-size:0.78rem; color:var(--color-text-faint); margin-top:0.2rem; font-family:var(--font-mono);">
+                        {opp.provider} · {opp.amount}
+                        {opp.sampleData && <span class="badge badge-sample" style="margin-left:0.5rem;">Sample</span>}
+                      </div>
+                    </div>
+                    <span class="badge badge-archived">Archived</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  </section>
+</BaseLayout>

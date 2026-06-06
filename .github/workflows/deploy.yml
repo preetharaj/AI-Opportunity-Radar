@@ -1,0 +1,63 @@
+name: Build and Deploy
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Archive expired opportunities
+        run: node scripts/archive-expired.mjs --write
+
+      - name: Commit archived changes (if any)
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add content/
+          git diff --staged --quiet || git commit -m "chore: auto-archive expired opportunities [skip ci]"
+          git push || true
+
+      - name: Build Astro site
+        env:
+          # Set these in GitHub repo Settings → Secrets → Actions
+          # Leave PUBLIC_UMAMI_WEBSITE_ID out of .env to keep local
+          # dev traffic off your real analytics dashboard.
+          PUBLIC_UMAMI_WEBSITE_ID: ${{ secrets.PUBLIC_UMAMI_WEBSITE_ID }}
+          PUBLIC_UMAMI_SRC: ${{ secrets.PUBLIC_UMAMI_SRC }}
+          SITE: ${{ secrets.SITE }}
+        run: npm run build
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

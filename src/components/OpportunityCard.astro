@@ -1,0 +1,110 @@
+---
+/**
+ * OpportunityCard.astro
+ * Reusable card component for opportunity listings.
+ * Used on homepage, category pages, and digest pages.
+ */
+
+interface Props {
+  slug: string;
+  category: string;
+  title: string;
+  provider: string;
+  deadline: string;
+  amount: string;
+  region: string;
+  summary: string;
+  status: 'active' | 'closing-soon' | 'archived';
+  tags: string[];
+  sampleData?: boolean;
+}
+
+const { slug, category, title, provider, deadline, amount, region, summary, status, tags, sampleData } = Astro.props;
+
+// Format deadline as human-readable
+const deadlineDate = new Date(deadline);
+const formattedDeadline = deadlineDate.toLocaleDateString('en-US', {
+  month: 'short', day: 'numeric', year: 'numeric'
+});
+
+// Days until deadline
+const today = new Date();
+const daysLeft = Math.ceil((deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+
+// Pre-compute display suffix to avoid Astro inline JSX fragment issues
+const daysLeftSuffix = (status !== 'archived' && daysLeft > 0 && daysLeft <= 60)
+  ? ' (' + daysLeft + 'd left)' : '';
+
+// Status label
+const statusLabel = { active: 'Active', 'closing-soon': 'Closing Soon', archived: 'Archived' }[status];
+const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', archived: 'badge-archived' }[status];
+
+// Category icon map
+const categoryIcons: Record<string, string> = {
+  grants: '💰', fellowships: '🎓', 'startup-programs': '🚀', competitions: '🏆', courses: '📚'
+};
+const icon = categoryIcons[category] ?? '⬡';
+---
+
+<article
+  class:list={['opp-card', status === 'closing-soon' && 'closing', status === 'archived' && 'archived', sampleData && 'sample-card']}
+  data-category={category}
+  data-status={status}
+>
+  <!-- Header: title + status badge -->
+  <header class="opp-card-header">
+    <div>
+      {sampleData && <span class="badge badge-sample" style="margin-bottom:0.4rem;display:block;">⚠ Sample</span>}
+      <h3 class="opp-card-title">
+        <a
+          href={import.meta.env.BASE_URL + `opportunities/${category}/${slug}/`}
+          onclick={`trackEvent('opportunity-detail-view', { slug: '${slug}', category: '${category}' })`}
+        >
+          {icon} {title}
+        </a>
+      </h3>
+    </div>
+    <span class:list={['badge', statusClass]} aria-label={`Status: ${statusLabel}`}>
+      {status === 'closing-soon' && '⚡ '}
+      {statusLabel}
+    </span>
+  </header>
+
+  <!-- Meta: provider, deadline, amount, region -->
+  <div class="opp-card-meta" role="list">
+    <span class="meta-item" role="listitem" aria-label="Provider">
+      🏛 {provider}
+    </span>
+    <span class="meta-item" role="listitem" aria-label="Deadline">
+      📅 {formattedDeadline}
+      {daysLeftSuffix}
+    </span>
+    <span class="meta-item" role="listitem" aria-label="Value">
+      💵 {amount}
+    </span>
+    <span class="meta-item" role="listitem" aria-label="Region">
+      🌍 {region}
+    </span>
+  </div>
+
+  <!-- Summary -->
+  <p class="opp-card-summary">{summary}</p>
+
+  <!-- Footer: tags + apply button -->
+  <footer class="opp-card-footer">
+    <div class="opp-card-tags" aria-label="Tags">
+      {tags.slice(0, 4).map(tag => (
+        <span class="tag">{tag}</span>
+      ))}
+    </div>
+    {status !== 'archived' && (
+      <a
+        href={import.meta.env.BASE_URL + `opportunities/${category}/${slug}/`}
+        class="btn btn-ghost"
+        onclick={`trackEvent('opportunity-detail-view', { slug: '${slug}' })`}
+      >
+        View →
+      </a>
+    )}
+  </footer>
+</article>

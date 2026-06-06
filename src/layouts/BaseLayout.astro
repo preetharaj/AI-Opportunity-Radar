@@ -1,0 +1,245 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  pageType?: 'homepage' | 'category' | 'opportunity' | 'digest' | 'archive';
+}
+
+const {
+  title,
+  description = 'Discover active AI grants, fellowships, startup programs, competitions, and courses — curated weekly.',
+  pageType = 'homepage',
+} = Astro.props;
+
+const fullTitle = title === 'AI Opportunity Radar' ? title : `${title} | AI Opportunity Radar`;
+// Use PUBLIC_ prefix so vars are exposed to client-side code in Astro.
+// Leave PUBLIC_UMAMI_WEBSITE_ID empty in .env — only set in GitHub Actions secrets.
+// This prevents local dev traffic from polluting production analytics.
+const umamiWebsiteId  = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID ?? '';
+const umamiScriptUrl  = import.meta.env.PUBLIC_UMAMI_SRC ?? 'https://cloud.umami.is/script.js';
+
+// Analytics only enabled when:
+//   1. A website ID is configured
+//   2. NOT running on localhost (prevents dev pollution)
+const isLocalhost = typeof window !== 'undefined'
+  ? ['localhost','127.0.0.1'].includes(window.location.hostname)
+  : true;
+const analyticsEnabled = umamiWebsiteId.length > 0 && !isLocalhost;
+const isDev = import.meta.env.DEV;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content={description} />
+  <title>{fullTitle}</title>
+
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:type" content="website" />
+
+  <link rel="alternate" type="application/rss+xml" title="AI Opportunity Radar — RSS Feed" href={import.meta.env.BASE_URL + "feed.xml"} />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href={import.meta.env.BASE_URL + "styles/global.css"} />
+  <meta name="page-type" content={pageType} />
+
+  {umamiWebsiteId.length > 0 && (
+    <script
+      defer
+      src={umamiScriptUrl}
+      data-website-id={umamiWebsiteId}
+      data-domains={import.meta.env.SITE?.replace('https://', '') ?? ''}
+    ></script>
+  )}
+
+  {isDev && (
+    <style>{`
+      #__analytics_debug {
+        position:fixed;bottom:12px;right:12px;z-index:9999;
+        background:#111113;border:1px solid #2a1a08;border-radius:6px;
+        padding:10px 14px;font-family:monospace;font-size:11px;color:#a85c0a;
+        max-width:260px;max-height:220px;overflow-y:auto;
+      }
+      #__analytics_debug .ad-title {
+        font-weight:600;margin-bottom:4px;display:flex;
+        align-items:center;justify-content:space-between;gap:8px;
+      }
+      #__analytics_debug .ad-dot {
+        width:7px;height:7px;border-radius:50%;
+        background:#a85c0a;display:inline-block;margin-right:5px;
+      }
+      #__analytics_debug .ad-entry {
+        font-size:10px;color:#4a3020;
+        padding:2px 0;border-bottom:1px solid #1e1810;
+      }
+      #__analytics_debug .ad-entry:last-child{border:none;}
+      #__analytics_debug .ad-close{cursor:pointer;opacity:.5;font-size:13px;}
+      #__analytics_debug .ad-close:hover{opacity:1;}
+    `}</style>
+  )}
+</head>
+
+<body>
+  <header class="site-header">
+    <div class="site-shell header-inner">
+      <a href={import.meta.env.BASE_URL} class="brand" aria-label="AI Opportunity Radar home">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="13" stroke="currentColor" stroke-width="1.4" opacity=".35"/><circle cx="16" cy="16" r="8" stroke="currentColor" stroke-width="1.2" opacity=".25"/><path d="M16 16L24 8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="23.5" cy="8.5" r="2.5" fill="currentColor"/></svg>
+        </span>
+        <span><strong>AI</strong> Opportunity Radar</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href={import.meta.env.BASE_URL}>Opportunities</a>
+        <a href={import.meta.env.BASE_URL + "categories/grants/"}>Grants</a>
+        <a href={import.meta.env.BASE_URL + "categories/fellowships/"}>Fellowships</a>
+        <a href={import.meta.env.BASE_URL + "categories/startup-programs/"}>Startups</a>
+        <a href={import.meta.env.BASE_URL + "categories/competitions/"}>Competitions</a>
+        <a href={import.meta.env.BASE_URL + "categories/courses/"}>Courses</a>
+        <a href={import.meta.env.BASE_URL + "digests/"}>Digests</a>
+        <a href={import.meta.env.BASE_URL + "archive/"}>Archive</a>
+        <a href={import.meta.env.BASE_URL + "feed.xml"} class="nav-rss" aria-label="RSS Feed" target="_blank" rel="noopener noreferrer" onclick="trackEvent('rss-click')">RSS</a>
+      </nav>
+
+      <div class="header-actions">
+        <a
+          class="header-submit"
+          href="https://github.com/preetharaj/ai-opportunity-radar/issues/new?template=submit_opportunity.md&title=%5BOpportunity%5D+"
+          target="_blank"
+          rel="noopener noreferrer"
+          onclick="trackEvent('submit-opportunity-click')"
+        >Submit</a>
+        <a
+          class="header-subscribe"
+          href="#subscribe"
+          onclick="handleSubscribeClick(event)"
+        >Subscribe</a>
+        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <slot />
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-shell footer-inner">
+      <div>
+        <strong>AI Opportunity Radar</strong>
+        <p>Curated AI grants, fellowships and programs for builders and researchers.</p>
+      </div>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href={import.meta.env.BASE_URL}>Home</a>
+        <a href={import.meta.env.BASE_URL + "categories/"}>Categories</a>
+        <a href={import.meta.env.BASE_URL + "digests/"}>Weekly</a>
+        <a href={import.meta.env.BASE_URL + "feed.xml"} onclick="trackEvent('rss-click')">RSS</a>
+      </nav>
+    </div>
+  </footer>
+
+  <script define:vars={{ pageType, analyticsEnabled, isDev, __BASE_URL__: import.meta.env.BASE_URL }}>
+    /**
+     * trackEvent — fires Umami events when live, logs to console + debug panel in dev.
+     *
+     * PRD events:
+     *   homepage-view, category-page-view, opportunity-detail-view,
+     *   opportunity-click, rss-click, newsletter-signup-click
+     *
+     * Usage in any template:
+     *   onclick="trackEvent('opportunity-click', { slug: 'my-slug' })"
+     */
+    function trackEvent(eventName, props) {
+      // 1. Fire to Umami if script is loaded
+      try {
+        if (typeof umami !== 'undefined') {
+          umami.track(eventName, props ?? {});
+        }
+      } catch (_) {}
+
+      // 2. In dev: log to console + update debug panel
+      if (isDev) {
+        const msg = props ? eventName + ' ' + JSON.stringify(props) : eventName;
+        console.log('%c[analytics]', 'color:#a85c0a;font-weight:bold', msg);
+
+        const panel = document.getElementById('__analytics_debug');
+        if (panel) {
+          const log = panel.querySelector('#__ad_log');
+          if (log) {
+            const entry = document.createElement('div');
+            entry.className = 'ad-entry';
+            const time = new Date().toLocaleTimeString();
+            entry.textContent = time + '  ' + msg;
+            if (log.querySelector('em')) log.innerHTML = '';
+            log.prepend(entry);
+          }
+        }
+      }
+    }
+
+    // Expose globally so inline onclick attributes work
+    window.trackEvent = trackEvent;
+
+    // Subscribe header button — scrolls to #subscribe on homepage,
+    // navigates to home page #subscribe from any other page.
+    window.handleSubscribeClick = function(e) {
+      e.preventDefault();
+      trackEvent('subscribe-click');
+      const base = (typeof __BASE_URL__ !== 'undefined') ? __BASE_URL__ : '/';
+      const target = document.getElementById('subscribe');
+      if (target) {
+        // Already on a page that has the newsletter section
+        target.scrollIntoView({ behavior: 'smooth' });
+      } else {
+        // On another page — navigate to home with anchor
+        window.location.href = base + '#subscribe';
+      }
+    };
+
+    // Fire immediately if DOM already ready, else wait
+    function onReady(fn) {
+      if (document.readyState !== 'loading') { fn(); }
+      else { document.addEventListener('DOMContentLoaded', fn); }
+    }
+
+    onReady(() => {
+      // 1. Build debug panel FIRST so it exists when trackEvent fires
+      if (isDev) {
+        const panel = document.createElement('div');
+        panel.id = '__analytics_debug';
+        const status = analyticsEnabled ? '● LIVE (Umami)' : '○ DEV only';
+        panel.innerHTML = `
+          <div class="ad-title">
+            <span><span class="ad-dot"></span>Analytics ${status}</span>
+            <span class="ad-close" onclick="this.closest('#__analytics_debug').remove()">✕</span>
+          </div>
+          <div id="__ad_log"></div>
+        `;
+        document.body.appendChild(panel);
+      }
+
+      // 2. NOW fire page view — panel exists to receive it
+      const eventMap = {
+        homepage:    'homepage-view',
+        category:    'category-page-view',
+        opportunity: 'opportunity-detail-view',
+        digest:      'digest-view',
+        archive:     'archive-view',
+      };
+      trackEvent(eventMap[pageType] ?? 'page-view');
+    });
+
+    // Mobile menu toggle
+    const toggle = document.querySelector('.menu-toggle');
+    const nav    = document.querySelector('.main-nav');
+    toggle?.addEventListener('click', () => {
+      const open = nav?.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', String(open));
+    });
+  </script>
+</body>
+</html>

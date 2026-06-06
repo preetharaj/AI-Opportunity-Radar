@@ -1,0 +1,136 @@
+---
+/**
+ * /opportunities/[category]/[slug].astro
+ * Dynamic route — one page per opportunity file.
+ */
+
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { formatDeadline, daysUntil, CATEGORIES } from '../../../utils/content';
+
+export async function getStaticPaths() {
+  const oppModules = import.meta.glob('/content/opportunities/**/*.md', { eager: true }) as Record<string, any>;
+
+  return Object.entries(oppModules).map(([filepath, mod]) => {
+    const parts = filepath.split('/');
+    const slug = parts.pop()!.replace('.md', '');
+    const category = parts.pop()!;
+    return {
+      params: { category, slug },
+      props: {
+        opp: { slug, category, ...mod.frontmatter },
+        Content: mod.default,
+      },
+    };
+  });
+}
+
+const { opp, Content } = Astro.props;
+const { slug, category, title, provider, deadline, amount, region, eligibility,
+        summary, applyLink, sourceLink, publicationDate, status, tags, sampleData } = opp;
+
+const formattedDeadline = formatDeadline(deadline);
+const days = daysUntil(deadline);
+const deadlineSuffix = status !== 'archived'
+  ? (days > 0 ? ` (${days}d left)` : ' (Expired)')
+  : '';
+
+const categoryMeta = CATEGORIES.find(c => c.slug === category);
+const statusLabel = { active: 'Active', 'closing-soon': 'Closing Soon', archived: 'Archived' }[status as string] ?? status;
+const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', archived: 'badge-archived' }[status as string] ?? 'badge-active';
+---
+
+<BaseLayout title={title} description={summary} pageType="opportunity">
+  <div class="container">
+    <div class="opp-detail">
+
+      <a href={import.meta.env.BASE_URL + `categories/${category}/`} class="back-link" style="margin-top:2rem;display:inline-flex;">
+        ← {categoryMeta?.icon} {categoryMeta?.label ?? category}
+      </a>
+
+      <header class="opp-detail-header">
+        <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap; margin-bottom:1rem;">
+          <span class:list={['badge', statusClass]}>{statusLabel}</span>
+          {sampleData && <span class="badge badge-sample">⚠ Sample Data</span>}
+          <span class="tag">{categoryMeta?.icon} {categoryMeta?.label}</span>
+        </div>
+        <h1>{title}</h1>
+        <p style="font-size:1.1rem; color:var(--color-text-muted); margin-top:1rem;">{summary}</p>
+        <div class="opp-card-tags" style="margin-top:1rem;">
+          {tags?.map((tag: string) => <span class="tag">{tag}</span>)}
+        </div>
+      </header>
+
+      <div class="opp-detail-meta-grid">
+        <div class="meta-field">
+          <span class="meta-field-label">Provider</span>
+          <span class="meta-field-value">🏛 {provider}</span>
+        </div>
+        <div class="meta-field">
+          <span class="meta-field-label">Deadline</span>
+          <span class="meta-field-value">📅 {formattedDeadline}{deadlineSuffix}</span>
+        </div>
+        <div class="meta-field">
+          <span class="meta-field-label">Value</span>
+          <span class="meta-field-value">💵 {amount}</span>
+        </div>
+        <div class="meta-field">
+          <span class="meta-field-label">Region</span>
+          <span class="meta-field-value">🌍 {region}</span>
+        </div>
+        <div class="meta-field" style="grid-column: 1 / -1;">
+          <span class="meta-field-label">Eligibility</span>
+          <span class="meta-field-value" style="font-family:var(--font-body); font-size:0.95rem;">{eligibility}</span>
+        </div>
+        <div class="meta-field">
+          <span class="meta-field-label">Published</span>
+          <span class="meta-field-value">
+            {new Date(publicationDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+          </span>
+        </div>
+        <div class="meta-field">
+          <span class="meta-field-label">Category</span>
+          <span class="meta-field-value">{categoryMeta?.icon} {categoryMeta?.label}</span>
+        </div>
+      </div>
+
+      {status !== 'archived' && (
+        <div class="apply-cta">
+          <div class="deadline-callout">
+            <div class="label">Application Deadline</div>
+            <div class="date">{formattedDeadline}</div>
+            <div style="font-size:0.8rem; color:var(--color-text-muted);">
+              {days > 0 ? `${days} days remaining` : 'Deadline passed'}
+            </div>
+          </div>
+          <a
+            href={applyLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="btn btn-accent"
+            onclick={`trackEvent('opportunity-click', { slug: '${slug}', category: '${category}' })`}
+          >
+            Apply Now ↗
+          </a>
+        </div>
+      )}
+
+      <div class="opp-detail-body">
+        <Content />
+      </div>
+
+      {sourceLink && sourceLink !== applyLink && (
+        <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--color-border);">
+          <p style="font-family:var(--font-mono); font-size:0.78rem; color:var(--color-text-faint);">
+            Source: <a href={sourceLink} target="_blank" rel="noopener noreferrer">{sourceLink}</a>
+          </p>
+        </div>
+      )}
+
+      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-border); display:flex; gap:1rem; flex-wrap:wrap;">
+        <a href={import.meta.env.BASE_URL + `categories/${category}/`} class="btn btn-ghost">← More {categoryMeta?.label}</a>
+        <a href={import.meta.env.BASE_URL} class="btn btn-ghost">← All Opportunities</a>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

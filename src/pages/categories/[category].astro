@@ -1,0 +1,158 @@
+---
+/**
+ * /categories/[category].astro
+ * Generates one page per category (grants, fellowships, etc.)
+ */
+
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import OpportunityCard from '../../components/OpportunityCard.astro';
+import { CATEGORIES, sortOpportunities } from '../../utils/content';
+
+// import.meta.glob must be at module level (not inside getStaticPaths)
+const oppModules = import.meta.glob('/content/opportunities/**/*.md', { eager: true }) as Record<string, any>;
+
+function parseOppModules(modules: Record<string, any>) {
+  return Object.entries(modules).map(([filepath, mod]) => {
+    const parts = filepath.split('/');
+    const slug = parts.pop()!.replace('.md', '');
+    const category = parts.pop()!;
+    return { slug, category, ...mod.frontmatter };
+  });
+}
+
+export async function getStaticPaths() {
+  const oppModulesInner = import.meta.glob('/content/opportunities/**/*.md', { eager: true }) as Record<string, any>;
+  const allOpps = Object.entries(oppModulesInner).map(([filepath, mod]) => {
+    const parts = filepath.split('/');
+    const slug = parts.pop()!.replace('.md', '');
+    const category = parts.pop()!;
+    return { slug, category, ...mod.frontmatter };
+  });
+
+  const byCategory: Record<string, any[]> = {};
+  for (const opp of allOpps) {
+    if (!byCategory[opp.category]) byCategory[opp.category] = [];
+    byCategory[opp.category].push(opp);
+  }
+
+  return CATEGORIES.map(cat => ({
+    params: { category: cat.slug },
+    props: {
+      categoryMeta: cat,
+      opportunities: sortOpportunities(byCategory[cat.slug] ?? []),
+    },
+  }));
+}
+
+const { categoryMeta, opportunities } = Astro.props;
+const { slug: categorySlug, label, icon, description } = categoryMeta;
+
+const active   = opportunities.filter((o: any) => o.status === 'active');
+const closing  = opportunities.filter((o: any) => o.status === 'closing-soon');
+const archived = opportunities.filter((o: any) => o.status === 'archived');
+const liveCount = active.length + closing.length;
+---
+
+<BaseLayout
+  title={`${icon} ${label}`}
+  description={`${description} — actively curated AI opportunities.`}
+  pageType="category"
+>
+  <section class="category-hero" aria-labelledby="cat-heading">
+    <div class="container">
+      <a href={import.meta.env.BASE_URL} class="back-link">← All Opportunities</a>
+      <div class="category-icon" aria-hidden="true">{icon}</div>
+      <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
+        <div>
+          <h1 id="cat-heading">{label}</h1>
+          <p style="color:var(--color-text-muted); margin-top:0.5rem; font-size:1.05rem;">{description}</p>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--font-display); font-size:2.5rem; font-weight:800; color:var(--color-accent); line-height:1;">{liveCount}</div>
+          <div style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--color-text-muted);">Active</div>
+        </div>
+      </div>
+      <div style="margin-top:2rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
+        {CATEGORIES.filter(c => c.slug !== categorySlug).map(c => (
+          <a href={import.meta.env.BASE_URL + `categories/${c.slug}/`} class="btn btn-ghost" style="font-size:0.75rem;">
+            {c.icon} {c.label}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {closing.length > 0 && (
+    <section class="section" aria-labelledby="closing-heading">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">⚡ Act fast</p>
+            <h2 id="closing-heading">Closing Soon</h2>
+          </div>
+        </div>
+        <div class="opp-grid" role="list">
+          {closing.map((opp: any) => (
+            <div role="listitem"><OpportunityCard {...opp} /></div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  <section class="section" aria-labelledby="active-heading">
+    <div class="container">
+      <div class="section-header">
+        <div>
+          <p class="section-eyebrow">Open now</p>
+          <h2 id="active-heading">Active {label}</h2>
+        </div>
+        <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--color-text-muted);">{active.length} available</span>
+      </div>
+      {active.length > 0 ? (
+        <div class="opp-grid" role="list">
+          {active.map((opp: any) => (
+            <div role="listitem"><OpportunityCard {...opp} /></div>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <div class="icon">{icon}</div>
+          <p>No active {label.toLowerCase()} right now — check back next week.</p>
+          {archived.length > 0 && (
+            <a href={import.meta.env.BASE_URL + `archive/#${categorySlug}`} class="btn btn-ghost" style="margin-top:1rem;">
+              View {archived.length} archived →
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  </section>
+
+  {archived.length > 0 && (
+    <section class="section" aria-labelledby="archived-heading" style="background:var(--color-surface);">
+      <div class="container">
+        <div class="section-header">
+          <div>
+            <p class="section-eyebrow">Closed</p>
+            <h2 id="archived-heading">Archived {label}</h2>
+          </div>
+          <a href={import.meta.env.BASE_URL + "archive/"} class="btn btn-ghost">Full archive →</a>
+        </div>
+        <div class="archive-list" id={categorySlug}>
+          {archived.map((opp: any) => (
+            <div class="archive-entry">
+              <span class="archive-date">
+                {new Date(opp.deadline).toLocaleDateString('en-US', { month: 'short', year: 'numeric' })}
+              </span>
+              <div>
+                <a href={import.meta.env.BASE_URL + `opportunities/${opp.category}/${opp.slug}/`} class="archive-title">{opp.title}</a>
+                <span class="badge badge-archived" style="margin-left:0.5rem;">Archived</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
