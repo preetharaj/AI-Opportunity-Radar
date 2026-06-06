@@ -6,7 +6,7 @@ import { defineConfig } from 'astro/config';
 
 export default defineConfig({
   site: 'https://preetharaj.github.io',
-  base: '/ai-opportunity-radar',
+  base: '/AI-Opportunity-Radar',
   output: 'static',
   build: { assets: '_assets' },
 });
