@@ -10,8 +10,13 @@ summary: "Techstars Anywhere is a remote-first accelerator for founders who want
 applyLink: "https://www.techstars.com/accelerators/anywhere"
 sourceLink: "https://www.techstars.com/accelerators/anywhere"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["accelerator", "startup", "Techstars", "remote", "Americas", "seed", "any-industry"]
+
+best_for: ["founders"]
+effort_level: "medium"
+hook: "Techstars' remote cohort opens the programme to founders outside major hubs — $120K convertible note plus the Techstars network on a fully distributed basis."
 ---
 
 Techstars Anywhere is designed for founders who shouldn't have to relocate to get world-class accelerator support. The programme operates virtually with three in-person offsites in major startup hubs.

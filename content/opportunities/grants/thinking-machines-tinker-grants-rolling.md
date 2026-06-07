@@ -10,8 +10,13 @@ summary: "Rolling grants from Thinking Machines Lab for researchers and instruct
 applyLink: "https://thinkingmachines.ai/news/tinker-research-and-teaching-grants/"
 sourceLink: "https://grantedai.com/grants/tinker-research-and-teaching-grants-program-thinking-machines-lab-f33bedc3"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "active"
 tags: ["grants", "global", "Thinking-Machines", "Tinker", "LLM", "fine-tuning", "teaching", "research", "rolling"]
+
+best_for: ["researchers", "founders"]
+effort_level: "low"
+hook: "A rolling grant with no fixed deadline — rare in the AI funding space, meaning you can apply when your project is ready rather than racing a calendar."
 ---
 
 Thinking Machines Lab offers two rolling grant types for academics using their Tinker fine-tuning platform:

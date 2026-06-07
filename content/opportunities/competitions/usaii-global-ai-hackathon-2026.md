@@ -10,8 +10,13 @@ summary: "USAII's virtual student AI hackathon — zero-to-low code, open global
 applyLink: "https://aihackathon.usaii.org/"
 sourceLink: "https://aihackathon.usaii.org/"
 publicationDate: "2026-06-06"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["competition", "hackathon", "students", "global", "virtual", "prize", "low-code", "USAII"]
+
+best_for: ["anyone"]
+effort_level: "low"
+hook: "Open to all skill levels globally — low barrier to entry with prize money and portfolio value for builders at any stage."
 ---
 
 The USAII Global AI Hackathon 2026 is a structured virtual competition designed for students at all levels — from high school through doctoral programmes. No advanced coding required: this is a zero-to-low code competition where AI tools are explicitly permitted.

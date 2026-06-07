@@ -127,6 +127,24 @@ const isDev = import.meta.env.DEV;
     <slot />
   </main>
 
+  <div class="rss-strip">
+    <div class="rss-strip-inner">
+      <p class="rss-strip-text">
+        📡 <strong>Subscribe via RSS:</strong> Copy this link into Feedly, Inoreader, Reeder, or any RSS reader.
+      </p>
+      <div class="rss-url-row">
+        <code class="rss-url">{import.meta.env.BASE_URL}/feed.xml</code>
+        <a
+          href={import.meta.env.BASE_URL + "/feed.xml"}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rss-open-btn"
+          onclick="trackEvent('rss-click', { source: 'footer-strip' })"
+        >Open Feed ↗</a>
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="site-shell footer-inner">
       <div>
@@ -242,4 +260,51 @@ const isDev = import.meta.env.DEV;
     });
   </script>
 </body>
+
+<style>
+.rss-strip {
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+  padding: 1rem 1.5rem;
+}
+.rss-strip-inner {
+  max-width: 860px;
+  margin: 0 auto;
+}
+.rss-strip-text {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 0.5rem;
+}
+.rss-strip-text strong {
+  color: var(--color-text);
+}
+.rss-url-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+.rss-url {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  background: var(--color-surface-alt, var(--color-bg));
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.3rem 0.65rem;
+  color: var(--color-text);
+  user-select: all;
+}
+.rss-open-btn {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.rss-open-btn:hover {
+  text-decoration: underline;
+}
+</style>
+
 </html>

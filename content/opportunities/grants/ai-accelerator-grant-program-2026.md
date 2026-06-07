@@ -10,8 +10,13 @@ summary: "The AI Accelerator Grant Program supports international organisations 
 applyLink: "https://www2.fundsforngos.org/listing/beat-the-deadline-secure-funding-through-opportunities-closing-in-june-2026/"
 sourceLink: "https://www2.fundsforngos.org/listing/beat-the-deadline-secure-funding-through-opportunities-closing-in-june-2026/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["grants", "global", "NGO", "social-good", "development", "AI-for-good"]
+
+best_for: ["founders"]
+effort_level: "medium"
+hook: "Structured accelerator funding for AI startups at the growth stage — combines grant money with mentorship access often unavailable elsewhere."
 ---
 
 The AI Accelerator Grant Program backs international organisations using AI to drive measurable social impact. The 2026 cycle prioritises proposals that address documented gaps in health access, educational equity, climate adaptation, or economic inclusion in underserved communities.

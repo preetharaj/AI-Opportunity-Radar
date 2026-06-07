@@ -10,8 +10,13 @@ summary: "IAPS runs a competitive summer AI policy fellowship (June–August 202
 applyLink: "https://www.iaps.ai/fellowship"
 sourceLink: "https://www.iaps.ai/fellowship"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["fellowship", "AI-policy", "governance", "USA", "remote", "summer", "Washington-DC"]
+
+best_for: ["researchers", "students"]
+effort_level: "high"
+hook: "Rare paid fellowship at the intersection of AI and policy — direct access to policymakers and think tanks that rarely recruit from technical backgrounds."
 ---
 
 The IAPS AI Policy Fellowship is a structured 12-week programme running June 1 – August 21, 2026, placing fellows in Washington D.C. or remotely. Fellows work on defined AI governance and policy projects alongside IAPS researchers and mentors.

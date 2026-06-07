@@ -26,7 +26,8 @@ export async function getStaticPaths() {
 
 const { opp, Content } = Astro.props;
 const { slug, category, title, provider, deadline, amount, region, eligibility,
-        summary, applyLink, sourceLink, publicationDate, status, tags, sampleData } = opp;
+        summary, applyLink, sourceLink, publicationDate, status, tags,
+        best_for, effort_level, hook, lastVerified, sampleData } = opp;
 
 const formattedDeadline = formatDeadline(deadline);
 const days = daysUntil(deadline);
@@ -37,6 +38,11 @@ const deadlineSuffix = status !== 'archived'
 const categoryMeta = CATEGORIES.find(c => c.slug === category);
 const statusLabel = { active: 'Active', 'closing-soon': 'Closing Soon', archived: 'Archived' }[status as string] ?? status;
 const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', archived: 'badge-archived' }[status as string] ?? 'badge-active';
+
+const bestForLabel: Record<string, string> = {
+  students: 'Students', researchers: 'Researchers', founders: 'Founders',
+  phd: 'PhD holders', anyone: 'Anyone'
+};
 ---
 
 <BaseLayout title={title} description={summary} pageType="opportunity">
@@ -60,6 +66,14 @@ const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', a
         </div>
       </header>
 
+      <!-- NEW: Why it matters hook -->
+      {hook && (
+        <div class="hook-callout">
+          <span class="hook-label">Why it matters</span>
+          <p>{hook}</p>
+        </div>
+      )}
+
       <div class="opp-detail-meta-grid">
         <div class="meta-field">
           <span class="meta-field-label">Provider</span>
@@ -81,6 +95,30 @@ const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', a
           <span class="meta-field-label">Eligibility</span>
           <span class="meta-field-value" style="font-family:var(--font-body); font-size:0.95rem;">{eligibility}</span>
         </div>
+
+        <!-- NEW: Best For + Effort Level -->
+        {(best_for?.length || effort_level) && (
+          <div class="meta-field" style="grid-column: 1 / -1; display:flex; gap:2rem; flex-wrap:wrap;">
+            {best_for && best_for.length > 0 && (
+              <div>
+                <span class="meta-field-label">Best For</span>
+                <span class="meta-field-value">
+                  👤 {best_for.map((b: string) => bestForLabel[b] ?? b).join(', ')}
+                </span>
+              </div>
+            )}
+            {effort_level && (
+              <div>
+                <span class="meta-field-label">Effort Level</span>
+                <span class="meta-field-value">
+                  {effort_level === 'low' ? '🟢' : effort_level === 'medium' ? '🟡' : '🔴'}
+                  {' '}{effort_level.charAt(0).toUpperCase() + effort_level.slice(1)}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
         <div class="meta-field">
           <span class="meta-field-label">Published</span>
           <span class="meta-field-value">
@@ -91,6 +129,24 @@ const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', a
           <span class="meta-field-label">Category</span>
           <span class="meta-field-value">{categoryMeta?.icon} {categoryMeta?.label}</span>
         </div>
+        {lastVerified && (
+          <div class="meta-field">
+            <span class="meta-field-label">Last Verified</span>
+            <span class="meta-field-value verified-date">
+              ✓ {new Date(lastVerified).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })}
+            </span>
+          </div>
+        )}
+        {sourceLink && (
+          <div class="meta-field">
+            <span class="meta-field-label">Source</span>
+            <span class="meta-field-value">
+              <a href={sourceLink} target="_blank" rel="noopener noreferrer" class="official-badge">
+                ✦ Official Source ↗
+              </a>
+            </span>
+          </div>
+        )}
       </div>
 
       {status !== 'archived' && (
@@ -118,14 +174,6 @@ const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', a
         <Content />
       </div>
 
-      {sourceLink && sourceLink !== applyLink && (
-        <div style="margin-top:2rem; padding-top:1.5rem; border-top:1px solid var(--color-border);">
-          <p style="font-family:var(--font-mono); font-size:0.78rem; color:var(--color-text-faint);">
-            Source: <a href={sourceLink} target="_blank" rel="noopener noreferrer">{sourceLink}</a>
-          </p>
-        </div>
-      )}
-
       <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-border); display:flex; gap:1rem; flex-wrap:wrap;">
         <a href={import.meta.env.BASE_URL + `/categories/${category}/`} class="btn btn-ghost">← More {categoryMeta?.label}</a>
         <a href={import.meta.env.BASE_URL} class="btn btn-ghost">← All Opportunities</a>
@@ -134,3 +182,48 @@ const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', a
     </div>
   </div>
 </BaseLayout>
+
+<style>
+.hook-callout {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  border-left: 3px solid var(--color-accent);
+  background: var(--color-surface-alt, var(--color-surface));
+  border-radius: 0 6px 6px 0;
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+.hook-label {
+  display: block;
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-accent);
+  margin-bottom: 0.4rem;
+  font-style: normal;
+}
+.verified-date {
+  color: var(--color-success, #22c55e);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+}
+.official-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  border: 1px solid var(--color-accent);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  transition: background 0.15s;
+}
+.official-badge:hover {
+  background: var(--color-accent);
+  color: var(--color-bg, #fff);
+}
+</style>

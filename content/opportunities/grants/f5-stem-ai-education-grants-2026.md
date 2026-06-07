@@ -10,8 +10,13 @@ summary: "F5 Foundation is awarding 10 unrestricted grants of $50,000 each to no
 applyLink: "https://www.f5.com/company/global-good/us-stem-grant"
 sourceLink: "https://www2.fundsforngos.org/innovation/apply-now-f5-stem-and-ai-education-grants-for-underserved-communities/"
 publicationDate: "2026-06-06"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["grants", "Africa", "Asia", "Latin-America", "nonprofits", "AI-education", "STEM", "F5"]
+
+best_for: ["researchers", "students"]
+effort_level: "medium"
+hook: "Education-focused AI grants from a major enterprise tech company — relatively undersubscribed compared to research-only grant pools."
 ---
 
 F5 Foundation has officially opened applications for its 2026 STEM & AI Education Grant Program. Unlike previous cycles, the 2026 track makes **AI education mandatory** — every applicant must demonstrate how AI concepts, literacy, or competencies are integrated into their existing programmes.

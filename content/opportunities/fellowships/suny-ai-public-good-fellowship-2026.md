@@ -10,9 +10,14 @@ summary: "SUNY's AI for the Public Good Fellowship supports academics and staff 
 applyLink: "https://system.suny.edu/academic-affairs/fellows-programs/ai-fellows/"
 sourceLink: "https://system.suny.edu/academic-affairs/fellows-programs/ai-fellows/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "archived"
 archivedDate: "2026-06-06"
 tags: ["fellowship", "USA", "SUNY", "public-good", "academic", "AI-education"]
+
+best_for: ["students", "researchers"]
+effort_level: "medium"
+hook: "State university fellowship with real project scope — lower competition than national fellowships while still providing funded research time."
 ---
 
 The SUNY AI for the Public Good Fellowship places fellows across the academic year, working on AI initiatives that benefit communities, students, and public institutions.

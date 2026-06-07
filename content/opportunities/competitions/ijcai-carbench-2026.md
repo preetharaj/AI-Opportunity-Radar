@@ -10,8 +10,13 @@ summary: "CAR-bench evaluates LLM agents as automotive in-car voice assistants, 
 applyLink: "https://2026.ijcai.org/competitions/"
 sourceLink: "https://2026.ijcai.org/competitions/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["competition", "IJCAI", "LLM", "agents", "automotive", "NLP", "hallucination", "global"]
+
+best_for: ["researchers"]
+effort_level: "high"
+hook: "Benchmark competition with direct TMLR publication pathway — one of the few competitions where participation itself produces a citable research output."
 ---
 
 CAR-bench is an academic benchmark competition focused on LLM agent reliability in a constrained, safety-relevant domain: automotive in-car voice assistants.

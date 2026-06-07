@@ -16,10 +16,13 @@ interface Props {
   summary: string;
   status: 'active' | 'closing-soon' | 'archived';
   tags: string[];
+  best_for?: string[];
+  effort_level?: 'low' | 'medium' | 'high';
   sampleData?: boolean;
 }
 
-const { slug, category, title, provider, deadline, amount, region, summary, status, tags, sampleData } = Astro.props;
+const { slug, category, title, provider, deadline, amount, region, summary,
+        status, tags, best_for, effort_level, sampleData } = Astro.props;
 
 // Format deadline as human-readable
 const deadlineDate = new Date(deadline);
@@ -44,6 +47,13 @@ const categoryIcons: Record<string, string> = {
   grants: '💰', fellowships: '🎓', 'startup-programs': '🚀', competitions: '🏆', courses: '📚'
 };
 const icon = categoryIcons[category] ?? '⬡';
+
+// Effort + best_for display helpers
+const effortEmoji: Record<string, string> = { low: '🟢', medium: '🟡', high: '🔴' };
+const bestForLabel: Record<string, string> = {
+  students: 'Students', researchers: 'Researchers', founders: 'Founders',
+  phd: 'PhD holders', anyone: 'Anyone'
+};
 ---
 
 <article
@@ -87,10 +97,26 @@ const icon = categoryIcons[category] ?? '⬡';
     </span>
   </div>
 
+  <!-- NEW: best_for + effort_level signals -->
+  {(best_for?.length || effort_level) && (
+    <div class="opp-card-signals">
+      {best_for && best_for.length > 0 && (
+        <span class="signal-item">
+          👤 {best_for.map(b => bestForLabel[b] ?? b).join(', ')}
+        </span>
+      )}
+      {effort_level && (
+        <span class="signal-item">
+          {effortEmoji[effort_level]} Effort: {effort_level.charAt(0).toUpperCase() + effort_level.slice(1)}
+        </span>
+      )}
+    </div>
+  )}
+
   <!-- Summary -->
   <p class="opp-card-summary">{summary}</p>
 
-  <!-- Footer: tags + apply button -->
+  <!-- Footer: tags + view button -->
   <footer class="opp-card-footer">
     <div class="opp-card-tags" aria-label="Tags">
       {tags.slice(0, 4).map(tag => (
@@ -108,3 +134,17 @@ const icon = categoryIcons[category] ?? '⬡';
     )}
   </footer>
 </article>
+
+<style>
+.opp-card-signals {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0 0.6rem;
+}
+.signal-item {
+  font-size: 0.78rem;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+}
+</style>

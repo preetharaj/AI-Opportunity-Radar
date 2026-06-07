@@ -10,8 +10,13 @@ summary: "Oxford's Institute for Ethics in AI invites applications for its Accel
 applyLink: "https://afp.oxford-aiethics.ox.ac.uk/join"
 sourceLink: "https://afp.oxford-aiethics.ox.ac.uk/join"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["fellowship", "AI-ethics", "Oxford", "governance", "global", "remote", "policy"]
+
+best_for: ["researchers"]
+effort_level: "high"
+hook: "Oxford Institute for Ethics in AI fellowship — one of the few funded programmes focused on actionable AI ethics work rather than purely academic output."
 ---
 
 The Accelerator Fellowship Programme is hosted by Oxford's Institute for Ethics in AI, backed by the Stephen A. Schwarzman Foundation. Fellows work independently on projects designed to create tangible impact in AI ethics — tools, frameworks, policy outputs, or public discourse initiatives.

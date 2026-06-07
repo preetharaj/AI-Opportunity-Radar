@@ -10,8 +10,13 @@ summary: "NSF's SBIR/STTR programme funds high-risk, high-impact deep tech and A
 applyLink: "https://www.bwcoconsulting.com/funding/ai-ml"
 sourceLink: "https://seedfund.nsf.gov/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "active"
 tags: ["SBIR", "STTR", "NSF", "USA", "deep-tech", "AI", "startup", "non-dilutive", "seed"]
+
+best_for: ["founders"]
+effort_level: "high"
+hook: "NSF SBIR is one of the largest non-dilutive funding sources in the US — worth the application overhead for founders building deep-tech AI products."
 ---
 
 NSF SBIR/STTR is the premier non-dilutive funding programme for US deep tech startups. Funds are awarded as grants — no equity taken.

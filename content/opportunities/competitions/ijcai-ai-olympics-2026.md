@@ -10,9 +10,14 @@ summary: "The 4th AI Olympics at IJCAI 2026 challenges teams to develop and benc
 applyLink: "https://2026.ijcai.org/competitions/"
 sourceLink: "https://2026.ijcai.org/competitions/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "archived"
 archivedDate: "2026-06-06"
 tags: ["competition", "IJCAI", "robotics", "reinforcement-learning", "control-systems", "global", "hardware"]
+
+best_for: ["researchers", "students"]
+effort_level: "medium"
+hook: "IJCAI is one of the oldest AI conferences — placing well here carries strong signal value in academic and research hiring."
 ---
 
 The AI Olympics at IJCAI is a reproducible hardware benchmark competition — participants train controllers that are tested on real physical hardware, not just simulation. The 2026 edition uses the double pendulum (also called the acrobot), a classic underactuated control problem.

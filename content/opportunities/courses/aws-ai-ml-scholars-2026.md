@@ -10,8 +10,13 @@ summary: "AWS and Udacity offer 100,000 free AI/ML scholarships for 2026. The Ch
 applyLink: "https://www.udacity.com/scholarships/aws-ai-ml-scholars"
 sourceLink: "https://aws.amazon.com/about-aws/our-impact/scholars/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["course", "free", "AWS", "Udacity", "global", "beginner", "scholarship", "certification", "GenAI"]
+
+best_for: ["students", "anyone"]
+effort_level: "low"
+hook: "100,000 scholarships globally — one of the easiest high-value AI credentials to access, backed by AWS with direct path to certification."
 ---
 
 AWS and Udacity are sponsoring 100,000 learners worldwide with free AI/ML training in 2026. The programme is designed for beginners — no prior technical knowledge needed.

@@ -10,8 +10,13 @@ summary: "Google's equity-free accelerator for AI startups tackling the energy t
 applyLink: "https://startup.google.com/programs/accelerator/"
 sourceLink: "https://blog.google/company-news/outreach-and-initiatives/entrepreneurs/google-for-startups-accelerator/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["accelerator", "startup", "Google", "energy", "AI", "Europe", "North-America", "equity-free", "cloud-credits"]
+
+best_for: ["founders"]
+effort_level: "medium"
+hook: "Up to $350K in Google Cloud credits with direct access to Google engineers — among the highest-value no-equity accelerator programmes available in 2026."
 ---
 
 Google for Startups is running its 2026 AI accelerator focused on energy transition — one of the fastest-growing sectors for AI deployment. Cohorts of 10–15 startups work through a mix of remote and in-person sessions over 10 weeks.

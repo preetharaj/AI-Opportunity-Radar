@@ -10,8 +10,13 @@ summary: "Thinking Machines Lab is awarding multiple $100K grants for research a
 applyLink: "https://thinkingmachines.ai/news/interactivity-research-grants/apply/"
 sourceLink: "https://thinkingmachines.ai/news/interactivity-research-grants/"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["grants", "global", "Thinking-Machines", "interactivity", "multimodal", "research", "human-AI", "agents"]
+
+best_for: ["researchers", "founders"]
+effort_level: "medium"
+hook: "One of the few AI grants combining meaningful funding with compute credits — viable for independent researchers without large institutional backing."
 ---
 
 Thinking Machines Lab — the AI research company founded by former OpenAI CTO Mira Murati — is awarding multiple $100,000 research grants for work that advances AI interactivity. Each grant also includes $25,000 in Tinker credits (their model fine-tuning platform).

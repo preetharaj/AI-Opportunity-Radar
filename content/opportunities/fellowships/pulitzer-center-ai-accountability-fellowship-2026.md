@@ -10,8 +10,13 @@ summary: "Pulitzer Center's fifth cohort of AI Accountability Fellows. 10-month 
 applyLink: "https://pulitzercenter.submittable.com/submit/354661/ai-accountability-fellowship-2026-2027"
 sourceLink: "https://pulitzercenter.org/blog/open-call-proposals-pulitzer-centers-ai-accountability-fellowships-2026-2027"
 publicationDate: "2026-06-06"
+lastVerified: "2026-06-07"
 status: "active"
 tags: ["fellowship", "journalism", "global", "AI-accountability", "Pulitzer", "reporting", "media"]
+
+best_for: ["researchers", "founders"]
+effort_level: "high"
+hook: "Pulitzer Center backing gives this fellowship exceptional reach — outputs are published and amplified far beyond what most research fellowships offer."
 ---
 
 The Pulitzer Center is accepting applications for the fifth cohort of its AI Accountability Fellowships — one of the most prestigious fellowships for journalists covering artificial intelligence.

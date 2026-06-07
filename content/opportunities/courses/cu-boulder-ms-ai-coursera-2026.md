@@ -10,8 +10,13 @@ summary: "University of Colorado Boulder's fully online MS in AI on Coursera. Th
 applyLink: "https://www.coursera.org/degrees/ms-artificial-intelligence-boulder"
 sourceLink: "https://www.coursera.org/degrees/ms-artificial-intelligence-boulder"
 publicationDate: "2026-06-03"
+lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["course", "masters", "degree", "CU-Boulder", "Coursera", "global", "online", "paid"]
+
+best_for: ["students", "anyone"]
+effort_level: "low"
+hook: "Accredited MS degree from a top-100 university fully online — significantly lower cost than on-campus equivalents with the same credential value."
 ---
 
 CU Boulder's MS in AI is delivered entirely online via Coursera. The programme features a performance-based admission pathway — you can begin coursework and earn your way into full admission, regardless of your undergraduate field.

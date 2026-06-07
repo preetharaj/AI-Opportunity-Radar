@@ -79,6 +79,50 @@ const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
         <a href={import.meta.env.BASE_URL} class="btn btn-ghost">All Opportunities →</a>
       </div>
 
+      <div class="rss-subscribe-callout">
+        <span class="rss-icon">📡</span>
+        <div>
+          <strong>Get the next radar update automatically</strong>
+          <p>Subscribe via RSS — works in Feedly, Reeder, NetNewsWire, or any feed reader.</p>
+          <a
+            href={import.meta.env.BASE_URL + "/feed.xml"}
+            class="btn btn-ghost"
+            style="margin-top:0.5rem; display:inline-block;"
+            onclick="trackEvent('rss-click', { source: 'digest-footer' })"
+          >
+            Subscribe via RSS ↗
+          </a>
+        </div>
+      </div>
+
     </div>
   </div>
 </BaseLayout>
+
+<style>
+.rss-subscribe-callout {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-top: 2.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  background: var(--color-surface);
+}
+.rss-subscribe-callout .rss-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.rss-subscribe-callout strong {
+  display: block;
+  font-size: 0.95rem;
+  margin-bottom: 0.25rem;
+}
+.rss-subscribe-callout p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+</style>

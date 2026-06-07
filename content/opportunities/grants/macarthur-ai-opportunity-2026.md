@@ -10,9 +10,14 @@ summary: "MacArthur Foundation AI initiative supporting nonprofits and research 
 applyLink: "https://grantedai.com/grants/ai-opportunity-macarthur-foundation-6a15818b"
 sourceLink: "https://grantedai.com/grants/ai-opportunity-macarthur-foundation-6a15818b"
 publicationDate: "2026-05-01"
+lastVerified: "2026-06-07"
 status: "archived"
 archivedDate: "2026-06-02"
 tags: ["grants", "global", "MacArthur", "AI-governance", "nonprofit", "research"]
+
+best_for: ["researchers"]
+effort_level: "high"
+hook: "MacArthur backing signals long-term legitimacy — this is one of the highest-prestige AI grants available to independent researchers."
 ---
 
 The MacArthur Foundation's AI Opportunity initiative directed up to $10,000,000 toward nonprofits and academic institutions studying the societal implications of AI development and deployment.
