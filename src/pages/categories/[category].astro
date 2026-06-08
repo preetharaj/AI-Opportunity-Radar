@@ -2,6 +2,7 @@
 /**
  * /categories/[category].astro
  * Generates one page per category (grants, fellowships, etc.)
+ * Includes client-side region filter.
  */
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
@@ -51,6 +52,18 @@ const active   = opportunities.filter((o: any) => o.status === 'active');
 const closing  = opportunities.filter((o: any) => o.status === 'closing-soon');
 const archived = opportunities.filter((o: any) => o.status === 'archived');
 const liveCount = active.length + closing.length;
+
+// Derive canonical region tag from region string
+function regionTag(region: string): string {
+  if (!region) return 'global';
+  const r = region.toLowerCase();
+  if (r.includes('india')) return 'india';
+  if (r.includes('southeast asia') || r.includes('sea') || r.includes('singapore') || r.includes('indonesia') || r.includes('vietnam') || r.includes('philippines') || r.includes('malaysia') || r.includes('thailand')) return 'sea';
+  if (r.includes('europe') || r.includes('eu ') || r.includes('uk') || r.includes('london') || r.includes('paris') || r.includes('berlin')) return 'europe';
+  if (r.includes('usa') || r.includes('united states') || r.includes('washington') || r.includes('berkeley') || r.includes('americas')) return 'usa';
+  if (r.includes('australia') || r.includes('csiro') || r.includes('australian')) return 'australia';
+  return 'global';
+}
 ---
 
 <BaseLayout
@@ -82,6 +95,25 @@ const liveCount = active.length + closing.length;
     </div>
   </section>
 
+  <!-- REGION FILTER BAR -->
+  <div class="region-filter-bar" id="region-filter" aria-label="Filter by region">
+    <div class="container">
+      <div class="filter-heading">
+        <span class="filter-title">Filter by Region</span>
+        <span class="filter-count" id="filter-count" aria-live="polite"></span>
+      </div>
+      <div class="filter-chips" role="group" aria-label="Region filters">
+        <button class="chip chip-active" data-region="all" onclick="filterRegion('all')">🌐 All Regions</button>
+        <button class="chip" data-region="global" onclick="filterRegion('global')">🌍 Global</button>
+        <button class="chip" data-region="india" onclick="filterRegion('india')">🇮🇳 India</button>
+        <button class="chip" data-region="sea" onclick="filterRegion('sea')">🌏 SEA</button>
+        <button class="chip" data-region="europe" onclick="filterRegion('europe')">🇪🇺 Europe</button>
+        <button class="chip" data-region="usa" onclick="filterRegion('usa')">🇺🇸 USA</button>
+        <button class="chip" data-region="australia" onclick="filterRegion('australia')">🇦🇺 Australia</button>
+      </div>
+    </div>
+  </div>
+
   {closing.length > 0 && (
     <section class="section" aria-labelledby="closing-heading">
       <div class="container">
@@ -91,9 +123,11 @@ const liveCount = active.length + closing.length;
             <h2 id="closing-heading">Closing Soon</h2>
           </div>
         </div>
-        <div class="opp-grid" role="list">
+        <div class="opp-grid" role="list" id="grid-closing">
           {closing.map((opp: any) => (
-            <div role="listitem"><OpportunityCard {...opp} /></div>
+            <div role="listitem" data-region={regionTag(opp.region)}>
+              <OpportunityCard {...opp} />
+            </div>
           ))}
         </div>
       </div>
@@ -110,9 +144,11 @@ const liveCount = active.length + closing.length;
         <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--color-text-muted);">{active.length} available</span>
       </div>
       {active.length > 0 ? (
-        <div class="opp-grid" role="list">
+        <div class="opp-grid" role="list" id="grid-active">
           {active.map((opp: any) => (
-            <div role="listitem"><OpportunityCard {...opp} /></div>
+            <div role="listitem" data-region={regionTag(opp.region)}>
+              <OpportunityCard {...opp} />
+            </div>
           ))}
         </div>
       ) : (
@@ -156,3 +192,118 @@ const liveCount = active.length + closing.length;
     </section>
   )}
 </BaseLayout>
+
+<style>
+.region-filter-bar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--color-bg);
+  border-top: 3px solid var(--color-accent);
+  border-bottom: 1px solid var(--color-border);
+  padding: 1rem 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+.region-filter-bar .container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+.filter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.filter-title {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+.filter-chips {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.chip {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+  font-weight: 500;
+}
+.chip:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  background: var(--color-surface);
+}
+.chip-active {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(36,84,198,0.25);
+}
+.filter-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--color-border);
+}
+[data-region].hidden {
+  display: none;
+}
+[data-region].hidden {
+  display: none;
+}
+</style>
+
+<script>
+  function filterRegion(region: string) {
+    // Update chip states
+    document.querySelectorAll('.chip').forEach(chip => {
+      const el = chip as HTMLElement;
+      el.classList.toggle('chip-active', el.dataset.region === region);
+    });
+
+    // Show/hide cards
+    const cards = document.querySelectorAll('[data-region]') as NodeListOf<HTMLElement>;
+    let visible = 0;
+    cards.forEach(card => {
+      const match = region === 'all' || card.dataset.region === region || card.dataset.region === 'global';
+      card.classList.toggle('hidden', !match);
+      if (match) visible++;
+    });
+
+    // Update count
+    const countEl = document.getElementById('filter-count');
+    if (countEl) {
+      countEl.textContent = region === 'all' ? '' : `${visible} shown`;
+    }
+
+    // Hide empty section headers gracefully
+    ['grid-closing', 'grid-active'].forEach(gridId => {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      const anyVisible = Array.from(grid.querySelectorAll('[data-region]')).some(
+        el => !(el as HTMLElement).classList.contains('hidden')
+      );
+      const section = grid.closest('section');
+      if (section) section.style.display = anyVisible ? '' : 'none';
+    });
+  }
+
+  // Expose globally for onclick
+  (window as any).filterRegion = filterRegion;
+</script>
