@@ -11,7 +11,7 @@ applyLink: "https://www.usief.org.in/Fellowships/Fulbright-Nehru-Doctoral-Resear
 sourceLink: "https://www2.fundsforngos.org/community-development/cfas-fulbright-nehru-doctoral-research-fellowship-program-india/"
 publicationDate: "2026-06-07"
 lastVerified: "2026-06-07"
-status: "active"
+status: "closing-soon"
 tags: ["fellowship", "India", "PhD", "Fulbright", "USA", "research", "government", "AI-policy"]
 best_for: ["phd", "researchers"]
 effort_level: "high"
