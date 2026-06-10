@@ -10,6 +10,7 @@ summary: "Prestigious government fellowship for Indian PhD students to conduct d
 applyLink: "https://www.usief.org.in/Fellowships/Fulbright-Nehru-Doctoral-Research-Fellowships.aspx"
 sourceLink: "https://www2.fundsforngos.org/community-development/cfas-fulbright-nehru-doctoral-research-fellowship-program-india/"
 publicationDate: "2026-06-07"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["fellowship", "India", "PhD", "Fulbright", "USA", "research", "government", "AI-policy"]

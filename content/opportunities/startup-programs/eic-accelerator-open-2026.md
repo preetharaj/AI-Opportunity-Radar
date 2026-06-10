@@ -10,6 +10,7 @@ summary: "The EU's flagship open-track accelerator for any deep tech startup —
 applyLink: "https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator_en"
 sourceLink: "https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator_en"
 publicationDate: "2026-06-08"
+newThisWeek: true
 lastVerified: "2026-06-08"
 status: "active"
 tags: ["grant", "equity", "Europe", "EU", "startup", "SME", "deep-tech", "EIC", "blended-finance", "open-track"]

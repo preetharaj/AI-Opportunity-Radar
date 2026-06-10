@@ -10,6 +10,7 @@ summary: "Techstars Anywhere is a remote-first accelerator for founders who want
 applyLink: "https://www.techstars.com/accelerators/anywhere"
 sourceLink: "https://www.techstars.com/accelerators/anywhere"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["accelerator", "startup", "Techstars", "remote", "Americas", "seed", "any-industry"]

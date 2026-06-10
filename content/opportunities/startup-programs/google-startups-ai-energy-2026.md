@@ -10,6 +10,7 @@ summary: "Google's equity-free accelerator for AI startups tackling the energy t
 applyLink: "https://startup.google.com/programs/accelerator/"
 sourceLink: "https://blog.google/company-news/outreach-and-initiatives/entrepreneurs/google-for-startups-accelerator/"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["accelerator", "startup", "Google", "energy", "AI", "Europe", "North-America", "equity-free", "cloud-credits"]

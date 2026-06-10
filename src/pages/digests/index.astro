@@ -20,7 +20,7 @@ const digests = Object.entries(digestModules)
       <a href={import.meta.env.BASE_URL} class="back-link">← Home</a>
       <div class="category-icon">📬</div>
       <h1>Weekly Digests</h1>
-      <p style="color:var(--color-text-muted); margin-top:0.5rem;">Every week's curated opportunity list, in one place.</p>
+      <p style="color:var(--muted); margin-top:0.5rem;">Every week's curated opportunity list, in one place.</p>
     </div>
   </section>
 
@@ -41,7 +41,7 @@ const digests = Object.entries(digestModules)
                 {d.sampleData && <span class="badge badge-sample" style="margin-left:0.5rem;">Sample</span>}
               </p>
               <h2 style="font-size:1.1rem;"><a href={import.meta.env.BASE_URL + `/digests/${d.slug}/`}>{d.title}</a></h2>
-              <p style="font-size:0.88rem; color:var(--color-text-muted); margin-top:0.5rem;">{d.summary}</p>
+              <p style="font-size:0.88rem; color:var(--muted); margin-top:0.5rem;">{d.summary}</p>
               <a href={import.meta.env.BASE_URL + `/digests/${d.slug}/`} class="btn btn-ghost" style="margin-top:1rem;">Read digest →</a>
             </article>
           ))}

@@ -10,6 +10,7 @@ summary: "NSF's SBIR/STTR programme funds high-risk, high-impact deep tech and A
 applyLink: "https://www.bwcoconsulting.com/funding/ai-ml"
 sourceLink: "https://seedfund.nsf.gov/"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "active"
 tags: ["SBIR", "STTR", "NSF", "USA", "deep-tech", "AI", "startup", "non-dilutive", "seed"]

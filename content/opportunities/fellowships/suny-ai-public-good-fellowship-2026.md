@@ -10,6 +10,7 @@ summary: "SUNY's AI for the Public Good Fellowship supports academics and staff 
 applyLink: "https://system.suny.edu/academic-affairs/fellows-programs/ai-fellows/"
 sourceLink: "https://system.suny.edu/academic-affairs/fellows-programs/ai-fellows/"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "archived"
 archivedDate: "2026-06-06"

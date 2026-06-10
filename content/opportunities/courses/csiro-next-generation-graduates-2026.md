@@ -10,6 +10,7 @@ summary: "CSIRO's flagship AI scholarship programme offering fully-funded Honour
 applyLink: "https://www.csiro.au/en/work-with-us/funding-programs/funding/next-generation-graduates-programs"
 sourceLink: "https://www.csiro.au/en/work-with-us/funding-programs/funding/next-generation-graduates-programs"
 publicationDate: "2026-06-08"
+newThisWeek: true
 lastVerified: "2026-06-08"
 status: "active"
 tags: ["scholarship", "Australia", "CSIRO", "PhD", "Masters", "Honours", "AI", "quantum", "research", "rolling"]

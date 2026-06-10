@@ -10,6 +10,7 @@ summary: "MacArthur Foundation AI initiative supporting nonprofits and research 
 applyLink: "https://grantedai.com/grants/ai-opportunity-macarthur-foundation-6a15818b"
 sourceLink: "https://grantedai.com/grants/ai-opportunity-macarthur-foundation-6a15818b"
 publicationDate: "2026-05-01"
+newThisWeek: false
 lastVerified: "2026-06-07"
 status: "archived"
 archivedDate: "2026-06-02"

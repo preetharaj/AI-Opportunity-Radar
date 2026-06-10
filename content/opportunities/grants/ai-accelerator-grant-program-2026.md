@@ -10,6 +10,7 @@ summary: "The AI Accelerator Grant Program supports international organisations 
 applyLink: "https://www2.fundsforngos.org/listing/beat-the-deadline-secure-funding-through-opportunities-closing-in-june-2026/"
 sourceLink: "https://www2.fundsforngos.org/listing/beat-the-deadline-secure-funding-through-opportunities-closing-in-june-2026/"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["grants", "global", "NGO", "social-good", "development", "AI-for-good"]

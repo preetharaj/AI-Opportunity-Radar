@@ -10,6 +10,7 @@ summary: "Government-funded fellowship for postgraduate students across all disc
 applyLink: "https://fellowship.indiaai.gov.in"
 sourceLink: "https://indiaai.gov.in/hub/indiaai-futureskills"
 publicationDate: "2026-06-08"
+newThisWeek: true
 lastVerified: "2026-06-08"
 status: "active"
 tags: ["fellowship", "India", "government", "PG", "students", "IndiaAI", "AI-mission", "multidisciplinary"]

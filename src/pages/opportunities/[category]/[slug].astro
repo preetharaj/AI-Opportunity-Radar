@@ -60,7 +60,7 @@ const bestForLabel: Record<string, string> = {
           <span class="tag">{categoryMeta?.icon} {categoryMeta?.label}</span>
         </div>
         <h1>{title}</h1>
-        <p style="font-size:1.1rem; color:var(--color-text-muted); margin-top:1rem;">{summary}</p>
+        <p style="font-size:1.1rem; color:var(--muted); margin-top:1rem;">{summary}</p>
         <div class="opp-card-tags" style="margin-top:1rem;">
           {tags?.map((tag: string) => <span class="tag">{tag}</span>)}
         </div>
@@ -154,7 +154,7 @@ const bestForLabel: Record<string, string> = {
           <div class="deadline-callout">
             <div class="label">Application Deadline</div>
             <div class="date">{formattedDeadline}</div>
-            <div style="font-size:0.8rem; color:var(--color-text-muted);">
+            <div style="font-size:0.8rem; color:var(--muted);">
               {days > 0 ? `${days} days remaining` : 'Deadline passed'}
             </div>
           </div>
@@ -174,7 +174,7 @@ const bestForLabel: Record<string, string> = {
         <Content />
       </div>
 
-      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-border); display:flex; gap:1rem; flex-wrap:wrap;">
+      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--line); display:flex; gap:1rem; flex-wrap:wrap;">
         <a href={import.meta.env.BASE_URL + `/categories/${category}/`} class="btn btn-ghost">← More {categoryMeta?.label}</a>
         <a href={import.meta.env.BASE_URL} class="btn btn-ghost">← All Opportunities</a>
       </div>
@@ -187,11 +187,11 @@ const bestForLabel: Record<string, string> = {
 .hook-callout {
   margin: 1.5rem 0;
   padding: 1rem 1.25rem;
-  border-left: 3px solid var(--color-accent);
-  background: var(--color-surface-alt, var(--color-surface));
+  border-left: 3px solid var(--blue);
+  background: var(--color-surface-alt, var(--surface));
   border-radius: 0 6px 6px 0;
   font-size: 0.95rem;
-  color: var(--color-text-muted);
+  color: var(--muted);
   font-style: italic;
 }
 .hook-label {
@@ -200,7 +200,7 @@ const bestForLabel: Record<string, string> = {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--color-accent);
+  color: var(--blue);
   margin-bottom: 0.4rem;
   font-style: normal;
 }
@@ -215,15 +215,15 @@ const bestForLabel: Record<string, string> = {
   gap: 0.3rem;
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--color-accent);
+  color: var(--blue);
   text-decoration: none;
-  border: 1px solid var(--color-accent);
+  border: 1px solid var(--blue);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
   transition: background 0.15s;
 }
 .official-badge:hover {
-  background: var(--color-accent);
-  color: var(--color-bg, #fff);
+  background: var(--blue);
+  color: var(--bg, #fff);
 }
 </style>

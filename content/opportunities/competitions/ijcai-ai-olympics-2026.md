@@ -10,6 +10,7 @@ summary: "The 4th AI Olympics at IJCAI 2026 challenges teams to develop and benc
 applyLink: "https://2026.ijcai.org/competitions/"
 sourceLink: "https://2026.ijcai.org/competitions/"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "archived"
 archivedDate: "2026-06-06"

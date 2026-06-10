@@ -10,6 +10,7 @@ summary: "The EU's flagship AI startup grant — up to €2.5M non-dilutive plus
 applyLink: "https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator/eic-accelerator-challenges-2025/genai4eu-creating-european-champions-generative-ai_en"
 sourceLink: "https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator_en"
 publicationDate: "2026-06-07"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["grant", "Europe", "EU", "GenAI", "startup", "SME", "equity", "EIC", "deep-tech"]

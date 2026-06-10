@@ -10,6 +10,7 @@ summary: "Pulitzer Center's fifth cohort of AI Accountability Fellows. 10-month 
 applyLink: "https://pulitzercenter.submittable.com/submit/354661/ai-accountability-fellowship-2026-2027"
 sourceLink: "https://pulitzercenter.org/blog/open-call-proposals-pulitzer-centers-ai-accountability-fellowships-2026-2027"
 publicationDate: "2026-06-06"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "active"
 tags: ["fellowship", "journalism", "global", "AI-accountability", "Pulitzer", "reporting", "media"]

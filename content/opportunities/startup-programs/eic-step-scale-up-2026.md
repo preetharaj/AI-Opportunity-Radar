@@ -10,6 +10,7 @@ summary: "Large-scale EU equity investment for deep-tech scaleups raising €50M
 applyLink: "https://eic.ec.europa.eu/eic-funding-opportunities/step-scale_en"
 sourceLink: "https://eic.ec.europa.eu/eic-funding-opportunities/step-scale_en"
 publicationDate: "2026-06-08"
+newThisWeek: true
 lastVerified: "2026-06-08"
 status: "active"
 tags: ["equity", "Europe", "EU", "scale-up", "EIC", "STEP", "deep-tech", "AI", "growth-stage", "large-round"]

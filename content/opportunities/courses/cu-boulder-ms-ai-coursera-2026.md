@@ -10,6 +10,7 @@ summary: "University of Colorado Boulder's fully online MS in AI on Coursera. Th
 applyLink: "https://www.coursera.org/degrees/ms-artificial-intelligence-boulder"
 sourceLink: "https://www.coursera.org/degrees/ms-artificial-intelligence-boulder"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["course", "masters", "degree", "CU-Boulder", "Coursera", "global", "online", "paid"]

@@ -263,8 +263,8 @@ const isDev = import.meta.env.DEV;
 
 <style>
 .rss-strip {
-  border-top: 1px solid var(--color-border);
-  background: var(--color-surface);
+  border-top: 1px solid var(--line);
+  background: var(--surface);
   padding: 1rem 1.5rem;
 }
 .rss-strip-inner {
@@ -273,11 +273,11 @@ const isDev = import.meta.env.DEV;
 }
 .rss-strip-text {
   font-size: 0.85rem;
-  color: var(--color-text-muted);
+  color: var(--muted);
   margin: 0 0 0.5rem;
 }
 .rss-strip-text strong {
-  color: var(--color-text);
+  color: var(--text);
 }
 .rss-url-row {
   display: flex;
@@ -288,17 +288,17 @@ const isDev = import.meta.env.DEV;
 .rss-url {
   font-family: var(--font-mono);
   font-size: 0.8rem;
-  background: var(--color-surface-alt, var(--color-bg));
-  border: 1px solid var(--color-border);
+  background: var(--color-surface-alt, var(--bg));
+  border: 1px solid var(--line);
   border-radius: 4px;
   padding: 0.3rem 0.65rem;
-  color: var(--color-text);
+  color: var(--text);
   user-select: all;
 }
 .rss-open-btn {
   font-family: var(--font-mono);
   font-size: 0.78rem;
-  color: var(--color-accent);
+  color: var(--blue);
   text-decoration: none;
   white-space: nowrap;
 }

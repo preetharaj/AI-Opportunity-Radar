@@ -11,6 +11,7 @@ summary: "A fully-funded 10-week AI safety research fellowship (Sep 28–Dec 4, 
 applyLink: "https://www.matsprogram.org/apply"
 sourceLink: "https://www.matsprogram.org/"
 publicationDate: "2026-06-07"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "archived"
 tags: ["fellowship", "AI-safety", "alignment", "interpretability", "governance", "global", "fully-funded", "Berkeley", "London"]

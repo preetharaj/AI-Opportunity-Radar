@@ -10,6 +10,7 @@ summary: "Google's inaugural equity-free accelerator for Southeast Asian AI star
 applyLink: "https://startup.google.com/programs/accelerator/southeast-asia/"
 sourceLink: "https://startup.google.com/programs/accelerator/southeast-asia/"
 publicationDate: "2026-06-07"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["accelerator", "SEA", "google", "equity-free", "Singapore", "Indonesia", "Vietnam", "agentic-AI", "cloud-credits"]

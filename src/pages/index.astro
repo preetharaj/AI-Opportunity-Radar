@@ -32,6 +32,16 @@ const featured = allOpportunities.find((o: any) => o.slug?.includes('thinking-ma
 const latest = sortOpportunities([...activeOpps, ...closingSoon]).filter((o: any) => o.slug !== featured?.slug).slice(0, 3);
 const allLive = sortOpportunities([...closingSoon, ...activeOpps]);
 
+// 7. Last updated + new count
+const newThisWeekCount = allLive.filter((o: any) => o.newThisWeek).length;
+const lastUpdatedDate = allLive
+  .filter((o: any) => o.publicationDate)
+  .map((o: any) => new Date(o.publicationDate))
+  .sort((a: Date, b: Date) => b.getTime() - a.getTime())[0];
+const lastUpdatedStr = lastUpdatedDate
+  ? lastUpdatedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' })
+  : '';
+
 const countsByCategory = allOpportunities.reduce((acc: Record<string, number>, o: any) => {
   acc[o.category] = (acc[o.category] ?? 0) + 1;
   return acc;
@@ -87,6 +97,36 @@ function formatDate(date: string) {
           </svg>
         </section>
 
+        <!-- 1. ABOVE-FOLD VALUE PROP -->
+        <div class="value-prop-strip">
+          <span class="vp-stat">{totalActive} verified opportunities</span>
+          <span class="vp-divider">·</span>
+          <span class="vp-stat">grants, fellowships, programs</span>
+          <span class="vp-divider">·</span>
+          <span class="vp-stat">filtered by region & deadline</span>
+          <span class="vp-divider">·</span>
+          <span class="vp-stat">updated weekly · no signups</span>
+        </div>
+
+        <!-- 5. EXPLAINER: 3 columns -->
+        <div class="explainer-grid">
+          <div class="explainer-item">
+            <span class="explainer-icon">🎯</span>
+            <strong>Manually curated</strong>
+            <p>Every opportunity verified. No expired links. No scraped noise.</p>
+          </div>
+          <div class="explainer-item">
+            <span class="explainer-icon">📅</span>
+            <strong>Deadline-first</strong>
+            <p>Sorted by closing date, not publish date. Urgent ones surface first.</p>
+          </div>
+          <div class="explainer-item">
+            <span class="explainer-icon">🌍</span>
+            <strong>Region-filtered</strong>
+            <p>India, SEA, Europe, USA, Australia, Global — filter in one click.</p>
+          </div>
+        </div>
+
         {featured && (
           <section class="featured-block" aria-labelledby="featured-heading">
             <p class="section-label" id="featured-heading">Featured Opportunity</p>
@@ -126,6 +166,13 @@ function formatDate(date: string) {
 
         <!-- ALL OPPORTUNITIES + REGION FILTER -->
         <section id="all-opps" class="all-opps-block" aria-labelledby="all-opps-heading">
+          <!-- 7. Last updated timestamp -->
+          {lastUpdatedStr && (
+            <div class="last-updated-bar">
+              <span>🕐 Last updated: <strong>{lastUpdatedStr}</strong></span>
+              {newThisWeekCount > 0 && <span class="new-count-badge">{newThisWeekCount} new this week</span>}
+            </div>
+          )}
           <div class="all-opps-header">
             <p class="section-label" id="all-opps-heading">All Active Opportunities</p>
             <div class="region-filter-inline" role="group" aria-label="Filter by region">
@@ -185,10 +232,67 @@ function formatDate(date: string) {
 </BaseLayout>
 
 <style>
+/* 1. Value prop strip */
+.value-prop-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.vp-stat { color: var(--text); font-weight: 500; }
+.vp-divider { color: var(--line); }
+
+/* 5. Explainer grid */
+.explainer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.explainer-item {
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.explainer-icon { font-size: 1.4rem; display: block; margin-bottom: 0.4rem; }
+.explainer-item strong { display: block; font-size: 0.88rem; margin-bottom: 0.3rem; }
+.explainer-item p { font-size: 0.78rem; color: var(--muted); margin: 0; line-height: 1.5; }
+
+/* 7. Last updated */
+.last-updated-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-bottom: 0.75rem;
+}
+.new-count-badge {
+  background: #16a34a;
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* existing styles */
 .all-opps-block {
   margin-top: 2.5rem;
   padding-top: 2rem;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--line);
 }
 .all-opps-header {
   display: flex;
@@ -202,8 +306,8 @@ function formatDate(date: string) {
   gap: 0.5rem;
   flex-wrap: wrap;
   padding: 0.75rem 1rem;
-  background: var(--color-surface);
-  border: 1.5px solid var(--color-accent);
+  background: var(--surface);
+  border: 1.5px solid var(--blue);
   border-radius: 8px;
 }
 .filter-title {
@@ -211,31 +315,36 @@ function formatDate(date: string) {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-accent);
+  color: var(--blue);
   font-weight: 600;
   flex-shrink: 0;
   margin-right: 0.25rem;
 }
+/* 8. Mobile: chips wrap properly */
 .chip {
   font-family: var(--font-mono);
   font-size: 0.82rem;
   padding: 0.4rem 1rem;
   border-radius: 999px;
-  border: 1.5px solid var(--color-border);
-  background: var(--color-bg);
-  color: var(--color-text-muted);
+  border: 1.5px solid var(--line);
+  background: var(--bg);
+  color: var(--muted);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
   font-weight: 500;
+  /* ensure touch target */
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
 }
 .chip:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+  border-color: var(--blue);
+  color: var(--blue);
 }
 .chip-active {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+  background: var(--blue);
+  border-color: var(--blue);
   color: #fff;
   font-weight: 700;
   box-shadow: 0 2px 8px rgba(36,84,198,0.25);
@@ -243,15 +352,22 @@ function formatDate(date: string) {
 .filter-count {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--color-text-muted);
-  background: var(--color-bg);
+  color: var(--muted);
+  background: var(--bg);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line);
   margin-left: auto;
 }
-[data-region].hidden {
-  display: none;
+[data-region].hidden { display: none; }
+
+/* 8. Mobile responsive */
+@media (max-width: 480px) {
+  .value-prop-strip { font-size: 0.72rem; }
+  .explainer-grid { grid-template-columns: 1fr; }
+  .region-filter-inline { gap: 0.4rem; }
+  .chip { font-size: 0.75rem; padding: 0.35rem 0.7rem; }
+  .filter-title { width: 100%; margin-bottom: 0.2rem; }
 }
 </style>
 
@@ -262,7 +378,9 @@ function formatDate(date: string) {
       el.classList.toggle('chip-active', el.dataset.region === region);
     });
 
-    const cards = document.querySelectorAll('#home-opp-grid [data-region]') as NodeListOf<HTMLElement>;
+    const grid = document.getElementById('home-opp-grid');
+    const cards = Array.from(grid?.querySelectorAll('[data-region]') ?? []) as HTMLElement[];
+
     let visible = 0;
     cards.forEach(card => {
       const match = region === 'all' || card.dataset.region === region || card.dataset.region === 'global';
@@ -270,11 +388,18 @@ function formatDate(date: string) {
       if (match) visible++;
     });
 
+    // Reorder: region-specific first, then global, then hidden
+    if (region !== 'all' && grid) {
+      const regionCards = cards.filter(c => c.dataset.region === region);
+      const globalCards = cards.filter(c => c.dataset.region === 'global');
+      const otherCards  = cards.filter(c => c.dataset.region !== region && c.dataset.region !== 'global');
+      [...regionCards, ...globalCards, ...otherCards].forEach(c => grid.appendChild(c));
+    }
+
     const countEl = document.getElementById('filter-count');
     if (countEl) countEl.textContent = region === 'all' ? '' : `${visible} shown`;
 
     const noResults = document.getElementById('no-results');
-    const grid = document.getElementById('home-opp-grid');
     if (noResults && grid) {
       noResults.style.display = visible === 0 ? 'block' : 'none';
       grid.style.display = visible === 0 ? 'none' : '';
@@ -282,4 +407,9 @@ function formatDate(date: string) {
   }
 
   (window as any).filterRegion = filterRegion;
+
+  // Default to India on page load
+  document.addEventListener('DOMContentLoaded', () => {
+    filterRegion('india');
+  });
 </script>

@@ -10,6 +10,7 @@ summary: "CAR-bench evaluates LLM agents as automotive in-car voice assistants, 
 applyLink: "https://2026.ijcai.org/competitions/"
 sourceLink: "https://2026.ijcai.org/competitions/"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["competition", "IJCAI", "LLM", "agents", "automotive", "NLP", "hallucination", "global"]

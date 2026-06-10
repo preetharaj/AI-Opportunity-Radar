@@ -2,7 +2,6 @@
 /**
  * OpportunityCard.astro
  * Reusable card component for opportunity listings.
- * Used on homepage, category pages, and digest pages.
  */
 
 interface Props {
@@ -18,42 +17,49 @@ interface Props {
   tags: string[];
   best_for?: string[];
   effort_level?: 'low' | 'medium' | 'high';
+  newThisWeek?: boolean;
   sampleData?: boolean;
 }
 
 const { slug, category, title, provider, deadline, amount, region, summary,
-        status, tags, best_for, effort_level, sampleData } = Astro.props;
+        status, tags, best_for, effort_level, newThisWeek, sampleData } = Astro.props;
 
-// Format deadline as human-readable
 const deadlineDate = new Date(deadline);
 const formattedDeadline = deadlineDate.toLocaleDateString('en-US', {
   month: 'short', day: 'numeric', year: 'numeric'
 });
 
-// Days until deadline
 const today = new Date();
 const daysLeft = Math.ceil((deadlineDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
 
-// Pre-compute display suffix to avoid Astro inline JSX fragment issues
+// 3. Deadline urgency classes
+const deadlineClass = status !== 'archived' && daysLeft > 0
+  ? daysLeft <= 7 ? 'deadline-red'
+  : daysLeft <= 30 ? 'deadline-orange'
+  : 'deadline-green'
+  : '';
+
+const deadlineIcon = daysLeft <= 7 && status !== 'archived' ? '⚠ ' : '📅 ';
+
 const daysLeftSuffix = (status !== 'archived' && daysLeft > 0 && daysLeft <= 60)
   ? ' (' + daysLeft + 'd left)' : '';
 
-// Status label
 const statusLabel = { active: 'Active', 'closing-soon': 'Closing Soon', archived: 'Archived' }[status];
 const statusClass = { active: 'badge-active', 'closing-soon': 'badge-closing', archived: 'badge-archived' }[status];
 
-// Category icon map
 const categoryIcons: Record<string, string> = {
   grants: '💰', fellowships: '🎓', 'startup-programs': '🚀', competitions: '🏆', courses: '📚'
 };
 const icon = categoryIcons[category] ?? '⬡';
 
-// Effort + best_for display helpers
 const effortEmoji: Record<string, string> = { low: '🟢', medium: '🟡', high: '🔴' };
 const bestForLabel: Record<string, string> = {
   students: 'Students', researchers: 'Researchers', founders: 'Founders',
   phd: 'PhD holders', anyone: 'Anyone'
 };
+
+// 6. Share URL
+const shareUrl = import.meta.env.SITE + import.meta.env.BASE_URL + `/opportunities/${category}/${slug}/`;
 ---
 
 <article
@@ -61,10 +67,11 @@ const bestForLabel: Record<string, string> = {
   data-category={category}
   data-status={status}
 >
-  <!-- Header: title + status badge -->
   <header class="opp-card-header">
-    <div>
+    <div style="flex:1; min-width:0;">
       {sampleData && <span class="badge badge-sample" style="margin-bottom:0.4rem;display:block;">⚠ Sample</span>}
+      <!-- 2. New this week badge -->
+      {newThisWeek && <span class="badge-new">✦ New</span>}
       <h3 class="opp-card-title">
         <a
           href={import.meta.env.BASE_URL + `/opportunities/${category}/${slug}/`}
@@ -74,36 +81,35 @@ const bestForLabel: Record<string, string> = {
         </a>
       </h3>
     </div>
-    <span class:list={['badge', statusClass]} aria-label={`Status: ${statusLabel}`}>
-      {status === 'closing-soon' && '⚡ '}
-      {statusLabel}
-    </span>
+    <div style="display:flex; flex-direction:column; align-items:flex-end; gap:0.35rem; flex-shrink:0;">
+      <span class:list={['badge', statusClass]} aria-label={`Status: ${statusLabel}`}>
+        {status === 'closing-soon' && '⚡ '}
+        {statusLabel}
+      </span>
+      <!-- 6. Share button -->
+      <button
+        class="share-btn"
+        title="Copy link"
+        onclick={`navigator.clipboard.writeText('${shareUrl}').then(()=>{ this.textContent='✓ Copied'; setTimeout(()=>{ this.textContent='⎘ Copy link'; },1500); })`}
+        aria-label="Copy opportunity link"
+      >⎘ Copy link</button>
+    </div>
   </header>
 
-  <!-- Meta: provider, deadline, amount, region -->
+  <!-- 3. Deadline urgency color -->
   <div class="opp-card-meta" role="list">
-    <span class="meta-item" role="listitem" aria-label="Provider">
-      🏛 {provider}
+    <span class="meta-item" role="listitem" aria-label="Provider">🏛 {provider}</span>
+    <span class:list={['meta-item', 'deadline-meta', deadlineClass]} role="listitem" aria-label="Deadline">
+      {deadlineIcon}{formattedDeadline}{daysLeftSuffix}
     </span>
-    <span class="meta-item" role="listitem" aria-label="Deadline">
-      📅 {formattedDeadline}
-      {daysLeftSuffix}
-    </span>
-    <span class="meta-item" role="listitem" aria-label="Value">
-      💵 {amount}
-    </span>
-    <span class="meta-item" role="listitem" aria-label="Region">
-      🌍 {region}
-    </span>
+    <span class="meta-item" role="listitem" aria-label="Value">💵 {amount}</span>
+    <span class="meta-item" role="listitem" aria-label="Region">🌍 {region}</span>
   </div>
 
-  <!-- NEW: best_for + effort_level signals -->
   {(best_for?.length || effort_level) && (
     <div class="opp-card-signals">
       {best_for && best_for.length > 0 && (
-        <span class="signal-item">
-          👤 {best_for.map(b => bestForLabel[b] ?? b).join(', ')}
-        </span>
+        <span class="signal-item">👤 {best_for.map(b => bestForLabel[b] ?? b).join(', ')}</span>
       )}
       {effort_level && (
         <span class="signal-item">
@@ -113,10 +119,8 @@ const bestForLabel: Record<string, string> = {
     </div>
   )}
 
-  <!-- Summary -->
   <p class="opp-card-summary">{summary}</p>
 
-  <!-- Footer: tags + view button -->
   <footer class="opp-card-footer">
     <div class="opp-card-tags" aria-label="Tags">
       {tags.slice(0, 4).map(tag => (
@@ -136,6 +140,48 @@ const bestForLabel: Record<string, string> = {
 </article>
 
 <style>
+.badge-new {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
+  background: #16a34a;
+  padding: 0.1rem 0.45rem;
+  border-radius: 4px;
+  margin-bottom: 0.3rem;
+}
+/* 3. Deadline urgency */
+.deadline-red {
+  color: #dc2626;
+  font-weight: 600;
+}
+.deadline-orange {
+  color: #ea580c;
+  font-weight: 500;
+}
+.deadline-green {
+  color: #16a34a;
+}
+/* 6. Share button */
+.share-btn {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  white-space: nowrap;
+}
+.share-btn:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
 .opp-card-signals {
   display: flex;
   gap: 1rem;
@@ -144,7 +190,7 @@ const bestForLabel: Record<string, string> = {
 }
 .signal-item {
   font-size: 0.78rem;
-  color: var(--color-text-muted);
+  color: var(--muted);
   font-family: var(--font-mono);
 }
 </style>

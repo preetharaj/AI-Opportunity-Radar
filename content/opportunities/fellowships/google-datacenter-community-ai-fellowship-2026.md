@@ -10,6 +10,7 @@ summary: "A fully funded 16-week virtual fellowship for community leaders using 
 applyLink: "https://watson.is/google-data-center-community-ai-fellowship-application/"
 sourceLink: "https://watson.is/google-data-center-community-ai-fellowship/"
 publicationDate: "2026-06-07"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "active"
 tags: ["fellowship", "google", "community", "global", "AI-for-good", "social-impact", "virtual"]

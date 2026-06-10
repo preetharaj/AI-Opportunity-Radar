@@ -10,6 +10,7 @@ summary: "Longview Philanthropy is funding research, applied work, and career de
 applyLink: "https://www.longview.org/request-for-proposals-research-and-applied-work-on-digital-minds/"
 sourceLink: "https://www.longview.org/request-for-proposals-research-and-applied-work-on-digital-minds/"
 publicationDate: "2026-06-07"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "active"
 tags: ["grant", "fellowship", "AI-welfare", "AI-consciousness", "global", "research", "Longview", "digital-minds", "ethics"]

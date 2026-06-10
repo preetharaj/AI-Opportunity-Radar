@@ -10,6 +10,7 @@ summary: "Oxford's Institute for Ethics in AI invites applications for its Accel
 applyLink: "https://afp.oxford-aiethics.ox.ac.uk/join"
 sourceLink: "https://afp.oxford-aiethics.ox.ac.uk/join"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["fellowship", "AI-ethics", "Oxford", "governance", "global", "remote", "policy"]

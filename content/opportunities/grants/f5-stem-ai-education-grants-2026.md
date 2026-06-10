@@ -10,6 +10,7 @@ summary: "F5 Foundation is awarding 10 unrestricted grants of $50,000 each to no
 applyLink: "https://www.f5.com/company/global-good/us-stem-grant"
 sourceLink: "https://www2.fundsforngos.org/innovation/apply-now-f5-stem-and-ai-education-grants-for-underserved-communities/"
 publicationDate: "2026-06-06"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["grants", "Africa", "Asia", "Latin-America", "nonprofits", "AI-education", "STEM", "F5"]

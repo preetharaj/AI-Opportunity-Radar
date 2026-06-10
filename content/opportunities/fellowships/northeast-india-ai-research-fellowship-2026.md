@@ -10,6 +10,7 @@ summary: "An 8–12 week remote research fellowship to build NLP and language te
 applyLink: "https://mwirelabs.com/northeast-india-ai-research-fellowship/"
 sourceLink: "https://mwirelabs.com/northeast-india-ai-research-fellowship/"
 publicationDate: "2026-06-07"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "active"
 tags: ["fellowship", "India", "NLP", "low-resource-languages", "remote", "students", "open-source"]

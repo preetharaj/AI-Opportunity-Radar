@@ -78,11 +78,11 @@ function regionTag(region: string): string {
       <div style="display:flex; align-items:baseline; justify-content:space-between; flex-wrap:wrap; gap:1rem;">
         <div>
           <h1 id="cat-heading">{label}</h1>
-          <p style="color:var(--color-text-muted); margin-top:0.5rem; font-size:1.05rem;">{description}</p>
+          <p style="color:var(--muted); margin-top:0.5rem; font-size:1.05rem;">{description}</p>
         </div>
         <div style="text-align:right;">
-          <div style="font-family:var(--font-display); font-size:2.5rem; font-weight:800; color:var(--color-accent); line-height:1;">{liveCount}</div>
-          <div style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--color-text-muted);">Active</div>
+          <div style="font-family:var(--font-display); font-size:2.5rem; font-weight:800; color:var(--blue); line-height:1;">{liveCount}</div>
+          <div style="font-family:var(--font-mono); font-size:0.72rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--muted);">Active</div>
         </div>
       </div>
       <div style="margin-top:2rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
@@ -141,7 +141,7 @@ function regionTag(region: string): string {
           <p class="section-eyebrow">Open now</p>
           <h2 id="active-heading">Active {label}</h2>
         </div>
-        <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--color-text-muted);">{active.length} available</span>
+        <span style="font-family:var(--font-mono); font-size:0.8rem; color:var(--muted);">{active.length} available</span>
       </div>
       {active.length > 0 ? (
         <div class="opp-grid" role="list" id="grid-active">
@@ -166,7 +166,7 @@ function regionTag(region: string): string {
   </section>
 
   {archived.length > 0 && (
-    <section class="section" aria-labelledby="archived-heading" style="background:var(--color-surface);">
+    <section class="section" aria-labelledby="archived-heading" style="background:var(--surface);">
       <div class="container">
         <div class="section-header">
           <div>
@@ -198,9 +198,9 @@ function regionTag(region: string): string {
   position: sticky;
   top: 0;
   z-index: 40;
-  background: var(--color-bg);
-  border-top: 3px solid var(--color-accent);
-  border-bottom: 1px solid var(--color-border);
+  background: var(--bg);
+  border-top: 3px solid var(--blue);
+  border-bottom: 1px solid var(--line);
   padding: 1rem 0;
   box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
@@ -219,7 +219,7 @@ function regionTag(region: string): string {
   font-size: 0.7rem;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--color-accent);
+  color: var(--blue);
   font-weight: 600;
 }
 .filter-chips {
@@ -232,22 +232,22 @@ function regionTag(region: string): string {
   font-size: 0.82rem;
   padding: 0.4rem 1rem;
   border-radius: 999px;
-  border: 1.5px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text-muted);
+  border: 1.5px solid var(--line);
+  background: var(--surface);
+  color: var(--muted);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
   font-weight: 500;
 }
 .chip:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-  background: var(--color-surface);
+  border-color: var(--blue);
+  color: var(--blue);
+  background: var(--surface);
 }
 .chip-active {
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+  background: var(--blue);
+  border-color: var(--blue);
   color: #fff;
   font-weight: 700;
   box-shadow: 0 2px 8px rgba(36,84,198,0.25);
@@ -255,11 +255,11 @@ function regionTag(region: string): string {
 .filter-count {
   font-family: var(--font-mono);
   font-size: 0.72rem;
-  color: var(--color-text-muted);
-  background: var(--color-surface);
+  color: var(--muted);
+  background: var(--surface);
   padding: 0.15rem 0.5rem;
   border-radius: 4px;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line);
 }
 [data-region].hidden {
   display: none;

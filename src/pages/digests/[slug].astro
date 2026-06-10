@@ -47,10 +47,10 @@ const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
 
       <a href={import.meta.env.BASE_URL + "/digests/"} class="back-link" style="margin-top:2rem;display:inline-flex;">← All Digests</a>
 
-      <header style="padding:3rem 0 2rem; border-bottom:2px solid var(--color-border);">
+      <header style="padding:3rem 0 2rem; border-bottom:2px solid var(--line);">
         <p class="section-eyebrow">Week #{weekNumber} · {formattedDate}</p>
         <h1>{title}</h1>
-        <p style="font-size:1.05rem; color:var(--color-text-muted); margin-top:0.75rem;">{summary}</p>
+        <p style="font-size:1.05rem; color:var(--muted); margin-top:0.75rem;">{summary}</p>
         {sampleData && <span class="badge badge-sample" style="margin-top:1rem;display:inline-block;">⚠ Sample Digest</span>}
       </header>
 
@@ -74,7 +74,7 @@ const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
         </section>
       )}
 
-      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--color-border); display:flex; gap:1rem; flex-wrap:wrap;">
+      <div style="margin-top:3rem; padding-top:2rem; border-top:1px solid var(--line); display:flex; gap:1rem; flex-wrap:wrap;">
         <a href={import.meta.env.BASE_URL + "/digests/"} class="btn btn-ghost">← All Digests</a>
         <a href={import.meta.env.BASE_URL} class="btn btn-ghost">All Opportunities →</a>
       </div>
@@ -106,9 +106,9 @@ const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
   gap: 1rem;
   margin-top: 2.5rem;
   padding: 1.25rem 1.5rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: var(--color-surface);
+  background: var(--surface);
 }
 .rss-subscribe-callout .rss-icon {
   font-size: 1.5rem;
@@ -122,7 +122,7 @@ const formattedDate = new Date(publishDate).toLocaleDateString('en-US', {
 }
 .rss-subscribe-callout p {
   font-size: 0.85rem;
-  color: var(--color-text-muted);
+  color: var(--muted);
   margin: 0;
 }
 </style>

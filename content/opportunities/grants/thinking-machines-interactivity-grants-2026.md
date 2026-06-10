@@ -10,6 +10,7 @@ summary: "Thinking Machines Lab is awarding multiple $100K grants for research a
 applyLink: "https://thinkingmachines.ai/news/interactivity-research-grants/apply/"
 sourceLink: "https://thinkingmachines.ai/news/interactivity-research-grants/"
 publicationDate: "2026-06-03"
+newThisWeek: true
 lastVerified: "2026-06-07"
 status: "closing-soon"
 tags: ["grants", "global", "Thinking-Machines", "interactivity", "multimodal", "research", "human-AI", "agents"]
