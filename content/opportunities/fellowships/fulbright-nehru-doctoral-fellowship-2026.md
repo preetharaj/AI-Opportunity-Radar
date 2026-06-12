@@ -12,7 +12,7 @@ sourceLink: "https://www2.fundsforngos.org/community-development/cfas-fulbright-
 publicationDate: "2026-06-07"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "active"
 tags: ["fellowship", "India", "PhD", "Fulbright", "USA", "research", "government", "AI-policy"]
 best_for: ["phd", "researchers"]
 effort_level: "high"

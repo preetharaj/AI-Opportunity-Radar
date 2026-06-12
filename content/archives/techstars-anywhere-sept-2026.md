@@ -12,7 +12,7 @@ sourceLink: "https://www.techstars.com/accelerators/anywhere"
 publicationDate: "2026-06-03"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "archived"
 tags: ["accelerator", "startup", "Techstars", "remote", "Americas", "seed", "any-industry"]
 
 best_for: ["founders"]

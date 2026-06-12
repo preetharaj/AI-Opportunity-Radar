@@ -12,7 +12,7 @@ sourceLink: "https://www.iaps.ai/fellowship"
 publicationDate: "2026-06-03"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "active"
 tags: ["fellowship", "AI-policy", "governance", "USA", "remote", "summer", "Washington-DC"]
 
 best_for: ["researchers", "students"]

@@ -64,6 +64,7 @@ const categoryLabel: Record<string, string> = {
   competitions: 'Competitions',
   courses: 'Courses',
   'startup-programs': 'Accelerators',
+  residencies: 'Residencies',
 };
 
 function formatDate(date: string) {
@@ -204,7 +205,7 @@ function formatDate(date: string) {
         <section class="sidebar-card subscribe-card" id="subscribe">
           <div class="mail-icon">✉</div>
           <h2>Get new opportunities<br/>every week.</h2>
-          <p>No spam. Just carefully curated AI grants, fellowships and programs delivered to your inbox.</p>
+          <p>Carefully curated AI grants, fellowships and programs delivered to your inbox.</p>
           <form onsubmit="event.preventDefault(); trackEvent('newsletter-signup-click'); alert('Newsletter signup coming soon');">
             <input type="email" placeholder="Enter your email" aria-label="Email address" required />
             <button type="submit" class="btn btn-primary">Subscribe</button>

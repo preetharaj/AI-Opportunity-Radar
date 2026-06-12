@@ -12,7 +12,7 @@ sourceLink: "https://2026.ijcai.org/competitions/"
 publicationDate: "2026-06-03"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "active"
 tags: ["competition", "IJCAI", "LLM", "agents", "automotive", "NLP", "hallucination", "global"]
 
 best_for: ["researchers"]

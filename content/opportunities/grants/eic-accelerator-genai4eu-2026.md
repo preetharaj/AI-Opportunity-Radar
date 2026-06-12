@@ -12,7 +12,7 @@ sourceLink: "https://eic.ec.europa.eu/eic-funding-opportunities/eic-accelerator_
 publicationDate: "2026-06-07"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "active"
 tags: ["grant", "Europe", "EU", "GenAI", "startup", "SME", "equity", "EIC", "deep-tech"]
 best_for: ["founders", "researchers"]
 effort_level: "high"

@@ -46,6 +46,7 @@ export const CATEGORIES = [
   { slug: 'startup-programs', label: 'Startup Programs',icon: '🚀', description: 'Accelerators, incubators, and startup credits' },
   { slug: 'competitions',     label: 'Competitions',    icon: '🏆', description: 'Challenges, hackathons, and prize competitions' },
   { slug: 'courses',          label: 'Courses',         icon: '📚', description: 'Free and funded AI/ML courses and programs' },
+  { slug: 'residencies',      label: 'Residencies',     icon: '🔬', description: 'Paid research residencies at AI labs and companies' },
 ] as const;
 
 /**
