@@ -3,6 +3,7 @@ title: "F5 STEM & AI Education Grants 2026"
 provider: "F5 Foundation"
 category: "grants"
 deadline: "2026-06-14"
+archivedDate: "2026-06-15"
 amount: "$50,000 (10 grants awarded)"
 region: "Africa, Asia, Latin America"
 eligibility: "Registered nonprofits operating in Africa, Asia, or Latin America serving communities living in poverty. AI education must be a mandatory component of the programme. Must be registered for at least 3 years."
@@ -12,7 +13,7 @@ sourceLink: "https://www2.fundsforngos.org/innovation/apply-now-f5-stem-and-ai-e
 publicationDate: "2026-06-06"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "archived"
 tags: ["grants", "Africa", "Asia", "Latin-America", "nonprofits", "AI-education", "STEM", "F5"]
 
 best_for: ["researchers", "students"]

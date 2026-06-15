@@ -12,7 +12,7 @@ sourceLink: "https://pulitzercenter.org/blog/open-call-proposals-pulitzer-center
 publicationDate: "2026-06-06"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "active"
+status: "closing-soon"
 tags: ["fellowship", "journalism", "global", "AI-accountability", "Pulitzer", "reporting", "media"]
 
 best_for: ["researchers", "founders"]

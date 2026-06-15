@@ -12,7 +12,7 @@ sourceLink: "https://www.santander.com/en/press-room/press-releases/2026/05/sant
 publicationDate: "2026-06-10"
 lastVerified: "2026-06-10"
 newThisWeek: true
-status: "active"
+status: "closing-soon"
 tags: ["competition", "Europe", "USA", "quantum", "AI", "Santander", "IBM", "startup", "scaleup", "prize"]
 best_for: ["founders"]
 effort_level: "medium"

@@ -3,6 +3,7 @@ title: "Oxford Institute for Ethics in AI — Accelerator Fellowship 2026/27"
 provider: "Oxford Institute for Ethics in AI, University of Oxford"
 category: "fellowships"
 deadline: "2026-06-12"
+archivedDate: "2026-06-15"
 amount: "Funded (stipend, research support, Oxford affiliation)"
 region: "Global (Remote + Oxford in-person options)"
 eligibility: "Open to academics and professionals at any career stage. Must be working on research, policy, or practice advancing ethical and responsible AI. Can be based anywhere — remote fellowship available. Visa required for in-person Oxford fellowship; apply at least 6 months in advance."
@@ -12,7 +13,7 @@ sourceLink: "https://afp.oxford-aiethics.ox.ac.uk/join"
 publicationDate: "2026-06-10"
 lastVerified: "2026-06-12"
 newThisWeek: true
-status: "closing-soon"
+status: "archived"
 tags: ["fellowship", "Oxford", "AI-ethics", "global", "remote", "responsible-AI", "academic", "policy"]
 best_for: ["researchers", "phd", "founders"]
 effort_level: "high"

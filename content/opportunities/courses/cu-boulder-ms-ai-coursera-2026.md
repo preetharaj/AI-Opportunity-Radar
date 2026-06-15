@@ -3,6 +3,7 @@ title: "CU Boulder MS in Artificial Intelligence — Summer 2026 Enrolment"
 provider: "University of Colorado Boulder / Coursera"
 category: "courses"
 deadline: "2026-06-12"
+archivedDate: "2026-06-15"
 amount: "Paid degree programme (tuition applies — financial aid available)"
 region: "Global (Online)"
 eligibility: "Open to all — performance-based admission pathway available regardless of prior field of study. Basic probability and linear algebra recommended."
@@ -12,7 +13,7 @@ sourceLink: "https://www.coursera.org/degrees/ms-artificial-intelligence-boulder
 publicationDate: "2026-06-03"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "archived"
 tags: ["course", "masters", "degree", "CU-Boulder", "Coursera", "global", "online", "paid"]
 
 best_for: ["students", "anyone"]

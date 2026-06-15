@@ -3,6 +3,7 @@ title: "Google for Startups Accelerator: AI for Energy Transition 2026"
 provider: "Google for Startups"
 category: "startup-programs"
 deadline: "2026-06-12"
+archivedDate: "2026-06-15"
 amount: "Up to $350,000 in Google Cloud credits + mentorship"
 region: "Europe, Israel (deadline June 12) · North America (deadline June 30)"
 eligibility: "Seed to Series A AI-first startups using AI for energy grid modernisation, demand optimisation, or energy affordability. Based in Europe, Israel, or North America."
@@ -12,7 +13,7 @@ sourceLink: "https://blog.google/company-news/outreach-and-initiatives/entrepren
 publicationDate: "2026-06-03"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "closing-soon"
+status: "archived"
 tags: ["accelerator", "startup", "Google", "energy", "AI", "Europe", "North-America", "equity-free", "cloud-credits"]
 
 best_for: ["founders"]

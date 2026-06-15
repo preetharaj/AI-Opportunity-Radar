@@ -12,7 +12,7 @@ sourceLink: "https://watson.is/google-data-center-community-ai-fellowship/"
 publicationDate: "2026-06-07"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "active"
+status: "closing-soon"
 tags: ["fellowship", "google", "community", "global", "AI-for-good", "social-impact", "virtual"]
 best_for: ["founders", "anyone"]
 effort_level: "medium"

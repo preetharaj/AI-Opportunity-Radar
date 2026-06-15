@@ -12,7 +12,7 @@ sourceLink: "https://www.longview.org/request-for-proposals-research-and-applied
 publicationDate: "2026-06-07"
 newThisWeek: true
 lastVerified: "2026-06-07"
-status: "active"
+status: "closing-soon"
 tags: ["grant", "fellowship", "AI-welfare", "AI-consciousness", "global", "research", "Longview", "digital-minds", "ethics"]
 best_for: ["researchers", "phd", "founders"]
 effort_level: "high"
