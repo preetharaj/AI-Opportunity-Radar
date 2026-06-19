@@ -37,7 +37,11 @@ export function DiscoverFeed({ opportunities: initial }: Props) {
         setErrorFor(opportunityId);
         return; // don't update local state — keep it in sync with what actually happened
       }
-      setSavedSet((s) => new Set([...s, opportunityId]));
+      setSavedSet((currentSavedSet) => {
+        const nextSavedSet = new Set(currentSavedSet);
+        nextSavedSet.add(opportunityId);
+        return nextSavedSet;
+      });
     } catch {
       setErrorFor(opportunityId);
     } finally {
@@ -58,7 +62,11 @@ export function DiscoverFeed({ opportunities: initial }: Props) {
         setErrorFor(opportunityId);
         return;
       }
-      setSavedSet((s) => { const n = new Set(s); n.delete(opportunityId); return n; });
+      setSavedSet((currentSavedSet) => {
+        const nextSavedSet = new Set(currentSavedSet);
+        nextSavedSet.delete(opportunityId);
+        return nextSavedSet;
+      });
     } catch {
       setErrorFor(opportunityId);
     } finally {
