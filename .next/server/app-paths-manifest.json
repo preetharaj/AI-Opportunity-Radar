@@ -1,5 +1,0 @@
-{
-  "/api/subscribe/route": "app/api/subscribe/route.js",
-  "/api/notify/route": "app/api/notify/route.js",
-  "/page": "app/page.js"
-}
