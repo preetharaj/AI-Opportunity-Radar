@@ -1,0 +1,21 @@
+name: Opportunity Notifications
+
+on:
+  schedule:
+    # Runs daily at 08:00 UTC.
+    # /api/notify sends deadline reminders only on matching threshold days,
+    # and sends the newsletter only on the biweekly digest day.
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  send-notifications:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger notification endpoint
+        run: |
+          curl -sS -X POST "${{ secrets.SITE_URL }}/api/notify" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            --fail

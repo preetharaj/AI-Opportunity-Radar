@@ -1,0 +1,38 @@
+/* src/app/globals.css */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { @apply antialiased bg-slate-50 text-slate-900; }
+  ::selection { @apply bg-indigo-200 text-indigo-950; }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-indigo-600 text-white shadow-sm shadow-indigo-600/20 hover:bg-indigo-700 hover:shadow-md hover:shadow-indigo-600/25 disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+  .btn-secondary {
+    @apply btn bg-white border border-slate-200 text-slate-700 shadow-sm hover:bg-slate-50 hover:border-slate-300;
+  }
+  .btn-ghost {
+    @apply btn text-slate-500 hover:text-slate-700 hover:bg-slate-100;
+  }
+  .card {
+    @apply bg-white rounded-2xl border border-slate-200/80 shadow-sm shadow-slate-200/60;
+  }
+  .input {
+    @apply w-full px-3 py-2 text-sm border border-slate-200 rounded-xl
+           focus:outline-none focus:ring-4 focus:ring-indigo-100 focus:border-indigo-300 bg-white shadow-sm placeholder:text-slate-400;
+  }
+  .label {
+    @apply block text-xs font-medium text-slate-500 mb-1;
+  }
+  .badge {
+    @apply inline-flex items-center px-2 py-0.5 rounded text-xs font-medium;
+  }
+}
