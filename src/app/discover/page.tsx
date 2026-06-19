@@ -7,6 +7,10 @@ import { rankOpportunities } from "@/lib/matching/score";
 import { FilterBar } from "@/components/opportunity/FilterBar";
 import { DiscoverFeed } from "./DiscoverFeed";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 interface Props {
   searchParams: { region?: string; category?: string; eligibility?: string; sort?: string; q?: string };
 }

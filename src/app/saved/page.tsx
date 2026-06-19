@@ -8,6 +8,10 @@ import { getProfile } from "@/lib/db/queries";
 import { DiscoverFeed } from "@/app/discover/DiscoverFeed";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 export default async function SavedPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/signin");

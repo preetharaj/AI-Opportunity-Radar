@@ -8,6 +8,10 @@ import { SubscribeWidget } from "@/components/SubscribeWidget";
 import { PublicFeed } from "./PublicFeed";
 import { differenceInDays, parseISO } from "date-fns";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 interface Props {
   searchParams: { region?: string; category?: string; sort?: string; q?: string };
 }

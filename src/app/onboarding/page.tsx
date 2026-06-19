@@ -4,6 +4,10 @@ import { auth } from "@/lib/auth/config";
 import { getProfile } from "@/lib/db/queries";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 export default async function OnboardingPage() {
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/signin");

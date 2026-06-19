@@ -5,6 +5,10 @@ import { differenceInDays, parseISO, format } from "date-fns";
 import Link from "next/link";
 import { EligibilityChecker } from "@/components/EligibilityChecker";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 const CAT_ICONS: Record<string, string> = {
   grant: "💰", fellowship: "🎓", competition: "🏆",
   startup: "🚀", course: "📚", residency: "🔬",

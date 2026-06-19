@@ -5,6 +5,10 @@ import { getSaved } from "@/lib/db/queries";
 import { getOpportunityById } from "@/lib/data/opportunities";
 import { PipelineBoard } from "./PipelineBoard";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 const STATUSES = ["saved", "researching", "applied", "interview", "rejected", "accepted"] as const;
 
 export default async function TrackingPage() {

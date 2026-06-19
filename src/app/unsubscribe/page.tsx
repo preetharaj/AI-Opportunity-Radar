@@ -2,6 +2,10 @@
 import { Suspense } from "react";
 import { UnsubscribeForm } from "./UnsubscribeForm";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
+
 export default function UnsubscribePage() {
   return (
     <div className="max-w-sm mx-auto py-16">
