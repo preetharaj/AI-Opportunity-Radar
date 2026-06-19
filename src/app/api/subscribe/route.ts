@@ -5,6 +5,9 @@ import { addSubscriber, removeSubscriber } from "@/lib/db/queries";
 import { SubscribeSchema, UnsubscribeSchema } from "@/lib/validation";
 import { rateLimit } from "@/lib/ratelimit";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 function getClientKey(req: NextRequest): string {
   // Best-effort client identifier for rate limiting on a public, unauthenticated route
   return req.headers.get("x-forwarded-for") ?? req.headers.get("x-real-ip") ?? "unknown";

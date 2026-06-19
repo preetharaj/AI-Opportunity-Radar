@@ -5,6 +5,9 @@ import { upsertProfile } from "@/lib/db/queries";
 import { ProfileSchema } from "@/lib/validation";
 import { rateLimit } from "@/lib/ratelimit";
 
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 export async function POST(req: NextRequest) {
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });

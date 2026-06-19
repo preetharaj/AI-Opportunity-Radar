@@ -2,6 +2,9 @@
 // Called daily by GitHub Actions cron. Protected by CRON_SECRET.
 // Never called from the browser.
 import { NextRequest, NextResponse } from "next/server";
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
+
 import {
   getUsersForReminders,
   deleteExpiredSessions,
