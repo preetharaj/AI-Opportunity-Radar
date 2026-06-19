@@ -22,7 +22,7 @@ export function rateLimit(key: string, limit: number, windowMs: number): boolean
 // Clean up old entries periodically (prevents memory leak in long-running dev)
 setInterval(() => {
   const now = Date.now();
-  for (const [key, val] of store) {
-    if (now > val.reset) store.delete(key);
-  }
+  store.forEach((val, key) => {
+	if (now > val.reset) { store.delete(key); }
+  });
 }, 60_000);
