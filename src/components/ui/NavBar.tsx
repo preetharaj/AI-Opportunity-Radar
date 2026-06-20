@@ -20,7 +20,7 @@ const CATEGORY_NAV = [
   { value: "competition", label: "Competitions" },
   { value: "course", label: "Courses" },
   { value: "research_internship", label: "Research" },
-  { value: "job_internship", label: "Internships" },
+  { value: "job_internship", label: "Job Internships" },
 ];
 
 export function NavBar({ user }: { user: { name?: string | null; email?: string | null } | null }) {
