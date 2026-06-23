@@ -15,7 +15,7 @@ jobs:
     steps:
       - name: Trigger notification endpoint
         run: |
-          curl -sS -X POST "${{ secrets.SITE_URL }}/api/notify" \
+          curl -sS -X POST "https://mapd.cc/api/notify" \
             -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
             -H "Content-Type: application/json" \
             --fail
