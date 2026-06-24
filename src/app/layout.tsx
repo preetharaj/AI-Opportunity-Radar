@@ -12,7 +12,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI Opportunity Radar",
-  description: "Find AI grants, fellowships, internships, courses and competitions — with biweekly updates and deadline reminders.",
+  description: "Find AI grants, fellowships, internships, and startup programs — with biweekly updates and deadline reminders.",
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {

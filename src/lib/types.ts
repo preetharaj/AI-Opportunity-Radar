@@ -49,6 +49,7 @@ export interface Opportunity {
   lastVerified: string;    // ISO date
   newThisWeek?: boolean;
   locationNote?: string;   // optional richer detail, e.g. "Remote and Oxford in-person options"
+  costType?: "free" | "paid" | "scholarship_available"; // primarily for courses
 
   // ── Rich eligibility criteria (all optional — absence means "no constraint") ──
   eligibleEducationLevels?: EducationLevel[];  // e.g. ["postgrad_masters", "postgrad_phd"]

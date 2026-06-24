@@ -10,10 +10,14 @@ export const runtime = "nodejs";
 
 
 const CAT_ICONS: Record<string, string> = {
-  grant: "💰", fellowship: "🎓", competition: "🏆",
-  startup: "🚀", course: "📚", residency: "🔬",
-  research_internship: "🧪",
-  job_internship: "💼",
+  grant: "💰", fellowship: "🎓",
+  startup: "🚀", course: "📚", internship: "💼",
+};
+
+const COST_BADGES: Record<string, { label: string; cls: string }> = {
+  free: { label: "🟢 Free", cls: "bg-emerald-50 text-emerald-700" },
+  scholarship_available: { label: "🟡 Scholarship Available", cls: "bg-amber-50 text-amber-700" },
+  paid: { label: "🔵 Paid", cls: "bg-sky-50 text-sky-700" },
 };
 
 export default function OpportunityPage({ params }: { params: { id: string } }) {
@@ -21,6 +25,7 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
   if (!opp) notFound();
 
   const days = differenceInDays(parseISO(opp.deadline), new Date());
+  const costBadge = opp.costType ? COST_BADGES[opp.costType] : null;
 
   return (
     <div className="max-w-2xl mx-auto py-4">
@@ -34,6 +39,7 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
           <span className="badge bg-gray-100 text-gray-600">{opp.category.replace("_", " ")}</span>
           <span className="badge bg-gray-100 text-gray-600">{opp.region}</span>
           {opp.newThisWeek && <span className="badge bg-indigo-50 text-indigo-600">New</span>}
+          {costBadge && <span className={`badge ${costBadge.cls}`}>{costBadge.label}</span>}
         </div>
         <h1 className="text-xl font-semibold text-gray-900 mb-4">{opp.title}</h1>
 

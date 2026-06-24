@@ -4,9 +4,8 @@ import Link from "next/link";
 import type { Opportunity } from "@/lib/types";
 
 const CAT_LABELS: Record<string, string> = {
-  grant: "Grant", fellowship: "Fellowship", competition: "Competition",
-  startup: "Startup program", course: "Course", residency: "Residency",
-  research_internship: "Research internship", job_internship: "Job internship",
+  grant: "Grant", fellowship: "Fellowship",
+  startup: "Startup program", course: "Course", internship: "Internship",
 };
 
 interface PublicOpp extends Opportunity {
@@ -38,12 +37,9 @@ function StatusPill({ days, isNew }: { days: number; isNew?: boolean }) {
 const BORDER_COLOR_MAP: Record<string, string> = {
   grant: "bg-emerald-400",
   fellowship: "bg-indigo-400",
-  competition: "bg-amber-400",
   startup: "bg-rose-400",
   course: "bg-sky-400",
-  residency: "bg-purple-400",
-  research_internship: "bg-teal-400",
-  job_internship: "bg-orange-400",
+  internship: "bg-teal-400",
 };
 
 // Tailwind's compiler statically scans source for literal class strings —
@@ -52,6 +48,17 @@ const BORDER_COLOR_MAP: Record<string, string> = {
 // entirely, since every value above is a complete, literal class name.
 function CategoryAccent({ category }: { category: string }) {
   return <span className={`absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl ${BORDER_COLOR_MAP[category] ?? "bg-slate-300"}`} />;
+}
+
+function CostBadge({ costType }: { costType?: "free" | "paid" | "scholarship_available" }) {
+  if (!costType) return null;
+  if (costType === "free") {
+    return <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100">🟢 Free</span>;
+  }
+  if (costType === "scholarship_available") {
+    return <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 ring-1 ring-amber-100">🟡 Scholarship Available</span>;
+  }
+  return <span className="text-xs font-medium px-2 py-0.5 rounded-md bg-sky-50 text-sky-700 ring-1 ring-sky-100">🔵 Paid</span>;
 }
 
 function IconRow({ icon, children }: { icon: string; children: React.ReactNode }) {
@@ -92,10 +99,15 @@ export function PublicFeed({ opportunities }: { opportunities: PublicOpp[] }) {
             </div>
 
             <Link href={`/opportunity/${opp.id}`} className="hover:text-indigo-600 transition-colors">
-              <h3 className="text-[15px] font-semibold text-slate-950 leading-snug mb-3">{opp.title}</h3>
+              <h3 className="text-[15px] font-semibold text-slate-950 leading-snug mb-1">{opp.title}</h3>
             </Link>
+            {opp.costType && (
+              <div className="mb-2">
+                <CostBadge costType={opp.costType} />
+              </div>
+            )}
 
-            <div className="space-y-1.5 flex-1">
+            <div className="space-y-1.5 flex-1 mt-1">
               <IconRow icon="📅">
                 <span className={`font-medium ${deadlineColor}`}>{formatDeadline(opp.deadline)}</span>
                 <span className="text-slate-400"> ({days === 0 ? "today" : `${days}d left`})</span>
