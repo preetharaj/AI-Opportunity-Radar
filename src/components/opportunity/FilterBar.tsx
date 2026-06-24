@@ -4,17 +4,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const REGIONS = ["All", "Global", "India", "SEA", "Europe", "USA", "Australia"];
-const CATEGORIES = ["All", "grant", "fellowship", "competition", "startup", "course", "residency", "research_internship", "job_internship"];
+const CATEGORIES = ["All", "grant", "fellowship", "startup", "course", "internship"];
 const CATEGORY_LABELS: Record<string, string> = {
   All: "All categories",
   grant: "Grants",
   fellowship: "Fellowships",
-  competition: "Competitions",
   startup: "Startup programs",
   course: "Courses",
-  residency: "Residencies",
-  research_internship: "Research internships",
-  job_internship: "Job internships",
+  internship: "Internships",
 };
 const SORT = [
   { value: "deadline", label: "Deadline" },

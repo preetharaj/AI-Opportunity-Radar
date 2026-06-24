@@ -34,7 +34,7 @@ export interface Profile {
 export interface Opportunity {
   id: string;
   title: string;
-  category: "grant" | "fellowship" | "competition" | "startup" | "course" | "residency" | "research_internship" | "job_internship";
+  category: "grant" | "fellowship" | "startup" | "course" | "internship";
   region: Region;
   deadline: string;        // ISO date string
   eligibility: string;     // human-readable summary

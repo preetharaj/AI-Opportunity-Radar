@@ -20,10 +20,8 @@ const STATUS_COLORS: Record<ApplicationStatus, string> = {
 };
 
 const CAT_ICONS: Record<string, string> = {
-  grant: "💰", fellowship: "🎓", competition: "🏆",
-  startup: "🚀", course: "📚", residency: "🔬",
-  research_internship: "🧪",
-  job_internship: "💼",
+  grant: "💰", fellowship: "🎓",
+  startup: "🚀", course: "📚", internship: "💼",
 };
 
 function DeadlineBadge({ days }: { days: number }) {

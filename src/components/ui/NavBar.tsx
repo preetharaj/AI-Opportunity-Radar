@@ -17,10 +17,8 @@ const CATEGORY_NAV = [
   { value: "grant", label: "Grants" },
   { value: "fellowship", label: "Fellowships" },
   { value: "startup", label: "Startups" },
-  { value: "competition", label: "Competitions" },
   { value: "course", label: "Courses" },
-  { value: "research_internship", label: "Research" },
-  { value: "job_internship", label: "Job Internships" },
+  { value: "internship", label: "Internships" },
 ];
 
 export function NavBar({ user }: { user: { name?: string | null; email?: string | null } | null }) {
