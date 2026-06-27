@@ -1,0 +1,98 @@
+name: Phase 3 — Agent-Assisted Discovery
+
+# Weekly scheduled discovery pass. One region per run, rotating across the
+# weekly cycle named in the PRD (India, SEA, Europe, USA, Australia, Global).
+#
+# IMPORTANT: this workflow ONLY ever opens a pull request. It has no path
+# that pushes to `main`. That guarantee depends on branch protection being
+# enabled on `main` in the repo's Settings — see docs/PHASE3.md, this is a
+# manual one-time step a workflow file cannot configure on its own behalf.
+#
+# Region rotation lives here (cron day-of-week -> region), not in the
+# script, so changing the schedule never requires touching discover.mjs.
+on:
+  schedule:
+    # All times UTC. One region per day, six days used out of seven.
+    - cron: "0 6 * * 1" # Monday    -> India
+    - cron: "0 6 * * 2" # Tuesday   -> SEA
+    - cron: "0 6 * * 3" # Wednesday -> Europe
+    - cron: "0 6 * * 4" # Thursday  -> USA
+    - cron: "0 6 * * 5" # Friday    -> Australia
+    - cron: "0 6 * * 6" # Saturday  -> Global
+  workflow_dispatch:
+    inputs:
+      region:
+        description: "Region to run discovery for (manual trigger)"
+        required: true
+        type: choice
+        options: [India, SEA, Europe, USA, Australia, Global]
+
+permissions:
+  contents: write # to push the candidate branch
+  pull-requests: write # to open the PR
+  issues: write # only used by check-links.yml, harmless here
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360 # 6h ceiling per PRD §7.1 (GitHub's own workflow max)
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Resolve region for this trigger
+        id: region
+        run: |
+          if [ -n "${{ github.event.inputs.region }}" ]; then
+            echo "region=${{ github.event.inputs.region }}" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          dow=$(date -u +%u) # 1=Mon .. 7=Sun
+          case "$dow" in
+            1) region="India" ;;
+            2) region="SEA" ;;
+            3) region="Europe" ;;
+            4) region="USA" ;;
+            5) region="Australia" ;;
+            6) region="Global" ;;
+            *) echo "No region scheduled for today (Sunday) — exiting." && exit 0 ;;
+          esac
+          echo "region=$region" >> "$GITHUB_OUTPUT"
+
+      - name: Install script dependencies
+        if: steps.region.outputs.region != ''
+        working-directory: scripts/phase3
+        run: npm install --no-save "zod@^4.0.0" @octokit/rest octokit-plugin-create-pull-request
+
+      - name: Install Ollama
+        if: steps.region.outputs.region != ''
+        run: curl -fsSL https://ollama.com/install.sh | sh
+
+      - name: Start Ollama and pull model
+        if: steps.region.outputs.region != ''
+        run: |
+          ollama serve &
+          # Wait for the daemon instead of a fixed sleep — flakier networks
+          # / cold runners shouldn't fail the job over a timing guess.
+          for i in $(seq 1 30); do
+            curl -sf http://127.0.0.1:11434/api/tags > /dev/null && break
+            sleep 2
+          done
+          ollama pull llama3.2:3b
+
+      - name: Run discovery for ${{ steps.region.outputs.region }}
+        if: steps.region.outputs.region != ''
+        env:
+          DISCOVERY_REGION: ${{ steps.region.outputs.region }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Optional — see scripts/phase3/lib/search-providers.mjs and
+          # lib/ollama.mjs for what each enables. Absence is handled
+          # gracefully (narrower discovery / cloud fallback skipped), never
+          # a hard failure.
+          GOOGLE_CSE_KEY: ${{ secrets.GOOGLE_CSE_KEY }}
+          GOOGLE_CSE_CX: ${{ secrets.GOOGLE_CSE_CX }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: node scripts/phase3/discover.mjs "$DISCOVERY_REGION"

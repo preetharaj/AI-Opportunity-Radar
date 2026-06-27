@@ -2,7 +2,7 @@
 
 > Discover curated AI, ML and technology opportunities from leading organizations worldwide.
 
-AI Opportunity Radar is a curated discovery layer for students, researchers, founders and builders looking for high-signal opportunities across AI, ML and technology.
+AI Opportunity Radar is an agent-assisted curation layer for students, researchers, founders and builders looking for high-signal opportunities across AI, ML and technology.
 
 ## Why It Exists
 
@@ -52,6 +52,23 @@ Receive curated opportunity updates every two weeks.
 ### Deadline Reminders
 Get notified when relevant deadlines are approaching.
 
+## Phase 3: Agent-Assisted Curation
+
+Phase 3 adds two scheduled, automated jobs that help with curation work without touching the live catalog directly. Every change either job proposes goes through a normal GitHub pull request — nothing publishes without a human approving it first.
+
+### Discovery pipeline
+A weekly job searches one region at a time (rotating through India, SEA, Europe, USA, Australia, Global) for new opportunities, drafts them as catalog entries, and opens a pull request for review. It uses a local, free open-source model (Ollama) running inside GitHub Actions, falling back to a free-tier cloud model only if local inference isn't available. Every PR includes the search queries used, sources found, candidates proposed, anything explicitly rejected, and any uncertainty the agent flagged — so review is fast, not a blind trust call.
+
+### Link-rot checker
+A separate weekly job checks every source URL already in the catalog and flags anything that's broken (404, 410, server error, timeout, unreachable). It never edits the catalog itself — it opens a GitHub issue listing what failed, and a human decides whether to fix the link, update the entry, or remove it.
+
+### What stays human
+- No job can merge to `main`. Both only ever open a pull request or an issue.
+- Discovery-value judgment (is this opportunity well-known enough to skip, is the deadline accurate, is the source credible) is still a manual review step — same bar as before Phase 3 existed.
+- Zero qualifying candidates in a given week is treated as a normal result, not a failure — the job says so explicitly rather than going silent.
+
+Full details: [`docs/PHASE3.md`](docs/PHASE3.md)
+
 ## Tech Stack
 
 - Next.js
@@ -71,6 +88,8 @@ Get notified when relevant deadlines are approaching.
 - Email subscriptions
 - Biweekly digest
 - Deadline reminders
+- Agent-assisted discovery (Phase 3)
+- Automated link-rot checking (Phase 3)
 
 ### Planned
 - Personalized recommendations
@@ -91,5 +110,6 @@ npm run dev
 
 - docs/DEPLOYMENT.md
 - docs/OPERATIONS.md
+- docs/PHASE3.md
 
 MIT License
