@@ -56,7 +56,7 @@ export function OpportunityCard({ opp, onSave, onUnsave, showStatus }: Props) {
             )}
           </div>
 
-          <Link href={`/opportunity/${opp.id}`} className="hover:text-indigo-600 transition-colors">
+          <Link href={`/opportunities/${opp.id}`} className="hover:text-indigo-600 transition-colors">
             <h3 className="text-sm font-semibold text-gray-900 leading-snug">{opp.title}</h3>
           </Link>
 

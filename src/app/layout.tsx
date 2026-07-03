@@ -7,17 +7,49 @@ import { Providers } from "@/components/Providers";
 import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { UmamiAnalytics } from "@/components/analytics/UmamiAnalytics";
 
+const SITE_URL = (process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "https://mapd.cc").replace(/\/$/, "");
 
+// Site-level default metadata. Individual pages override title/description/OG
+// via their own generateMetadata export — Next.js merges them automatically.
 export const metadata: Metadata = {
-  title: "AI Opportunity Radar",
-  description: "Find AI grants, fellowships, internships, and startup programs — with biweekly updates and deadline reminders.",
+  title: {
+    default: "AI Opportunity Radar",
+    // Page-level titles are used as-is; layout title is the fallback.
+    template: "%s | AI Opportunity Radar",
+  },
+  description:
+    "Curated AI grants, fellowships, internships, and startup programs — with biweekly updates and deadline reminders. Strongest coverage in India, SEA, and Australia.",
+  metadataBase: new URL(SITE_URL),
+  alternates: {
+    canonical: SITE_URL,
+  },
+  openGraph: {
+    title: "AI Opportunity Radar",
+    description:
+      "Curated AI grants, fellowships, internships, and startup programs — biweekly updates and deadline reminders.",
+    url: SITE_URL,
+    siteName: "AI Opportunity Radar",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "AI Opportunity Radar",
+    description:
+      "Curated AI grants, fellowships, internships, and startup programs — biweekly updates and deadline reminders.",
+    site: "@mapd_cc", // update to your real Twitter handle
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
+  },
 };
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  // Skip the auth() call entirely in public mode. This avoids an unnecessary
-  // Turso round-trip on every page render, and — more importantly — means the
-  // public site keeps working even if Turso/Auth.js env vars are never set up,
-  // since none of the currently-visible features need them.
   let user: { name?: string | null; email?: string | null } | null = null;
   if (FEATURE_FLAGS.showSignIn) {
     const { auth } = await import("@/lib/auth/config");

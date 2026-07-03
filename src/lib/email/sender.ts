@@ -15,7 +15,9 @@ function getResend(): Resend {
   if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
   return _resend;
 }
+
 const APP_URL = process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "http://localhost:3000";
+
 // EMAIL_FROM must be on a domain verified in your Resend account.
 // If it's missing or left as the placeholder, Resend returns a 422 and
 // the email is silently dropped — which is the most common reason
@@ -67,7 +69,7 @@ export async function sendDeadlineReminder(
         `<li style="margin-bottom:12px;">
           <strong>${escapeHtml(opp.title)}</strong><br>
           <span style="color:#dc2626;">${daysLeft} day${daysLeft !== 1 ? "s" : ""} left</span> · ${escapeHtml(opp.category)}<br>
-          <a href="${safeUrl(`${APP_URL}/opportunity/${opp.id}`)}">View details + calendar →</a>
+          <a href="${safeUrl(`${APP_URL}/opportunities/${opp.id}`)}">View details + calendar →</a>
         </li>`
     )
     .join("");
@@ -106,7 +108,7 @@ export async function sendBiweeklyNewsletterDigest(
           <strong>${escapeHtml(opp.title)}</strong> <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${escapeHtml(opp.category)}</span><br>
             <span style="color:#6b7280;font-size:13px;">${escapeHtml(deadlineDisplay(opp))}</span><br>
           <span style="color:#6b7280;font-size:13px;">${escapeHtml(opp.hook)}</span><br>
-            <a href="${safeUrl(`${APP_URL}/opportunity/${opp.id}`)}">View details →</a>
+            <a href="${safeUrl(`${APP_URL}/opportunities/${opp.id}`)}">View details →</a>
         </li>`
     )
     .join("");
@@ -149,7 +151,7 @@ export async function sendNewMatchDigest(
         `<li style="margin-bottom:12px;">
           <strong>${escapeHtml(opp.title)}</strong> <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${escapeHtml(opp.category)}</span><br>
           <span style="color:#6b7280;font-size:13px;">${escapeHtml(opp.hook)}</span><br>
-          <a href="${safeUrl(`${APP_URL}/opportunity/${opp.id}`)}">View →</a>
+          <a href="${safeUrl(`${APP_URL}/opportunities/${opp.id}`)}">View →</a>
         </li>`
     )
     .join("");
@@ -187,7 +189,7 @@ export async function sendSubscriberDeadlineReminder(
           <strong>${escapeHtml(opp.title)}</strong> <span style="background:#f3f4f6;padding:2px 6px;border-radius:4px;font-size:12px;">${escapeHtml(opp.category.replace(/_/g, " "))}</span><br>
           <span style="color:#dc2626;">${daysLeft === 0 ? "closes today" : `${daysLeft} day${daysLeft !== 1 ? "s" : ""} left`}</span><br>
           <span style="color:#6b7280;font-size:13px;">${escapeHtml(opp.hook)}</span><br>
-          <a href="${safeUrl(`${APP_URL}/opportunity/${opp.id}`)}">View details + calendar →</a>
+          <a href="${safeUrl(`${APP_URL}/opportunities/${opp.id}`)}">View details + calendar →</a>
         </li>`
     )
     .join("");
