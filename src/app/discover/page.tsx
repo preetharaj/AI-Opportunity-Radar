@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth/config";
 import { getProfile, getSaved } from "@/lib/db/queries";
 import { opportunities } from "@/lib/data/opportunities";
 import { rankOpportunities } from "@/lib/matching/score";
+import { sortDeadlineValue } from "@/lib/deadlines";
 import { FilterBar } from "@/components/opportunity/FilterBar";
 import { DiscoverFeed } from "./DiscoverFeed";
 
@@ -45,7 +46,7 @@ export default async function DiscoverPage({ searchParams }: Props) {
     );
   }
   if (searchParams.sort === "deadline") {
-    ranked.sort((a, b) => a.daysUntilDeadline - b.daysUntilDeadline);
+    ranked.sort((a, b) => sortDeadlineValue(a) - sortDeadlineValue(b));
   }
 
   const scoredWithStatus = ranked.map((o) => ({

@@ -77,7 +77,7 @@ export function SubscribeWidget({ variant = "card" }: Props) {
         </button>
       </form>
       {error && <p className="text-xs text-rose-600 mt-2">{error}</p>}
-      <p className="text-xs text-slate-400 mt-2">Free. Biweekly digest + deadline reminders. Unsubscribe anytime.</p>
+      <p className="text-xs text-slate-400 mt-2">Free. Biweekly digest + deadline reminders. <a href="/unsubscribe" className="underline hover:text-slate-600">Unsubscribe anytime</a>.</p>
     </div>
   );
 }

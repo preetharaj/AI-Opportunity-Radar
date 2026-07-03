@@ -6,7 +6,7 @@ import { opportunities } from "@/lib/data/opportunities";
 import { FilterBar } from "@/components/opportunity/FilterBar";
 import { SubscribeWidget } from "@/components/SubscribeWidget";
 import { PublicFeed } from "./PublicFeed";
-import { differenceInDays, parseISO } from "date-fns";
+import { daysUntilDeadline, sortDeadlineValue } from "@/lib/deadlines";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -18,8 +18,8 @@ interface Props {
 
 export default function HomePage({ searchParams }: Props) {
   let list = opportunities
-    .map((o) => ({ ...o, daysUntilDeadline: differenceInDays(parseISO(o.deadline), new Date()) }))
-    .filter((o) => o.daysUntilDeadline >= 0);
+    .map((o) => ({ ...o, daysUntilDeadline: daysUntilDeadline(o, new Date()) }))
+    .filter((o) => o.daysUntilDeadline === null || o.daysUntilDeadline >= 0);
 
   if (searchParams.region && searchParams.region !== "All") {
     list = list.filter((o) => o.region === searchParams.region || o.region === "Global");
@@ -36,7 +36,7 @@ export default function HomePage({ searchParams }: Props) {
   if (searchParams.sort === "newest") {
     list = [...list].sort((a, b) => (b.newThisWeek ? 1 : 0) - (a.newThisWeek ? 1 : 0));
   } else {
-    list = [...list].sort((a, b) => a.daysUntilDeadline - b.daysUntilDeadline);
+    list = [...list].sort((a, b) => sortDeadlineValue(a) - sortDeadlineValue(b));
   }
 
   return (
@@ -47,7 +47,7 @@ export default function HomePage({ searchParams }: Props) {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-indigo-100 bg-indigo-50/80 px-3 py-1 text-xs font-medium text-indigo-700 shadow-sm">
               <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-              Global • AI • ML • Research • Internships
+              Curated AI, ML & technology opportunities
             </div>
             <h1 className="mt-5 max-w-3xl text-4xl sm:text-5xl lg:text-6xl font-semibold text-slate-950 leading-[1.03] tracking-[-0.04em]">
               AI Opportunity Radar
@@ -58,11 +58,6 @@ export default function HomePage({ searchParams }: Props) {
             <p className="mt-4 max-w-2xl text-base sm:text-lg text-slate-600 leading-8">
               Curated opportunities for students, researchers, founders and builders. Updated biweekly with grants, fellowships, internships, and startup programs worldwide.
             </p>
-            <div className="mt-6 flex flex-wrap items-center gap-2 text-xs font-medium text-slate-600">
-              <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm">Global coverage</span>
-              <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm">Deadline reminders</span>
-              <span className="rounded-full border border-slate-200 bg-white/80 px-3 py-1.5 shadow-sm">No account needed</span>
-            </div>
           </div>
           <SubscribeWidget />
         </div>

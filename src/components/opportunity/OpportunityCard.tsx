@@ -2,6 +2,7 @@
 "use client";
 import Link from "next/link";
 import type { ScoredOpportunity, ApplicationStatus } from "@/lib/types";
+import { deadlineShortDisplay, isRollingOpportunity } from "@/lib/deadlines";
 
 const TIER_STYLES = {
   likely: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -24,15 +25,13 @@ const CAT_ICONS: Record<string, string> = {
   startup: "🚀", course: "📚", internship: "💼",
 };
 
-function DeadlineBadge({ days }: { days: number }) {
-  const cls =
-    days <= 7 ? "text-red-600 font-semibold" :
-    days <= 30 ? "text-amber-600 font-medium" : "text-gray-500";
-  return (
-    <span className={`text-xs ${cls}`}>
-      {days === 0 ? "Closes today" : days < 0 ? "Closed" : `${days}d left`}
-    </span>
-  );
+function DeadlineBadge({ opp }: { opp: ScoredOpportunity }) {
+  const rolling = isRollingOpportunity(opp);
+  const days = opp.daysUntilDeadline;
+  const cls = rolling ? "text-slate-600 font-medium" :
+    days !== null && days <= 7 ? "text-red-600 font-semibold" :
+    days !== null && days <= 30 ? "text-amber-600 font-medium" : "text-gray-500";
+  return <span className={`text-xs ${cls}`}>{deadlineShortDisplay(opp)}</span>;
 }
 
 interface Props {
@@ -84,7 +83,7 @@ export function OpportunityCard({ opp, onSave, onUnsave, showStatus }: Props) {
         </div>
 
         <div className="flex items-center gap-2">
-          <DeadlineBadge days={opp.daysUntilDeadline} />
+          <DeadlineBadge opp={opp} />
           {opp.isSaved ? (
             <button
               onClick={() => onUnsave?.(opp.id)}

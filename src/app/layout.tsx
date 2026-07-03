@@ -1,6 +1,5 @@
 // src/app/layout.tsx
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import { NavBar } from "@/components/ui/NavBar";
@@ -8,7 +7,6 @@ import { Providers } from "@/components/Providers";
 import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { UmamiAnalytics } from "@/components/analytics/UmamiAnalytics";
 
-const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AI Opportunity Radar",
@@ -29,7 +27,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
 
   return (
     <html lang="en">
-      <body className={`${inter.className} bg-gray-50 text-gray-900 min-h-screen`}>
+      <body className="bg-gray-50 text-gray-900 min-h-screen">
         <UmamiAnalytics />
         <Providers>
           <Suspense fallback={<div className="h-14 bg-white border-b border-gray-100" />}>

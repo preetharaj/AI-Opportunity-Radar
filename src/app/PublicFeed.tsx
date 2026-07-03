@@ -2,6 +2,7 @@
 "use client";
 import Link from "next/link";
 import type { Opportunity } from "@/lib/types";
+import { deadlineShortDisplay, isRollingOpportunity } from "@/lib/deadlines";
 
 const CAT_LABELS: Record<string, string> = {
   grant: "Grant", fellowship: "Fellowship",
@@ -9,7 +10,7 @@ const CAT_LABELS: Record<string, string> = {
 };
 
 interface PublicOpp extends Opportunity {
-  daysUntilDeadline: number;
+  daysUntilDeadline: number | null;
 }
 
 function formatDeadline(deadline: string): string {
@@ -17,11 +18,12 @@ function formatDeadline(deadline: string): string {
   return d.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
 
-function StatusPill({ days, isNew }: { days: number; isNew?: boolean }) {
+function StatusPill({ opp, days, isNew }: { opp: Opportunity; days: number | null; isNew?: boolean }) {
   const pills: { label: string; cls: string }[] = [];
   if (isNew) pills.push({ label: "New", cls: "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100" });
-  if (days <= 14 && days >= 0) pills.push({ label: "Closing soon", cls: "bg-amber-50 text-amber-700 ring-1 ring-amber-100" });
-  else if (days > 14) pills.push({ label: "Active", cls: "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100" });
+  if (isRollingOpportunity(opp)) pills.push({ label: "Rolling", cls: "bg-slate-50 text-slate-700 ring-1 ring-slate-200" });
+  else if (days !== null && days <= 14 && days >= 0) pills.push({ label: "Closing soon", cls: "bg-amber-50 text-amber-700 ring-1 ring-amber-100" });
+  else if (days !== null && days > 14) pills.push({ label: "Active", cls: "bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100" });
   if (pills.length === 0) return null;
   return (
     <div className="flex items-center gap-1.5">
@@ -84,7 +86,8 @@ export function PublicFeed({ opportunities }: { opportunities: PublicOpp[] }) {
     <div className="grid gap-4 sm:grid-cols-2">
       {opportunities.map((opp) => {
         const days = opp.daysUntilDeadline;
-        const deadlineColor = days <= 14 ? "text-rose-600" : days <= 30 ? "text-amber-600" : "text-slate-600";
+        const rolling = isRollingOpportunity(opp);
+        const deadlineColor = rolling ? "text-slate-600" : days !== null && days <= 14 ? "text-rose-600" : days !== null && days <= 30 ? "text-amber-600" : "text-slate-600";
         return (
           <div
             key={opp.id}
@@ -92,7 +95,7 @@ export function PublicFeed({ opportunities }: { opportunities: PublicOpp[] }) {
           >
             <CategoryAccent category={opp.category} />
             <div className="flex items-center justify-between mb-2 gap-2">
-              <StatusPill days={days} isNew={opp.newThisWeek} />
+              <StatusPill opp={opp} days={days} isNew={opp.newThisWeek} />
               <span className="text-[11px] text-slate-400 uppercase tracking-wide shrink-0">
                 {CAT_LABELS[opp.category]}
               </span>
@@ -109,8 +112,8 @@ export function PublicFeed({ opportunities }: { opportunities: PublicOpp[] }) {
 
             <div className="space-y-1.5 flex-1 mt-1">
               <IconRow icon="📅">
-                <span className={`font-medium ${deadlineColor}`}>{formatDeadline(opp.deadline)}</span>
-                <span className="text-slate-400"> ({days === 0 ? "today" : `${days}d left`})</span>
+                <span className={`font-medium ${deadlineColor}`}>{rolling ? "Rolling" : formatDeadline(opp.deadline)}</span>
+                {!rolling && <span className="text-slate-400"> ({deadlineShortDisplay(opp)})</span>}
               </IconRow>
               <IconRow icon="🌍">
                 {opp.locationNote ? `${opp.region} (${opp.locationNote})` : opp.region === "Global" ? "Global (Remote)" : opp.region}

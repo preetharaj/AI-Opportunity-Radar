@@ -37,6 +37,7 @@ export interface Opportunity {
   category: "grant" | "fellowship" | "startup" | "course" | "internship";
   region: Region;
   deadline: string;        // ISO date string
+  deadlineType?: "fixed" | "rolling"; // omitted = fixed; rolling = no hard close date, deadline is a review/visibility date
   eligibility: string;     // human-readable summary
   minScore: number;        // score >= this = "likely"
   maybeScore: number;      // score >= this = "maybe"
@@ -50,6 +51,13 @@ export interface Opportunity {
   newThisWeek?: boolean;
   locationNote?: string;   // optional richer detail, e.g. "Remote and Oxford in-person options"
   costType?: "free" | "paid" | "scholarship_available"; // primarily for courses
+  // ── Remote-work fields (Phase 4) ──
+  // isRemote is the primary filter flag. region above still describes the
+  // opportunity's "home" geography (where it's run from / who it's aimed
+  // at), since that's used throughout the existing scoring and filtering
+  // logic — isRemote is additive, not a replacement for region.
+  isRemote?: boolean;             // true if the role/program can be done remotely, in whole or part
+  remoteEligibleRegions?: Region[]; // residency restriction on the remote option, if any — e.g. ["USA"] for "remote, must be USA-based"; absent/empty means no restriction stated
 
   // ── Rich eligibility criteria (all optional — absence means "no constraint") ──
   eligibleEducationLevels?: EducationLevel[];  // e.g. ["postgrad_masters", "postgrad_phd"]
@@ -74,7 +82,7 @@ export interface SavedOpportunity {
 export interface ScoredOpportunity extends Opportunity {
   score: number;
   eligibilityTier: EligibilityTier;
-  daysUntilDeadline: number;
+  daysUntilDeadline: number | null; // null for rolling opportunities
   isSaved: boolean;
   applicationStatus?: ApplicationStatus;
 }

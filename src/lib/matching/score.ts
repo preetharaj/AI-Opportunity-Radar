@@ -1,7 +1,7 @@
 // src/lib/matching/score.ts
 // Pure, deterministic — no ML. Server-side only.
 import type { Profile, Opportunity, MatchResult, EligibilityTier } from "@/lib/types";
-import { differenceInDays, parseISO } from "date-fns";
+import { daysUntilDeadline, sortDeadlineValue } from "@/lib/deadlines";
 
 export function scoreOpportunity(opportunity: Opportunity, profile: Profile): MatchResult {
   let score = 0;
@@ -32,8 +32,10 @@ export function scoreOpportunity(opportunity: Opportunity, profile: Profile): Ma
   }
 
   // Deadline modifiers
-  const days = differenceInDays(parseISO(opportunity.deadline), new Date());
-  if (days > 30) {
+  const days = daysUntilDeadline(opportunity, new Date());
+  if (days === null) {
+    reasons.push("Rolling deadline");
+  } else if (days > 30) {
     score += 1;
   } else if (days <= 7 && days >= 0) {
     score -= 1;
@@ -61,7 +63,7 @@ export function rankOpportunities<T extends Opportunity>(
   return opportunities
     .map((opp) => {
       const match = scoreOpportunity(opp, profile);
-      const days = differenceInDays(parseISO(opp.deadline), new Date());
+      const days = daysUntilDeadline(opp, new Date());
       return {
         ...opp,
         score: match.score,
@@ -71,10 +73,10 @@ export function rankOpportunities<T extends Opportunity>(
         isSaved: savedIds.has(opp.id),
       };
     })
-    .filter((o) => !excludeExpired || o.daysUntilDeadline >= 0)
+    .filter((o) => !excludeExpired || o.daysUntilDeadline === null || o.daysUntilDeadline >= 0)
     .sort((a, b) => {
       // Primary: score desc. Secondary: deadline asc
       if (b.score !== a.score) return b.score - a.score;
-      return a.daysUntilDeadline - b.daysUntilDeadline;
+      return sortDeadlineValue(a) - sortDeadlineValue(b);
     });
 }
