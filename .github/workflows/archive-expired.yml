@@ -1,0 +1,53 @@
+name: Phase 3 — Archival of Expired Opportunities
+
+# Runs weekly on Sunday (the one day discovery doesn't run) and proposes
+# removal of expired fixed-deadline entries via a pull request.
+#
+# HUMAN REVIEW IS REQUIRED. This workflow can only open a PR — it has no
+# code path that merges, and the GITHUB_TOKEN used here cannot merge PRs
+# because branch protection on `main` requires at least one human approval.
+#
+# Non-blocking by construction:
+#   - No `pull_request` trigger, so it can never become a required check
+#     on someone else's PR.
+#   - No `needs:` dependency on discovery.yml or link-checker.yml.
+#   - A failure here shows up in the Actions tab only — not as a red X
+#     on any contributor's open PR.
+#
+# Independent from the link-checker: the link-checker flags URLs that are
+# broken (HTTP errors). This job flags entries whose deadline has passed
+# regardless of whether the URL still responds. Both are needed — a program
+# can be closed with the page still live (returning 200) or vice versa.
+
+on:
+  schedule:
+    - cron: "0 7 * * 0"   # Sunday 07:00 UTC — no other job runs on Sunday
+  workflow_dispatch: {}    # manual trigger for testing
+
+permissions:
+  contents: write        # to push the archival branch
+  pull-requests: write   # to open the PR
+  issues: write          # for the no-op audit-trail issue when nothing expired
+
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10   # this job does no inference — 10min is more than enough
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install script dependencies
+        working-directory: scripts/phase3
+        run: npm install --no-save @octokit/rest octokit-plugin-create-pull-request
+
+      - name: Run archival scan
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/phase3/archive-expired.mjs

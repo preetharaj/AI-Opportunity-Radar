@@ -146,16 +146,31 @@ async function loadExistingIds() {
 
 function buildPrompt(region, rawCandidates, existingIds) {
   const rules = renderRulesForPrompt();
+
+  // Build the candidate block. Items with fullContent (primary sources that
+  // changed, or full-page-fetched API results) get their real text sent to
+  // the model. Items with only a snippet (fallback) get the snippet.
+  // This is the key change from the old pipeline: the model gets real
+  // content rather than 160-char aggregator snippets — the difference
+  // between reliable extraction and hallucination.
   const linksBlock = rawCandidates
-    .slice(0, 25) // cap context size for small local models
-    .map((c, i) => `${i + 1}. ${c.title || "(untitled)"}\n   URL: ${c.url}\n   Snippet: ${c.snippet || "(none)"}`)
-    .join("\n\n");
+    .slice(0, 15) // cap: 15 items × up to ~4000 chars each = stays within context window
+    .map((c, i) => {
+      const header = `${i + 1}. ${c.title || "(untitled)"}\n   URL: ${c.url}\n   Source: ${c.queryUsed || "unknown"}`;
+      if (c.fullContent) {
+        // Full page content: truncate to ~800 words to balance context vs. coverage
+        const truncated = c.fullContent.slice(0, 3200);
+        return `${header}\n   FULL PAGE CONTENT:\n${truncated}\n   [end of page content]`;
+      }
+      return `${header}\n   Snippet: ${c.snippet || "(none)"}`;
+    })
+    .join("\n\n---\n\n");
 
   const systemPrompt = [
     "You are a careful research assistant helping curate a catalog of real, verifiable AI/tech opportunities (grants, fellowships, internships, courses, startup programs).",
-    "You only propose opportunities you can support with the source link given to you below.",
-    "You never invent deadlines, amounts, or eligibility details not present in the provided snippet or your general knowledge of the named source.",
-    "If you are unsure whether something is still open or accurate, you say so in uncertaintyNotes rather than guessing.",
+    "You extract information only from the source content provided below — you do not invent facts.",
+    "When full page content is provided, read it carefully: deadlines, eligibility, and funding amounts should be taken from what's explicitly written there.",
+    "When only a snippet is provided, flag any details you're uncertain about in uncertaintyNotes rather than guessing.",
     "Respond with ONLY a JSON object matching the provided schema. No prose, no markdown fences.",
   ].join(" ");
 
@@ -167,10 +182,10 @@ ${rules}
 Opportunities already in the catalog (do not propose these ids again):
 ${[...existingIds].slice(0, 50).join(", ") || "(none yet)"}
 
-Raw candidate links found this pass (titles/snippets from search, NOT verified):
+Candidate sources found this pass:
 ${linksBlock}
 
-For each link that plausibly describes a real, region-relevant, currently-open-or-rolling AI/tech opportunity and clears the curation rules above, draft one candidate object. For anything you looked at but are deliberately excluding (evergreen brand, expired, off-topic, etc.), add it to "rejected" with a short reason. Return JSON only.
+For each source that describes a real, region-relevant, currently-open-or-rolling AI/tech opportunity and clears the curation rules above, draft one candidate object. For anything you looked at but are deliberately excluding, add it to "rejected" with a short reason. Return JSON only.
 `.trim();
 
   return { systemPrompt, userPrompt };
@@ -213,10 +228,12 @@ function renderCandidateAsTs(c) {
     `    hook: ${ts(c.hook)},`,
     `    effortLevel: ${ts(c.effortLevel)},`,
     `    lastVerified: ${ts(c.lastVerified)},`,
+    `    isRemote: ${c.isRemote === true ? "true" : "false"},`,
     "    newThisWeek: true,",
     "    // ⚠️ AGENT-DRAFTED — Phase 3 discovery pipeline. Not yet human-verified.",
     `    // Uncertainty flagged by the agent: ${toSingleLineComment(c.uncertaintyNotes) || "(none stated)"}`,
   ];
+  if (c.remoteEligibleRegions) lines.push(`    remoteEligibleRegions: ${tsArray(c.remoteEligibleRegions)},`);
   if (c.eligibleEducationLevels) lines.push(`    eligibleEducationLevels: ${tsArray(c.eligibleEducationLevels)},`);
   if (c.eligibleFields) lines.push(`    eligibleFields: ${tsArray(c.eligibleFields)},`);
   if (c.eligibleCitizenshipRegions) lines.push(`    eligibleCitizenshipRegions: ${tsArray(c.eligibleCitizenshipRegions)},`);
