@@ -157,6 +157,21 @@ export const PRIMARY_SOURCES = {
       label: "Anyscale Careers",
       note: "Ray ecosystem lab — watch for internship or fellowship announcements",
     },
+    {
+      url: "https://foundation.mozilla.org/en/what-we-fund/",
+      label: "Mozilla Foundation Funding",
+      note: "Trustworthy-AI fellowships and awards — changes when new calls open",
+    },
+    {
+      url: "https://sloan.org/grants/apply",
+      label: "Sloan Foundation Grants",
+      note: "Research grants incl. AI/computing — foundation primary page",
+    },
+    {
+      url: "https://schmidtsciences.org/programs/",
+      label: "Schmidt Sciences Programs",
+      note: "AI2050 fellowships and science programs — high-value, low-competition",
+    },
   ],
 
   India: [
@@ -190,6 +205,16 @@ export const PRIMARY_SOURCES = {
       label: "STPI NERVE CoE Nagpur",
       note: "AI/DeepTech startup incubation challenges",
     },
+    {
+      url: "https://iisc.ac.in/positions-open/",
+      label: "IISc Bangalore Open Positions",
+      note: "Research internships and project positions — India's top research university",
+    },
+    {
+      url: "https://rbcdsai.iitm.ac.in/opportunities/",
+      label: "IIT Madras RBCDSAI Opportunities",
+      note: "Robert Bosch Centre for Data Science and AI — internships and fellowships",
+    },
   ],
 
   SEA: [
@@ -222,6 +247,16 @@ export const PRIMARY_SOURCES = {
       url: "https://talent.alibaba.com",
       label: "Alibaba Talent Portal",
       note: "Search 'Qwen' or 'DAMO Academy' for AI research internships, Singapore-based roles most accessible internationally",
+    },
+    {
+      url: "https://www.comp.nus.edu.sg/programmes/pg/",
+      label: "NUS Computing Programmes",
+      note: "Research attachments and AI programmes at Singapore's top CS school",
+    },
+    {
+      url: "https://www.ntu.edu.sg/scse/admissions/programmes",
+      label: "NTU SCSE Programmes",
+      note: "AI research programmes and attachments",
     },
   ],
 
@@ -266,6 +301,16 @@ export const PRIMARY_SOURCES = {
       label: "Perplexity Jobs Board",
       note: "Internships in Belgrade (Serbia), Berlin (Germany), London (UK) — check for new intern postings",
     },
+    {
+      url: "https://ai.ethz.ch/education/fellowships.html",
+      label: "ETH AI Center Fellowships",
+      note: "Postdoc and doctoral fellowships at Europe's top technical university",
+    },
+    {
+      url: "https://www.eu-startups.com/category/accelerators/",
+      label: "EU-Startups Accelerator News",
+      note: "Free directory — new EU accelerator cohort announcements (verify against official pages before curating)",
+    },
   ],
 
   USA: [
@@ -309,6 +354,16 @@ export const PRIMARY_SOURCES = {
       label: "OpenAI Residency",
       note: "Reopens annually — watch for 2027 cycle",
     },
+    {
+      url: "https://hai.stanford.edu/research/fellowship-programs",
+      label: "Stanford HAI Fellowships",
+      note: "Human-centered AI fellowship programs",
+    },
+    {
+      url: "https://www.eecs.mit.edu/research/",
+      label: "MIT EECS Research",
+      note: "SuperUROP and research program announcements",
+    },
   ],
 
   Australia: [
@@ -331,6 +386,16 @@ export const PRIMARY_SOURCES = {
       url: "https://www.startupaus.org/programs",
       label: "StartupAus Programs",
       note: "Australian startup programs including AI accelerators",
+    },
+    {
+      url: "https://cecc.anu.edu.au/study/study-options",
+      label: "ANU Computing Study Options",
+      note: "AI programs and research opportunities at Australia's top research university",
+    },
+    {
+      url: "https://data61.csiro.au/en/Our-Research/Students-and-Careers",
+      label: "CSIRO Data61 Students & Careers",
+      note: "Australia's data-science arm — internships and PhD scholarships",
     },
   ],
 };

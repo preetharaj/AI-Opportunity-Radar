@@ -48,7 +48,7 @@ async function main() {
   console.log(`[discover] Starting discovery pass for region: ${REGION}`);
 
   const existingIds = await loadExistingIds();
-  const { items: rawCandidates, queriesUsed } = await gatherRawCandidates(REGION);
+  const { items: rawCandidates, queriesUsed, hardDropped = [] } = await gatherRawCandidates(REGION);
   console.log(`[discover] Gathered ${rawCandidates.length} raw links via ${queriesUsed.length} queries`);
 
   if (rawCandidates.length === 0) {
@@ -129,7 +129,7 @@ async function main() {
   const updatedFileContent = await spliceCandidatesIntoFile(newCandidates);
   const branchName = `phase3/discovery-${REGION.toLowerCase()}-${today}`;
   const prTitle = `Phase 3 discovery: ${newCandidates.length} candidate(s) for ${REGION} (${today})`;
-  const prBody = renderPrBody({ region: REGION, queriesUsed, candidates: newCandidates, rejected, modelSource: llmResult.source });
+  const prBody = renderPrBody({ region: REGION, queriesUsed, candidates: newCandidates, rejected, modelSource: llmResult.source, hardDropped });
 
   await openCandidatePR({
     branchName,
@@ -276,7 +276,7 @@ function tsArray(arr) {
   return `[${arr.map((v) => ts(v)).join(", ")}]`;
 }
 
-function renderPrBody({ region, queriesUsed, candidates, rejected, modelSource }) {
+function renderPrBody({ region, queriesUsed, candidates, rejected, modelSource, hardDropped = [] }) {
   const candidateList = candidates
     .map(
       (c) =>
@@ -288,6 +288,11 @@ function renderPrBody({ region, queriesUsed, candidates, rejected, modelSource }
     rejected.length > 0
       ? rejected.map((r) => `- ~~${r.title}~~ — ${r.reason}`).join("\n")
       : "_None — the agent did not log any explicit rejections this pass._";
+
+  const hardDroppedList =
+    hardDropped.length > 0
+      ? hardDropped.map((d) => `- ~~${d.item.title || d.item.url}~~ — ${d.reason}`).join("\n")
+      : "_None — no aggregator or evergreen-brand items appeared this pass._";
 
   return `
 ## Phase 3 agent-assisted discovery — ${region}
@@ -305,6 +310,9 @@ ${candidateList}
 
 ### Candidates the agent looked at and rejected (${rejected.length})
 ${rejectedList}
+
+### Hard-dropped before the LLM (${hardDropped.length}) — deterministic filter
+${hardDroppedList}
 
 ### Reviewer checklist (same bar as manual curation)
 - [ ] Discovery value: does this clear the "would Google already surface this" litmus test?

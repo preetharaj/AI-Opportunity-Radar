@@ -25,6 +25,7 @@
 
 import { scanPrimarySources } from "./source-monitor.mjs";
 import { gatherStructuredCandidates } from "./structured-apis.mjs";
+import { rankByDiscoveryValue } from "./discovery-value.mjs";
 
 export async function gatherRawCandidates(region) {
   console.log(`[search] Starting Tier 1 (primary source monitor) for ${region}`);
@@ -65,13 +66,21 @@ export async function gatherRawCandidates(region) {
     return true;
   });
 
+  // Tier 3: deterministic discovery-value ranking.
+  // Hard-drops aggregator domains and evergreen brands BEFORE the LLM
+  // (the prompt rules remain a second layer for judgment calls a regex
+  // can't make), then scores and sorts the rest so discover.mjs's
+  // 15-item context cap keeps the highest-signal candidates rather than
+  // whichever happened to arrive first.
+  const { ranked, dropped } = rankByDiscoveryValue(combined);
+
   const queriesUsed = [
     ...changed.map((c) => `primary-source: ${c.label}`),
     ...structuredItems.map((s) => s.source),
   ].filter((v, i, a) => a.indexOf(v) === i); // unique
 
-  console.log(`[search] Combined: ${combined.length} total candidates for LLM`);
-  return { items: combined, queriesUsed };
+  console.log(`[search] ${ranked.length} ranked candidates for LLM (${dropped.length} hard-dropped pre-LLM)`);
+  return { items: ranked, queriesUsed, hardDropped: dropped };
 }
 
 // Re-export for anything that imports these directly (e.g. tests)
