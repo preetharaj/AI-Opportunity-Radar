@@ -1,0 +1,73 @@
+name: Email notifications
+
+on:
+  schedule:
+    # Run once daily. /api/notify decides which emails are due:
+    # followed reminders daily, weekly roundup on Monday, biweekly digest every second Monday.
+    - cron: "15 8 * * *"
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Call notification endpoint in batches
+        env:
+          NOTIFY_URL: ${{ secrets.NOTIFY_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+        run: |
+          set -euo pipefail
+          if [ -z "${NOTIFY_URL:-}" ]; then
+            echo "NOTIFY_URL secret is required, e.g. https://mapd.cc/api/notify"
+            exit 1
+          fi
+          if [ -z "${CRON_SECRET:-}" ]; then
+            echo "CRON_SECRET secret is required"
+            exit 1
+          fi
+
+          call_phase() {
+            phase="$1"
+            cursor=""
+            page=1
+            while true; do
+              url="${NOTIFY_URL}?phase=${phase}"
+              if [ -n "${cursor}" ]; then
+                url="${url}&cursor=${cursor}"
+              fi
+              echo "Calling ${phase} notification batch ${page}"
+              response_file="response-${phase}-${page}.json"
+              http_code=$(curl --silent --show-error \
+                --request POST \
+                --header "Authorization: Bearer ${CRON_SECRET}" \
+                --write-out "%{http_code}" \
+                --output "${response_file}" \
+                "${url}")
+
+              cat "${response_file}"
+              echo
+
+              # 200 = all sends succeeded/skipped. 207 = partial send failures were recorded for retry.
+              # Both should allow the loop to continue so later batches are not blocked by one bad address/provider failure.
+              if [ "${http_code}" != "200" ] && [ "${http_code}" != "207" ]; then
+                echo "Notification endpoint failed with HTTP ${http_code}"
+                exit 1
+              fi
+
+              has_more=$(jq -r '.hasMore // false' "${response_file}")
+              cursor=$(jq -r '.nextCursor // empty' "${response_file}")
+              if [ "${has_more}" != "true" ] || [ -z "${cursor}" ]; then
+                break
+              fi
+              page=$((page + 1))
+              if [ "${page}" -gt 100 ]; then
+                echo "Safety stop: more than 100 notification batches for ${phase}"
+                exit 1
+              fi
+            done
+          }
+
+          call_phase daily
+          call_phase weekly
+          call_phase biweekly

@@ -1,6 +1,7 @@
 // src/app/saved/page.tsx
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { getSaved } from "@/lib/db/queries";
 import { getOpportunityById } from "@/lib/data/opportunities";
 import { rankOpportunities } from "@/lib/matching/score";
@@ -13,6 +14,8 @@ export const runtime = "nodejs";
 
 
 export default async function SavedPage() {
+  if (!FEATURE_FLAGS.showSignIn) notFound();
+
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/signin");
 

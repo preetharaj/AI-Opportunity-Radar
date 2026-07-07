@@ -1,6 +1,7 @@
 // src/app/tracking/page.tsx
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { getSaved } from "@/lib/db/queries";
 import { getOpportunityById } from "@/lib/data/opportunities";
 import { PipelineBoard } from "./PipelineBoard";
@@ -12,6 +13,8 @@ export const runtime = "nodejs";
 const STATUSES = ["saved", "researching", "applied", "interview", "rejected", "accepted"] as const;
 
 export default async function TrackingPage() {
+  if (!FEATURE_FLAGS.showSignIn) notFound();
+
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/signin");
 

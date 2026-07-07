@@ -61,7 +61,7 @@ export function SubscribeWidget({ variant = "card" }: Props) {
         <p className="text-sm font-semibold text-slate-950">Biweekly opportunity digest</p>
       </div>
       <p className="text-xs text-slate-500 mb-4 leading-5">
-        Get new grants, fellowships, programs, and deadline reminders in your inbox. No account needed.
+        Get new grants, fellowships, programs, and one weekly closing roundup in your inbox. No account needed.
       </p>
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
@@ -77,7 +77,7 @@ export function SubscribeWidget({ variant = "card" }: Props) {
         </button>
       </form>
       {error && <p className="text-xs text-rose-600 mt-2">{error}</p>}
-      <p className="text-xs text-slate-400 mt-2">Free. Biweekly digest + deadline reminders. <a href="/unsubscribe" className="underline hover:text-slate-600">Unsubscribe anytime</a>.</p>
+      <p className="text-xs text-slate-400 mt-2">Free. Biweekly digest + weekly closing roundup. <a href="/unsubscribe" className="underline hover:text-slate-600">Unsubscribe anytime</a>.</p>
     </div>
   );
 }

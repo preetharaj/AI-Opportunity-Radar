@@ -1,6 +1,7 @@
 // src/app/settings/page.tsx
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { getProfile } from "@/lib/db/queries";
 import { ProfileForm } from "@/components/profile/ProfileForm";
 
@@ -9,6 +10,8 @@ export const runtime = "nodejs";
 
 
 export default async function SettingsPage() {
+  if (!FEATURE_FLAGS.showSignIn) notFound();
+
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/signin");
 

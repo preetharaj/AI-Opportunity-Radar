@@ -4,12 +4,15 @@ import { auth } from "@/lib/auth/config";
 import { upsertSaved, deleteSaved } from "@/lib/db/queries";
 import { SaveSchema, DeleteSavedSchema } from "@/lib/validation";
 import { rateLimit } from "@/lib/ratelimit";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { getOpportunityById } from "@/lib/data/opportunities";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  if (!FEATURE_FLAGS.showSignIn) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
@@ -33,6 +36,8 @@ export async function POST(req: NextRequest) {
 }
 
 export async function DELETE(req: NextRequest) {
+  if (!FEATURE_FLAGS.showSignIn) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

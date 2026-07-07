@@ -1,6 +1,7 @@
 // src/app/discover/page.tsx
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth/config";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { getProfile, getSaved } from "@/lib/db/queries";
 import { opportunities } from "@/lib/data/opportunities";
 import { rankOpportunities } from "@/lib/matching/score";
@@ -17,6 +18,8 @@ interface Props {
 }
 
 export default async function DiscoverPage({ searchParams }: Props) {
+  if (!FEATURE_FLAGS.showSignIn) notFound();
+
   const session = await auth();
   if (!session?.user?.id) redirect("/auth/signin");
 

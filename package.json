@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "npx @libsql/client && node scripts/db-init.js",
-    "db:init": "node scripts/db-init.js"
+    "db:init": "node scripts/db-init.js",
+    "typecheck": "tsc --noEmit",
+    "test": "node scripts/test-notification-policy.mjs && node scripts/test-notification-pipeline.mjs && npm run typecheck"
   },
   "dependencies": {
     "@auth/core": "^0.28.0",
@@ -18,7 +20,7 @@
     "@octokit/rest": "^22.0.1",
     "date-fns": "^3.6.0",
     "dotenv": "^17.4.2",
-    "next": "14.2.0",
+    "next": "^14.2.35",
     "next-auth": "^5.0.0-beta.16",
     "octokit-plugin-create-pull-request": "^6.0.1",
     "react": "^18.3.0",

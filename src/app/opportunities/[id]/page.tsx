@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getOpportunityById, opportunities } from "@/lib/data/opportunities";
 import { EligibilityChecker } from "@/components/EligibilityChecker";
+import { FollowButton } from "@/components/opportunity/FollowButton";
 import {
   deadlineDisplay,
   daysUntilDeadline,
@@ -247,15 +248,15 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
             </div>
             <div>
               <span className="label">Category</span>
-              <Link href={`/category/${opp.category}`} className="text-indigo-600 hover:underline capitalize text-sm">
+              <span className="text-gray-800 capitalize text-sm">
                 {CAT_LABELS[opp.category] ?? opp.category}
-              </Link>
+              </span>
             </div>
             <div>
               <span className="label">Region</span>
-              <Link href={`/region/${opp.region.toLowerCase()}`} className="text-indigo-600 hover:underline text-sm">
+              <span className="text-gray-800 text-sm">
                 {opp.region}
-              </Link>
+              </span>
             </div>
           </div>
 
@@ -279,13 +280,13 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
 
           <div className="pt-4 border-t border-gray-100">
             <div className="flex flex-wrap gap-2">
-              <a href={opp.source} target="_blank" rel="noopener noreferrer" className="btn-primary text-sm">
+              <a href={opp.source} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="btn-primary text-sm">
                 Apply / Official source ↗
               </a>
               {!rolling && googleCalendarUrl && (
                 <>
                   <a href={`/api/calendar/${opp.id}`} className="btn-secondary text-sm">Download .ics</a>
-                  <a href={googleCalendarUrl} target="_blank" rel="noopener noreferrer" className="btn-secondary text-sm">
+                  <a href={googleCalendarUrl} target="_blank" rel="noopener noreferrer" referrerPolicy="no-referrer" className="btn-secondary text-sm">
                     Add to Google Calendar
                   </a>
                 </>
@@ -293,6 +294,12 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
             </div>
           </div>
         </div>
+
+        {!rolling && days !== null && days >= 0 && (
+          <div className="mb-4">
+            <FollowButton opportunityId={opp.id} />
+          </div>
+        )}
 
         <EligibilityChecker opportunity={opp} />
       </div>

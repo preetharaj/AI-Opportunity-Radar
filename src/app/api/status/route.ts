@@ -4,12 +4,15 @@ import { auth } from "@/lib/auth/config";
 import { updateStatus } from "@/lib/db/queries";
 import { StatusUpdateSchema } from "@/lib/validation";
 import { rateLimit } from "@/lib/ratelimit";
+import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { getOpportunityById } from "@/lib/data/opportunities";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
+  if (!FEATURE_FLAGS.showSignIn) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
   const session = await auth();
   if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 

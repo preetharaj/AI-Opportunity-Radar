@@ -31,3 +31,9 @@ export const SubscribeSchema = z.object({
 export const UnsubscribeSchema = z.object({
   email: z.string().email().max(200).transform((e) => e.trim().toLowerCase()),
 });
+
+
+export const ReminderFollowSchema = z.object({
+  email: z.string().email().max(200).transform((e) => e.trim().toLowerCase()),
+  opportunityId: z.string().min(1).max(120).regex(/^[a-z0-9-]+$/),
+});
