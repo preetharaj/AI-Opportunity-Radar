@@ -193,7 +193,7 @@ async function runDailyFollowedReminders(today: Date, cursorRaw: string | null, 
     return { sent: 0, hasMore: false, nextCursor: null };
   }
 
-  const page = await getActiveFollowsForOpportunityIdsPage([...candidatesByOppId.keys()], {
+  const page = await getActiveFollowsForOpportunityIdsPage(Array.from(candidatesByOppId.keys()), {
     cursorEmail: cursor?.email,
     cursorOpportunityId: cursor?.opportunityId,
     limit: BATCH_LIMIT,
