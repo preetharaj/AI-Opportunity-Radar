@@ -34,7 +34,7 @@ export interface Profile {
 export interface Opportunity {
   id: string;
   title: string;
-  category: "grant" | "fellowship" | "startup" | "course" | "internship";
+  category: "grant" | "fellowship" | "course" | "internship" | "fractional_job";
   region: Region;
   deadline: string;        // ISO date string
   deadlineType?: "fixed" | "rolling"; // omitted = fixed; rolling = no hard close date, deadline is a review/visibility date

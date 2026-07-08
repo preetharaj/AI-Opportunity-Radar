@@ -23,14 +23,14 @@ const SITE_URL = (process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "https://m
 const CAT_LABELS: Record<string, string> = {
   grant: "Grant",
   fellowship: "Fellowship",
-  startup: "Startup Program",
   course: "Course",
   internship: "Internship",
+  fractional_job: "Fractional Job",
 };
 
 const CAT_ICONS: Record<string, string> = {
   grant: "💰", fellowship: "🎓",
-  startup: "🚀", course: "📚", internship: "💼",
+  course: "📚", internship: "💼", fractional_job: "🧩",
 };
 
 const COST_BADGES: Record<string, { label: string; cls: string }> = {

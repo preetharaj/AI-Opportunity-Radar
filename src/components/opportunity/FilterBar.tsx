@@ -4,14 +4,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 const REGIONS = ["All", "Global", "India", "SEA", "Europe", "USA", "Australia"];
-const CATEGORIES = ["All", "grant", "fellowship", "startup", "course", "internship"];
+const CATEGORIES = ["All", "grant", "fellowship", "course", "internship", "fractional_job"];
 const CATEGORY_LABELS: Record<string, string> = {
   All: "All categories",
   grant: "Grants",
   fellowship: "Fellowships",
-  startup: "Startup programs",
   course: "Courses",
   internship: "Internships",
+  fractional_job: "Fractional jobs",
 };
 const SORT = [
   { value: "deadline", label: "Deadline" },

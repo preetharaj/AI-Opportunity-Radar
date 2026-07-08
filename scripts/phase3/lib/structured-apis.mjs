@@ -156,30 +156,43 @@ const REDDIT_SOURCES = {
     { sub: "MachineLearning", query: "fellowship OR grant OR internship OR \"apply now\" OR \"applications open\"" },
     { sub: "artificial", query: "fellowship OR grant OR internship opportunity" },
     { sub: "AIColab", query: "opportunity OR fellowship OR grant" },
+    "site:gofractional.com/jobs fractional 2026",
+    "site:fractionaljobs.io fractional head OR cto OR cmo",
+    "site:arc.dev fractional OR part-time AI OR ML engineer 2026",
+    "site:indeed.com fractional chief AI officer remote",
   ],
   India: [
     { sub: "india", query: "AI fellowship OR AI grant OR AI internship 2026" },
     { sub: "cscareerquestions", query: "India AI fellowship OR grant" },
     { sub: "Indian_Academia", query: "AI OR ML fellowship OR grant" },
     { sub: "developersIndia", query: "AI internship OR fellowship 2026" },
+    "site:gofractional.com OR site:fractionaljobs.io india fractional",
   ],
   SEA: [
     { sub: "singapore", query: "AI fellowship OR AI grant OR AI internship 2026" },
     { sub: "malaysia", query: "AI opportunity OR fellowship 2026" },
     { sub: "Philippines", query: "AI fellowship OR grant 2026" },
+    "site:gofractional.com OR site:fractionaljobs.io singapore OR asia fractional",
+    "site:arc.dev fractional AI engineer Singapore OR SEA part-time",
   ],
   Europe: [
     { sub: "cscareerquestionsEU", query: "AI fellowship OR grant OR internship 2026" },
     { sub: "MachineLearning", query: "Europe fellowship OR EU grant AI" },
+    "site:gofractional.com OR site:fractionaljobs.io europe OR london fractional",
+    "site:arc.dev fractional AI advisor UK OR EU part-time",
   ],
   USA: [
     { sub: "cscareerquestions", query: "AI fellowship OR AI grant OR research internship 2026" },
     { sub: "MachineLearning", query: "fellowship OR residency OR \"applications open\"" },
     { sub: "gradadmissions", query: "AI fellowship OR NSF OR DOE grant" },
+    "site:gofractional.com/jobs united states fractional",
+    "site:arc.dev fractional applied AI engineer USA part-time",
+    "site:indeed.com fractional CTO OR CAIO AI remote United States",
   ],
   Australia: [
     { sub: "australia", query: "AI fellowship OR AI grant OR CSIRO 2026" },
     { sub: "cscareerquestions", query: "Australia AI internship OR fellowship" },
+    "site:gofractional.com OR site:fractionaljobs.io australia fractional",
   ],
 };
 

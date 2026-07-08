@@ -21,7 +21,7 @@ import { z } from "zod";
 export const REGIONS = ["Global", "India", "SEA", "Europe", "USA", "Australia"];
 
 // Keep this list in sync with `Opportunity.category` in src/lib/types.ts.
-export const CATEGORIES = ["grant", "fellowship", "startup", "course", "internship"];
+export const CATEGORIES = ["grant", "fellowship", "course", "internship", "fractional_job"];
 
 // Mirrors EducationLevel in src/lib/types.ts. Optional on the candidate —
 // absence means "no constraint," same convention as the live schema.

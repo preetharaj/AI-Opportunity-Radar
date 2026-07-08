@@ -6,7 +6,8 @@ import { deadlineShortDisplay, isRollingOpportunity } from "@/lib/deadlines";
 
 const CAT_LABELS: Record<string, string> = {
   grant: "Grant", fellowship: "Fellowship",
-  startup: "Startup program", course: "Course", internship: "Internship",
+  course: "Course", internship: "Internship",
+  fractional_job: "Fractional job",
 };
 
 interface PublicOpp extends Opportunity {
@@ -39,9 +40,9 @@ function StatusPill({ opp, days, isNew }: { opp: Opportunity; days: number | nul
 const BORDER_COLOR_MAP: Record<string, string> = {
   grant: "bg-emerald-400",
   fellowship: "bg-indigo-400",
-  startup: "bg-rose-400",
   course: "bg-sky-400",
   internship: "bg-teal-400",
+  fractional_job: "bg-violet-400",
 };
 
 // Tailwind's compiler statically scans source for literal class strings —

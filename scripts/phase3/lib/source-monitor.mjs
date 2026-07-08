@@ -158,19 +158,34 @@ export const PRIMARY_SOURCES = {
       note: "Ray ecosystem lab — watch for internship or fellowship announcements",
     },
     {
-      url: "https://foundation.mozilla.org/en/what-we-fund/",
-      label: "Mozilla Foundation Funding",
-      note: "Trustworthy-AI fellowships and awards — changes when new calls open",
+      url: "https://www.gofractional.com/jobs",
+      label: "Go Fractional — Jobs [fractional_job]",
+      note: "Primary fractional-executive job board — new fractional CxO/lead roles appear here first",
     },
     {
-      url: "https://sloan.org/grants/apply",
-      label: "Sloan Foundation Grants",
-      note: "Research grants incl. AI/computing — foundation primary page",
+      url: "https://www.fractionaljobs.io",
+      label: "Fractional Jobs — Board [fractional_job]",
+      note: "Curated fractional roles board — fractional head-of/exec listings",
     },
     {
-      url: "https://schmidtsciences.org/programs/",
-      label: "Schmidt Sciences Programs",
-      note: "AI2050 fellowships and science programs — high-value, low-competition",
+      url: "https://www.gofractional.com/blog",
+      label: "Go Fractional — Blog [fractional_job]",
+      note: "Announcements + new-roles posts from Go Fractional",
+    },
+    {
+      url: "https://www.fractionaljobs.io/blog",
+      label: "Fractional Jobs — Blog [fractional_job]",
+      note: "New roles + market announcements from Fractional Jobs",
+    },
+    {
+      url: "https://arc.dev/remote-jobs/data-science",
+      label: "Arc.dev — Fractional AI Roles (Worldwide) [fractional_job]",
+      note: "Arc Exclusive fractional/part-time AI, ML, and Computer Vision roles — filter for PT and Fractional listings; changes when new roles go live",
+    },
+    {
+      url: "https://www.indeed.com/q-fractional-chief-ai-officer-jobs.html",
+      label: "Indeed — Fractional Chief AI Officer (Global) [fractional_job]",
+      note: "Aggregated CAIO/fractional AI leadership postings — filter carefully, exclude non-AI roles; changes daily",
     },
   ],
 
@@ -206,14 +221,9 @@ export const PRIMARY_SOURCES = {
       note: "AI/DeepTech startup incubation challenges",
     },
     {
-      url: "https://iisc.ac.in/positions-open/",
-      label: "IISc Bangalore Open Positions",
-      note: "Research internships and project positions — India's top research university",
-    },
-    {
-      url: "https://rbcdsai.iitm.ac.in/opportunities/",
-      label: "IIT Madras RBCDSAI Opportunities",
-      note: "Robert Bosch Centre for Data Science and AI — internships and fellowships",
+      url: "https://www.flexiple.com/freelance-jobs",
+      label: "Flexiple — Senior Freelance India [fractional_job]",
+      note: "India-focused senior freelance/fractional tech roles — verify fractional framing per listing",
     },
   ],
 
@@ -249,14 +259,14 @@ export const PRIMARY_SOURCES = {
       note: "Search 'Qwen' or 'DAMO Academy' for AI research internships, Singapore-based roles most accessible internationally",
     },
     {
-      url: "https://www.comp.nus.edu.sg/programmes/pg/",
-      label: "NUS Computing Programmes",
-      note: "Research attachments and AI programmes at Singapore's top CS school",
+      url: "https://www.glints.com/opportunities/jobs/explore?jobTypes=CONTRACT",
+      label: "Glints SEA — Contract/Interim [fractional_job]",
+      note: "SEA contract/interim tech roles — only genuinely fractional listings qualify",
     },
     {
-      url: "https://www.ntu.edu.sg/scse/admissions/programmes",
-      label: "NTU SCSE Programmes",
-      note: "AI research programmes and attachments",
+      url: "https://arc.dev/remote-jobs/details/applied-ai-engineer-rag-knowledge-systems-ww-pt-p2vgi09suh",
+      label: "Arc.dev — Applied AI Engineer RAG (WW, Singapore overlap) [fractional_job]",
+      note: "Arc Exclusive part-time RAG/LLM engineer worldwide with Singapore timezone overlap — monitor for status changes",
     },
   ],
 
@@ -302,14 +312,14 @@ export const PRIMARY_SOURCES = {
       note: "Internships in Belgrade (Serbia), Berlin (Germany), London (UK) — check for new intern postings",
     },
     {
-      url: "https://ai.ethz.ch/education/fellowships.html",
-      label: "ETH AI Center Fellowships",
-      note: "Postdoc and doctoral fellowships at Europe's top technical university",
+      url: "https://www.gofractional.com/jobs?location=Europe",
+      label: "Go Fractional — Europe filter [fractional_job]",
+      note: "Europe-region fractional roles view — changes when new EU/UK roles post",
     },
     {
-      url: "https://www.eu-startups.com/category/accelerators/",
-      label: "EU-Startups Accelerator News",
-      note: "Free directory — new EU accelerator cohort announcements (verify against official pages before curating)",
+      url: "https://arc.dev/remote-jobs/details/senior-ai-technical-advisor-part-time-uk-eu-oqzau2emhc",
+      label: "Arc.dev — Senior AI Technical Advisor PT UK/EU [fractional_job]",
+      note: "Arc Exclusive part-time AI advisory role for UK/EU timezone — monitor for status changes",
     },
   ],
 
@@ -355,14 +365,19 @@ export const PRIMARY_SOURCES = {
       note: "Reopens annually — watch for 2027 cycle",
     },
     {
-      url: "https://hai.stanford.edu/research/fellowship-programs",
-      label: "Stanford HAI Fellowships",
-      note: "Human-centered AI fellowship programs",
+      url: "https://www.gofractional.com/jobs?location=United+States",
+      label: "Go Fractional — US filter [fractional_job]",
+      note: "US-region fractional roles view — changes when new US roles post",
     },
     {
-      url: "https://www.eecs.mit.edu/research/",
-      label: "MIT EECS Research",
-      note: "SuperUROP and research program announcements",
+      url: "https://arc.dev/remote-jobs/details/applied-ai-engineer-us-pt-osiav6eeep",
+      label: "Arc.dev — Applied AI Engineer PT USA [fractional_job]",
+      note: "Arc Exclusive part-time applied AI engineer (Vertex AI, Gemini, agentic) — monitor for status changes",
+    },
+    {
+      url: "https://www.indeed.com/q-fractional-chief-ai-officer-jobs.html?l=United+States",
+      label: "Indeed — Fractional AI Officer USA [fractional_job]",
+      note: "US-scoped CAIO and fractional AI leadership postings on Indeed — exclude non-AI roles",
     },
   ],
 
@@ -388,14 +403,9 @@ export const PRIMARY_SOURCES = {
       note: "Australian startup programs including AI accelerators",
     },
     {
-      url: "https://cecc.anu.edu.au/study/study-options",
-      label: "ANU Computing Study Options",
-      note: "AI programs and research opportunities at Australia's top research university",
-    },
-    {
-      url: "https://data61.csiro.au/en/Our-Research/Students-and-Careers",
-      label: "CSIRO Data61 Students & Careers",
-      note: "Australia's data-science arm — internships and PhD scholarships",
+      url: "https://www.expert360.com/jobs",
+      label: "Expert360 AU — Interim/Advisory [fractional_job]",
+      note: "Australian consulting/interim exec marketplace — public listings only, fractional framing required",
     },
   ],
 };

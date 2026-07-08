@@ -56,7 +56,7 @@ export default function HomePage({ searchParams }: Props) {
               Discover curated AI, ML and technology opportunities from leading organizations worldwide.
             </p>
             <p className="mt-4 max-w-2xl text-base sm:text-lg text-slate-600 leading-8">
-              Curated opportunities for students, researchers, founders and builders. Updated biweekly with grants, fellowships, internships, and startup programs worldwide.
+              Curated opportunities for students, researchers, founders and builders. Updated biweekly with grants, fellowships, internships, courses, and fractional jobs worldwide.
             </p>
           </div>
           <SubscribeWidget />

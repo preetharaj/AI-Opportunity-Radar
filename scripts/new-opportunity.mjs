@@ -8,6 +8,7 @@
  * Usage:
  *   node scripts/new-opportunity.mjs
  *   node scripts/new-opportunity.mjs --category grants --slug my-grant-2025
+ *   node scripts/new-opportunity.mjs --category fractional-jobs --slug fractional-cto-2026
  *
  * Then open the generated file and fill in the real data.
  */
@@ -19,7 +20,7 @@ import { createInterface } from 'readline';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-const CATEGORIES = ['grants', 'fellowships', 'startup-programs', 'competitions', 'courses'];
+const CATEGORIES = ['grants', 'fellowships', 'startup-programs', 'competitions', 'courses', 'internships', 'fractional-jobs'];
 
 // Parse CLI args
 const args = process.argv.slice(2);

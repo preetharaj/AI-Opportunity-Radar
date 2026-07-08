@@ -16,9 +16,9 @@ const CATEGORY_NAV = [
   { value: "All", label: "Opportunities" },
   { value: "grant", label: "Grants" },
   { value: "fellowship", label: "Fellowships" },
-  { value: "startup", label: "Startups" },
   { value: "course", label: "Courses" },
   { value: "internship", label: "Internships" },
+  { value: "fractional_job", label: "Fractional Jobs" },
 ];
 
 export function NavBar({ user }: { user: { name?: string | null; email?: string | null } | null }) {

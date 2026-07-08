@@ -81,6 +81,7 @@ const EVERGREEN_TITLE_FRAGMENTS = [
 // Domain-pattern scores. Positive = likely primary source, negative = likely
 // low-signal. Applied to the candidate's URL hostname.
 const DOMAIN_SIGNALS = [
+  { pattern: /gofractional\.com|fractionaljobs\.io/i, score: 15, why: "primary fractional-jobs board" },
   { pattern: /\.gov(\.[a-z]{2})?$/i, score: 30, why: "government domain" },
   { pattern: /\.edu$|\.ac\.[a-z]{2}$|\.edu\.[a-z]{2}$/i, score: 25, why: "university domain" },
   { pattern: /\.org$/i, score: 10, why: "org domain (often foundations)" },
@@ -93,6 +94,12 @@ const DOMAIN_SIGNALS = [
 // Text signals in title+snippet. Things that suggest a real, current, open
 // opportunity with a deadline vs. generic content.
 const TEXT_SIGNALS = [
+  // Fractional-job signals (Phase 4). Genuine fractional framing scores up;
+  // generic permanent-role language scores down. Mirrors FRACTIONAL_SIGNALS /
+  // FRACTIONAL_EXCLUSIONS in curation-rules.mjs — the LLM applies rule text,
+  // this layer applies the deterministic version pre-LLM.
+  { pattern: /\bfractional\b|\binterim (cto|cmo|cfo|coo|ceo|head|director|lead)\b|portfolio (career|executive)|advisory retainer|part.time (cto|cmo|cfo|coo|head of)|\b\d ?days?\s?(a|per|\/)\s?week\b/i, score: 20, why: "genuinely-fractional engagement language" },
+  { pattern: /full.time permanent|permanent role|w-2 full.time/i, score: -20, why: "permanent-role language — not fractional" },
   { pattern: /deadline|apply by|applications? (close|due)|closing date/i, score: 15, why: "explicit deadline language" },
   { pattern: /applications? (are )?(now )?open|now accepting|call for/i, score: 15, why: "open-call language" },
   { pattern: /\b2026\b|\b2027\b/, score: 10, why: "current-cycle year mentioned" },

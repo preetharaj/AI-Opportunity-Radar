@@ -22,7 +22,7 @@ const STATUS_COLORS: Record<ApplicationStatus, string> = {
 
 const CAT_ICONS: Record<string, string> = {
   grant: "💰", fellowship: "🎓",
-  startup: "🚀", course: "📚", internship: "💼",
+  course: "📚", internship: "💼", fractional_job: "🧩",
 };
 
 function DeadlineBadge({ opp }: { opp: ScoredOpportunity }) {
