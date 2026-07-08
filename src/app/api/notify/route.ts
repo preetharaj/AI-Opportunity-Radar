@@ -227,8 +227,8 @@ async function runDailyFollowedReminders(today: Date, cursorRaw: string | null, 
   return { sent, hasMore: page.hasMore, nextCursor: encodeFollowCursor(page.nextCursor) };
 }
 
-async function runWeeklyClosingRoundup(today: Date, cursor: string | null, todayKey: string, errors: string[]) {
-  if (!isMondayUtc(today)) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "not_monday" };
+async function runWeeklyClosingRoundup(today: Date, cursor: string | null, todayKey: string, errors: string[], force = false) {
+  if (!force && !isMondayUtc(today)) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "not_monday" };
   const closing = getClosingWithin7Days(opportunities, today);
   if (closing.length === 0) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "no_closing_opportunities" };
 
@@ -243,8 +243,8 @@ async function runWeeklyClosingRoundup(today: Date, cursor: string | null, today
   return { sent, hasMore: page.hasMore, nextCursor: page.nextCursor, skipped: null as string | null };
 }
 
-async function runBiweeklyDigest(today: Date, cursor: string | null, todayKey: string, errors: string[]) {
-  if (!isBiweeklyDigestDay(today, BIWEEKLY_DIGEST_START_DATE)) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "not_biweekly_monday" };
+async function runBiweeklyDigest(today: Date, cursor: string | null, todayKey: string, errors: string[], force = false) {
+  if (!force && !isBiweeklyDigestDay(today, BIWEEKLY_DIGEST_START_DATE)) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "not_biweekly_monday" };
   const newThisCycle = getBiweeklyNewOpportunities(opportunities, today);
   if (newThisCycle.length === 0) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "no_new_opportunities" };
 
@@ -275,6 +275,7 @@ export async function POST(req: NextRequest) {
   const today = new Date();
   const todayKey = isoDay(today);
   const cursor = req.nextUrl.searchParams.get("cursor");
+  const force = req.nextUrl.searchParams.get("force") === "1";
   const errors: string[] = [];
 
   const dormant = phase === "daily" && !cursor ? await runDormantAccountFlow(today, errors) : { usersChecked: 0, accountDeadlineRemindersSent: 0, matchDigestsSent: 0 };
@@ -282,8 +283,8 @@ export async function POST(req: NextRequest) {
   let result: { sent: number; hasMore: boolean; nextCursor: string | null; skipped?: string | null };
   try {
     if (phase === "daily") result = await runDailyFollowedReminders(today, cursor, errors);
-    else if (phase === "weekly") result = await runWeeklyClosingRoundup(today, cursor, todayKey, errors);
-    else result = await runBiweeklyDigest(today, cursor, todayKey, errors);
+    else if (phase === "weekly") result = await runWeeklyClosingRoundup(today, cursor, todayKey, errors, force);
+    else result = await runBiweeklyDigest(today, cursor, todayKey, errors, force);
   } catch (err) {
     errors.push(err instanceof Error ? err.message : String(err));
     result = { sent: 0, hasMore: false, nextCursor: null };
@@ -294,6 +295,7 @@ export async function POST(req: NextRequest) {
       ok: errors.length === 0,
       date: todayKey,
       phase,
+      forced: force || undefined,
       batchLimit: BATCH_LIMIT,
       hasMore: result.hasMore,
       nextCursor: result.nextCursor,
