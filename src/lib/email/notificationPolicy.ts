@@ -37,23 +37,36 @@ export function getClosingWithin7Days(opportunities: Opportunity[], today: Date)
     .sort((a, b) => a.daysLeft - b.daysLeft || a.opp.title.localeCompare(b.opp.title));
 }
 
-export function getFollowReminderCandidates(opportunities: Opportunity[], today: Date): Array<{ opp: Opportunity; daysLeft: number }> {
-  const thresholds = new Set<number>(FOLLOW_REMINDER_DAYS);
+export function getFollowReminderCandidates(
+  opportunities: Opportunity[],
+  today: Date
+): Array<{ opp: Opportunity; daysLeft: number; thresholdDay: number }> {
+  // Catch-up: if the cron missed the exact threshold day (outage/deploy),
+  // fire on the next successful run. thresholdDay is the dedup key in sendKey
+  // so idempotency holds even when delivered a day late.
+  const thresholds = [...FOLLOW_REMINDER_DAYS].sort((a, b) => b - a); // [7,3,1,0]
   return opportunities
     .filter(isFixedDeadlineOpportunity)
-    .map((opp) => ({ opp, daysLeft: daysUntilDeadline(opp, today) }))
-    .filter((item): item is { opp: Opportunity; daysLeft: number } => item.daysLeft !== null && thresholds.has(item.daysLeft));
+    .flatMap((opp) => {
+      const daysLeft = daysUntilDeadline(opp, today);
+      if (daysLeft === null || daysLeft < 0) return [];
+      return thresholds
+        .filter((t) => daysLeft <= t)
+        .map((t) => ({ opp, daysLeft, thresholdDay: t }));
+    });
 }
 
 export function getBiweeklyNewOpportunities(opportunities: Opportunity[], today: Date): Opportunity[] {
-  const fourteenDaysAgo = new Date(today.getTime() - 14 * 86_400_000);
+  // N3 fix: removed the lastVerified 14-day gate. That gate silently excluded
+  // entries whose newThisWeek:true was set correctly by the curator but whose
+  // lastVerified predated the 14-day window. newThisWeek IS the curator's
+  // explicit "include in next digest" signal — trust it. Only exclude entries
+  // that are expired (fixed-deadline already past).
   return opportunities
     .filter((opp) => {
       const days = daysUntilDeadline(opp, today);
       if (!(days === null || days >= 0)) return false;
-      if (!opp.newThisWeek) return false;
-      const verified = new Date(opp.lastVerified);
-      return !Number.isNaN(verified.getTime()) && verified >= fourteenDaysAgo;
+      return opp.newThisWeek === true;
     })
     .sort((a, b) => a.title.localeCompare(b.title));
 }

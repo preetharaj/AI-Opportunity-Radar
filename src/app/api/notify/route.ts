@@ -12,6 +12,7 @@
 import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
+export const maxDuration = 60; // N2: prevent Vercel 10s default killing the cron batch
 
 import {
   deleteExpiredSessions,
@@ -178,29 +179,49 @@ async function sendWithReservation(sendKey: string, send: () => Promise<void>, e
 async function runDailyFollowedReminders(today: Date, cursorRaw: string | null, errors: string[]) {
   const cursor = decodeFollowCursor(cursorRaw);
   const followCandidates = getFollowReminderCandidates(opportunities, today);
-  const page = await getActiveFollowsForOpportunityIdsPage(followCandidates.map((c) => c.opp.id), {
+
+  // N7 fix: group by oppId — with catch-up semantics one opp can have
+  // multiple due thresholds (e.g. cron was down, daysLeft=2, both t=3 and t=7 due).
+  const candidatesByOppId = new Map<string, Array<{ opp: Opportunity; daysLeft: number; thresholdDay: number }>>();
+  for (const c of followCandidates) {
+    const arr = candidatesByOppId.get(c.opp.id) ?? [];
+    arr.push(c);
+    candidatesByOppId.set(c.opp.id, arr);
+  }
+
+  if (candidatesByOppId.size === 0) {
+    return { sent: 0, hasMore: false, nextCursor: null };
+  }
+
+  const page = await getActiveFollowsForOpportunityIdsPage([...candidatesByOppId.keys()], {
     cursorEmail: cursor?.email,
     cursorOpportunityId: cursor?.opportunityId,
     limit: BATCH_LIMIT,
   });
-  const candidateById = new Map(followCandidates.map((c) => [c.opp.id, c]));
 
   const sent = await runWithConcurrency(page.follows.flatMap((follow): SendWork[] => {
-    const item = candidateById.get(follow.opportunityId);
-    if (!item) return [];
-    return [async () => {
-      const sendKey = `follow:${follow.email}:${item.opp.id}:${item.opp.deadline}:${item.daysLeft}`;
+    const items = candidatesByOppId.get(follow.opportunityId);
+    if (!items) return [];
+    return items.map((item) => async () => {
+      // N6 fix: sendKey uses thresholdDay (not actual daysLeft) so a catch-up
+      // delivery on day-6 for threshold-7 gets the same key as a day-7 delivery
+      // would have — idempotency holds regardless of which day it fires.
+      const sendKey = `follow:${follow.email}:${item.opp.id}:${item.thresholdDay}`;
       const reserved = await reserveNotificationDelivery({
         email: follow.email,
         notificationType: "follow_deadline",
         sendKey,
         opportunityId: item.opp.id,
         deadlineDate: item.opp.deadline,
-        daysLeft: item.daysLeft,
+        daysLeft: item.thresholdDay,
       });
       if (!reserved) return false;
-      return sendWithReservation(sendKey, () => sendFollowedOpportunityReminder(follow.email, item), errors);
-    }];
+      return sendWithReservation(
+        sendKey,
+        () => sendFollowedOpportunityReminder(follow.email, { opp: item.opp, daysLeft: item.daysLeft }),
+        errors
+      );
+    });
   }));
 
   return { sent, hasMore: page.hasMore, nextCursor: encodeFollowCursor(page.nextCursor) };

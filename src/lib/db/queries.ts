@@ -192,8 +192,8 @@ export async function upsertEmailFollow(email: string, opportunityId: string): P
   const existing = await db.execute({ sql: "SELECT status FROM email_follows WHERE email = ? AND opportunity_id = ?", args: [email, opportunityId] });
   if (existing.rows[0]?.status === "active") return { alreadyFollowing: true, blockedByGlobalUnsubscribe: false };
 
-  // A reminder follow should not force global newsletter subscription. If the
-  // person is already globally unsubscribed, keep that override respected.
+  // Respect global unsubscribe — if they previously unsubscribed, don't
+  // force re-subscribe. The unsubscribe link is the master kill-switch.
   const subscriber = await db.execute({ sql: "SELECT status FROM subscribers WHERE email = ?", args: [email] });
   if (subscriber.rows[0]?.status === "unsubscribed") {
     await db.execute({
@@ -204,6 +204,17 @@ export async function upsertEmailFollow(email: string, opportunityId: string): P
     });
     return { alreadyFollowing: false, blockedByGlobalUnsubscribe: true };
   }
+
+  // N5 fix: auto-subscribe to the global subscribers table so this person
+  // also receives weekly closing roundup and biweekly digest emails.
+  // getActiveSubscribersPage is the gate for both flows — without a row here
+  // they'd only get per-opportunity reminders and nothing else.
+  // INSERT OR IGNORE: if already an active subscriber, this is a no-op.
+  await db.execute({
+    sql: `INSERT OR IGNORE INTO subscribers (id, email, status, created_at)
+          VALUES (?, ?, 'active', unixepoch())`,
+    args: [crypto.randomUUID(), email],
+  });
 
   await db.execute({
     sql: `INSERT INTO email_follows (id, email, opportunity_id, status, created_at, updated_at)
