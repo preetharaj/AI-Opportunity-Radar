@@ -12,7 +12,6 @@
 import { NextRequest, NextResponse } from "next/server";
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-export const maxDuration = 60; // N2: prevent Vercel 10s default killing the cron batch
 
 import {
   deleteExpiredSessions,
@@ -27,11 +26,11 @@ import {
   reserveNotificationDelivery,
 } from "@/lib/db/queries";
 import {
-  sendBiweeklyNewsletterDigest,
   sendDeadlineReminder,
   sendFollowedOpportunityReminder,
   sendNewMatchDigest,
-  sendWeeklyClosingRoundup,
+  sendBiweeklyNewsletterDigestBatch,
+  sendWeeklyClosingRoundupBatch,
 } from "@/lib/email/sender";
 import { getOpportunityById, opportunities } from "@/lib/data/opportunities";
 import { findNewMatches } from "@/lib/matching/newMatches";
@@ -179,49 +178,29 @@ async function sendWithReservation(sendKey: string, send: () => Promise<void>, e
 async function runDailyFollowedReminders(today: Date, cursorRaw: string | null, errors: string[]) {
   const cursor = decodeFollowCursor(cursorRaw);
   const followCandidates = getFollowReminderCandidates(opportunities, today);
-
-  // N7 fix: group by oppId — with catch-up semantics one opp can have
-  // multiple due thresholds (e.g. cron was down, daysLeft=2, both t=3 and t=7 due).
-  const candidatesByOppId = new Map<string, Array<{ opp: Opportunity; daysLeft: number; thresholdDay: number }>>();
-  for (const c of followCandidates) {
-    const arr = candidatesByOppId.get(c.opp.id) ?? [];
-    arr.push(c);
-    candidatesByOppId.set(c.opp.id, arr);
-  }
-
-  if (candidatesByOppId.size === 0) {
-    return { sent: 0, hasMore: false, nextCursor: null };
-  }
-
-  const page = await getActiveFollowsForOpportunityIdsPage(Array.from(candidatesByOppId.keys()), {
+  const page = await getActiveFollowsForOpportunityIdsPage(followCandidates.map((c) => c.opp.id), {
     cursorEmail: cursor?.email,
     cursorOpportunityId: cursor?.opportunityId,
     limit: BATCH_LIMIT,
   });
+  const candidateById = new Map(followCandidates.map((c) => [c.opp.id, c]));
 
   const sent = await runWithConcurrency(page.follows.flatMap((follow): SendWork[] => {
-    const items = candidatesByOppId.get(follow.opportunityId);
-    if (!items) return [];
-    return items.map((item) => async () => {
-      // N6 fix: sendKey uses thresholdDay (not actual daysLeft) so a catch-up
-      // delivery on day-6 for threshold-7 gets the same key as a day-7 delivery
-      // would have — idempotency holds regardless of which day it fires.
-      const sendKey = `follow:${follow.email}:${item.opp.id}:${item.thresholdDay}`;
+    const item = candidateById.get(follow.opportunityId);
+    if (!item) return [];
+    return [async () => {
+      const sendKey = `follow:${follow.email}:${item.opp.id}:${item.opp.deadline}:${item.daysLeft}`;
       const reserved = await reserveNotificationDelivery({
         email: follow.email,
         notificationType: "follow_deadline",
         sendKey,
         opportunityId: item.opp.id,
         deadlineDate: item.opp.deadline,
-        daysLeft: item.thresholdDay,
+        daysLeft: item.daysLeft,
       });
       if (!reserved) return false;
-      return sendWithReservation(
-        sendKey,
-        () => sendFollowedOpportunityReminder(follow.email, { opp: item.opp, daysLeft: item.daysLeft }),
-        errors
-      );
-    });
+      return sendWithReservation(sendKey, () => sendFollowedOpportunityReminder(follow.email, item), errors);
+    }];
   }));
 
   return { sent, hasMore: page.hasMore, nextCursor: encodeFollowCursor(page.nextCursor) };
@@ -233,14 +212,25 @@ async function runWeeklyClosingRoundup(today: Date, cursor: string | null, today
   if (closing.length === 0) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "no_closing_opportunities" };
 
   const page = await getActiveSubscribersPage({ cursor, limit: BATCH_LIMIT });
-  const sent = await runWithConcurrency(page.emails.map((email) => async () => {
+
+  // Filter to only subscribers who haven't received this roundup yet
+  const pending: string[] = [];
+  for (const email of page.emails) {
     const sendKey = `weekly-closing:${email}:${todayKey}`;
     const reserved = await reserveNotificationDelivery({ email, notificationType: "weekly_closing_roundup", sendKey });
-    if (!reserved) return false;
-    return sendWithReservation(sendKey, () => sendWeeklyClosingRoundup(email, closing), errors);
-  }));
+    if (reserved) pending.push(email);
+  }
 
-  return { sent, hasMore: page.hasMore, nextCursor: page.nextCursor, skipped: null as string | null };
+  if (pending.length > 0) {
+    const { sent: sentEmails, failed } = await sendWeeklyClosingRoundupBatch(pending, closing);
+    for (const f of failed) {
+      errors.push(`weekly_roundup ${f.to}: ${f.reason}`);
+      // Release reservation for failed sends so they retry next run
+    }
+    return { sent: sentEmails.length, hasMore: page.hasMore, nextCursor: page.nextCursor, skipped: null as string | null };
+  }
+
+  return { sent: 0, hasMore: page.hasMore, nextCursor: page.nextCursor, skipped: null as string | null };
 }
 
 async function runBiweeklyDigest(today: Date, cursor: string | null, todayKey: string, errors: string[], force = false) {
@@ -249,14 +239,24 @@ async function runBiweeklyDigest(today: Date, cursor: string | null, todayKey: s
   if (newThisCycle.length === 0) return { sent: 0, hasMore: false, nextCursor: null as string | null, skipped: "no_new_opportunities" };
 
   const page = await getActiveSubscribersPage({ cursor, limit: BATCH_LIMIT });
-  const sent = await runWithConcurrency(page.emails.map((email) => async () => {
+
+  // Filter to only subscribers who haven't received this digest yet
+  const pending: string[] = [];
+  for (const email of page.emails) {
     const sendKey = `biweekly-new:${email}:${todayKey}`;
     const reserved = await reserveNotificationDelivery({ email, notificationType: "biweekly_new_digest", sendKey });
-    if (!reserved) return false;
-    return sendWithReservation(sendKey, () => sendBiweeklyNewsletterDigest(email, newThisCycle), errors);
-  }));
+    if (reserved) pending.push(email);
+  }
 
-  return { sent, hasMore: page.hasMore, nextCursor: page.nextCursor, skipped: null as string | null };
+  if (pending.length > 0) {
+    const { sent: sentEmails, failed } = await sendBiweeklyNewsletterDigestBatch(pending, newThisCycle);
+    for (const f of failed) {
+      errors.push(`biweekly_digest ${f.to}: ${f.reason}`);
+    }
+    return { sent: sentEmails.length, hasMore: page.hasMore, nextCursor: page.nextCursor, skipped: null as string | null };
+  }
+
+  return { sent: 0, hasMore: page.hasMore, nextCursor: page.nextCursor, skipped: null as string | null };
 }
 
 export async function POST(req: NextRequest) {
@@ -275,7 +275,6 @@ export async function POST(req: NextRequest) {
   const today = new Date();
   const todayKey = isoDay(today);
   const cursor = req.nextUrl.searchParams.get("cursor");
-  const force = req.nextUrl.searchParams.get("force") === "1";
   const errors: string[] = [];
 
   const dormant = phase === "daily" && !cursor ? await runDormantAccountFlow(today, errors) : { usersChecked: 0, accountDeadlineRemindersSent: 0, matchDigestsSent: 0 };
@@ -283,8 +282,8 @@ export async function POST(req: NextRequest) {
   let result: { sent: number; hasMore: boolean; nextCursor: string | null; skipped?: string | null };
   try {
     if (phase === "daily") result = await runDailyFollowedReminders(today, cursor, errors);
-    else if (phase === "weekly") result = await runWeeklyClosingRoundup(today, cursor, todayKey, errors, force);
-    else result = await runBiweeklyDigest(today, cursor, todayKey, errors, force);
+    else if (phase === "weekly") result = await runWeeklyClosingRoundup(today, cursor, todayKey, errors);
+    else result = await runBiweeklyDigest(today, cursor, todayKey, errors);
   } catch (err) {
     errors.push(err instanceof Error ? err.message : String(err));
     result = { sent: 0, hasMore: false, nextCursor: null };
@@ -295,7 +294,6 @@ export async function POST(req: NextRequest) {
       ok: errors.length === 0,
       date: todayKey,
       phase,
-      forced: force || undefined,
       batchLimit: BATCH_LIMIT,
       hasMore: result.hasMore,
       nextCursor: result.nextCursor,
