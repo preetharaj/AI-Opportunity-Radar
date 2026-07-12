@@ -8,8 +8,18 @@ import { isRollingOpportunity } from "@/lib/deadlines";
 
 const SITE_URL = (process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "https://mapd.cc").replace(/\/$/, "");
 
+const CATEGORY_SLUGS = ["grant", "fellowship", "course", "internship", "fractional_job"];
+const REGION_SLUGS = ["global", "india", "sea", "europe", "usa", "australia"];
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
+
+  // Most-recent lastVerified across the catalog — used as a freshness proxy
+  // for the category/region listing pages, which aggregate many entries.
+  const latestVerified = opportunities.reduce((latest, opp) => {
+    const d = new Date(opp.lastVerified);
+    return d > latest ? d : latest;
+  }, new Date(0));
 
   // Static pages
   const staticRoutes: MetadataRoute.Sitemap = [
@@ -20,12 +30,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1.0,
     },
     {
+      url: `${SITE_URL}/about`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.5,
+    },
+    {
       url: `${SITE_URL}/unsubscribe`,
       lastModified: now,
       changeFrequency: "yearly",
       priority: 0.1,
     },
   ];
+
+  const categoryRoutes: MetadataRoute.Sitemap = CATEGORY_SLUGS.map((slug) => ({
+    url: `${SITE_URL}/category/${slug}`,
+    lastModified: latestVerified,
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  }));
+
+  const regionRoutes: MetadataRoute.Sitemap = REGION_SLUGS.map((slug) => ({
+    url: `${SITE_URL}/region/${slug}`,
+    lastModified: latestVerified,
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  }));
 
   // One URL per opportunity
   // - Rolling entries still get indexed (they're always open)
@@ -47,5 +77,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
         : 0.7,
     }));
 
-  return [...staticRoutes, ...opportunityRoutes];
+  return [...staticRoutes, ...categoryRoutes, ...regionRoutes, ...opportunityRoutes];
 }

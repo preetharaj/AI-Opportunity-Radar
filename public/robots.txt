@@ -1,7 +1,11 @@
 User-agent: *
 Allow: /
+Allow: /opportunities/
+Allow: /category/
+Allow: /region/
 
-# Block auth and API routes from indexing — no value for search
+# Block auth, account, and API routes from indexing — no SEO value, and some
+# are gated behind FEATURE_FLAGS.showSignIn anyway
 Disallow: /api/
 Disallow: /auth/
 Disallow: /onboarding

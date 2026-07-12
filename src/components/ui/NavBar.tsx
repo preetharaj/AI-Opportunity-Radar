@@ -1,7 +1,7 @@
 // src/components/ui/NavBar.tsx
 "use client";
 import Link from "next/link";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { FEATURE_FLAGS } from "@/lib/featureFlags";
 
@@ -12,19 +12,20 @@ const ACCOUNT_NAV = [
   { href: "/settings", label: "Settings" },
 ];
 
-const CATEGORY_NAV = [
-  { value: "All", label: "Opportunities" },
-  { value: "grant", label: "Grants" },
-  { value: "fellowship", label: "Fellowships" },
-  { value: "course", label: "Courses" },
-  { value: "internship", label: "Internships" },
-  { value: "fractional_job", label: "Fractional Jobs" },
+// Plain <a>-equivalent (next/link renders a real <a> in the server-rendered
+// HTML regardless of this file's "use client" directive) links to the
+// category/region landing pages + about. Kept separate from CATEGORY_NAV
+// above, which drives the homepage's client-side `?category=` filter.
+const CATEGORY_LINKS = [
+  { href: "/category/grant", label: "Grants" },
+  { href: "/category/fellowship", label: "Fellowships" },
+  { href: "/category/course", label: "Courses" },
+  { href: "/category/internship", label: "Internships" },
+  { href: "/category/fractional_job", label: "Fractional Jobs" },
 ];
 
 export function NavBar({ user }: { user: { name?: string | null; email?: string | null } | null }) {
   const path = usePathname();
-  const params = useSearchParams();
-  const activeCategory = params.get("category") ?? "All";
 
   return (
     <nav className="sticky top-0 z-40 border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
@@ -41,23 +42,20 @@ export function NavBar({ user }: { user: { name?: string | null; email?: string 
           </span>
         </Link>
 
-        {path === "/" && (
-          <div className="hidden md:flex items-center gap-0.5 overflow-x-auto">
-            {CATEGORY_NAV.map((c) => (
-              <Link
-                key={c.value}
-                href={c.value === "All" ? "/" : `/?category=${c.value}`}
-                className={`text-[13px] px-3 py-1.5 rounded-md whitespace-nowrap transition-colors ${
-                  activeCategory === c.value
-                    ? "bg-indigo-50 text-indigo-700 font-medium shadow-sm"
-                    : "text-slate-500 hover:text-slate-900 hover:bg-slate-50"
-                }`}
-              >
-                {c.label}
-              </Link>
-            ))}
-          </div>
-        )}
+        {/* Category/about links — real anchor tags, no JS needed to discover
+            them. Region links live in the footer + sitemap, not repeated here. */}
+        <div className="hidden md:flex items-center gap-x-4 overflow-x-auto text-xs text-slate-500 ml-auto">
+          <span className="text-slate-400 shrink-0">Categories:</span>
+          {CATEGORY_LINKS.map((c) => (
+            <Link key={c.href} href={c.href} className="hover:text-indigo-600 whitespace-nowrap">
+              {c.label}
+            </Link>
+          ))}
+          <span className="text-slate-300 shrink-0">|</span>
+          <Link href="/about" className="hover:text-indigo-600 whitespace-nowrap">
+            About
+          </Link>
+        </div>
 
         {/* Authenticated nav — only shown if a session exists AND the feature flag is on.
             Kept in code for when accounts are re-enabled; public mode shows nothing here. */}
@@ -84,6 +82,21 @@ export function NavBar({ user }: { user: { name?: string | null; email?: string 
             </button>
           </div>
         )}
+      </div>
+
+      {/* Mobile-only category row — the top row's link list is hidden below
+          md, so it's repeated here in a scrollable strip for small screens. */}
+      <div className="md:hidden max-w-6xl mx-auto px-4 pb-2 flex items-center gap-x-4 gap-y-1 overflow-x-auto text-xs text-slate-500 border-t border-slate-100/80 pt-2">
+        <span className="text-slate-400 shrink-0">Categories:</span>
+        {CATEGORY_LINKS.map((c) => (
+          <Link key={c.href} href={c.href} className="hover:text-indigo-600 whitespace-nowrap">
+            {c.label}
+          </Link>
+        ))}
+        <span className="text-slate-300 shrink-0">|</span>
+        <Link href="/about" className="hover:text-indigo-600 whitespace-nowrap">
+          About
+        </Link>
       </div>
     </nav>
   );

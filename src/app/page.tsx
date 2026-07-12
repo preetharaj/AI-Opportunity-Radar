@@ -2,11 +2,34 @@
 // Homepage = public Discover feed. No login wall — anyone can browse.
 // Auth code stays in the repo (see FEATURE_FLAGS.showSignIn) for later use.
 import { Suspense } from "react";
+import Link from "next/link";
 import { opportunities } from "@/lib/data/opportunities";
 import { FilterBar } from "@/components/opportunity/FilterBar";
 import { SubscribeWidget } from "@/components/SubscribeWidget";
 import { PublicFeed } from "./PublicFeed";
-import { daysUntilDeadline, sortDeadlineValue } from "@/lib/deadlines";
+import { daysUntilDeadline, isFixedDeadlineOpportunity, sortDeadlineValue } from "@/lib/deadlines";
+
+// Build-time trust signals — plain text, computed once from the static
+// catalog. Not client state, so they show up in the first server-rendered
+// HTML for crawlers and AI engines to lift directly.
+function computeStats() {
+  const today = new Date();
+  const todayStr = today.toISOString().slice(0, 10);
+  const active = opportunities.filter((o) => !isFixedDeadlineOpportunity(o) || o.deadline >= todayStr);
+  const closingSoon = active.filter((o) => {
+    const d = daysUntilDeadline(o, today);
+    return d !== null && d >= 0 && d <= 14;
+  }).length;
+  const regions = new Set(active.map((o) => o.region));
+  const mostRecentVerified = active.reduce((latest, o) => (o.lastVerified > latest ? o.lastVerified : latest), "");
+
+  return {
+    total: active.length,
+    closingSoon,
+    regionCount: regions.size,
+    mostRecentVerified,
+  };
+}
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -39,9 +62,11 @@ export default function HomePage({ searchParams }: Props) {
     list = [...list].sort((a, b) => sortDeadlineValue(a) - sortDeadlineValue(b));
   }
 
+  const stats = computeStats();
+
   return (
     <div className="space-y-8">
-      <section className="relative overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-sm">
+      <section className="relative overflow-hidden rounded-[2rem] border border-slate-200/70 bg-white shadow-sm" id="subscribe">
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(79,70,229,0.16),transparent_34%),radial-gradient(circle_at_85%_15%,rgba(14,165,233,0.14),transparent_30%)]" />
         <div className="relative grid md:grid-cols-[1fr_360px] gap-8 items-center p-6 sm:p-8 lg:p-10">
           <div>
@@ -62,6 +87,17 @@ export default function HomePage({ searchParams }: Props) {
           <SubscribeWidget />
         </div>
       </section>
+
+      {/* Build-time trust signals — plain server-rendered text, no client JS */}
+      <div className="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-600 border-y border-slate-200/70 py-3">
+        <span><strong className="text-slate-900">{stats.total}</strong> active opportunities</span>
+        <span><strong className="text-slate-900">{stats.closingSoon}</strong> closing within 14 days</span>
+        <span><strong className="text-slate-900">{stats.regionCount}</strong> regions covered</span>
+        {stats.mostRecentVerified && (
+          <span>Most recently verified <strong className="text-slate-900">{stats.mostRecentVerified}</strong></span>
+        )}
+        <Link href="/about" className="text-indigo-600 hover:underline">How we verify →</Link>
+      </div>
 
       <Suspense fallback={<div className="h-10 mb-4" />}>
         <FilterBar />

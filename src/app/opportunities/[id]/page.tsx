@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getOpportunityById, opportunities } from "@/lib/data/opportunities";
+import type { Opportunity } from "@/lib/types";
 import { EligibilityChecker } from "@/components/EligibilityChecker";
 import { FollowButton } from "@/components/opportunity/FollowButton";
 import {
@@ -134,6 +135,7 @@ function buildJsonLd(opp: ReturnType<typeof getOpportunityById>) {
     "educationalProgramMode": opp.isRemote ? "online" : "onsite",
     "inLanguage": "en",
     "keywords": opp.tags.join(", "),
+    "dateModified": opp.lastVerified,
   };
 
   // Remove undefined keys — JSON.stringify drops them but being explicit is cleaner
@@ -157,6 +159,88 @@ function buildJsonLd(opp: ReturnType<typeof getOpportunityById>) {
   return [program, breadcrumb];
 }
 
+// ─── FAQ: built purely from fields already on the entry — never invents facts ──
+
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+function buildFaqItems(opp: Opportunity): FaqItem[] {
+  const items: FaqItem[] = [];
+  const rolling = isRollingOpportunity(opp);
+
+  items.push({ question: "Who can apply?", answer: opp.eligibility });
+
+  items.push({
+    question: "Is this remote?",
+    answer:
+      opp.isRemote === true
+        ? opp.remoteEligibleRegions && opp.remoteEligibleRegions.length > 0
+          ? `Yes, remote — open to applicants based in ${opp.remoteEligibleRegions.join(", ")}.`
+          : "Yes, this can be done remotely, in whole or in part."
+        : opp.isRemote === false
+        ? "No, this is not listed as a remote opportunity."
+        : "Remote eligibility isn't specified for this listing — check the official source for details.",
+  });
+
+  items.push({
+    question: "Is there a hard deadline?",
+    answer: rolling
+      ? "No — this opportunity has a rolling, ongoing application process with no fixed closing date."
+      : `Yes — applications close on ${opp.deadline}.`,
+  });
+
+  if (opp.costType) {
+    items.push({
+      question: "Is it free?",
+      answer:
+        opp.costType === "free"
+          ? "Yes, this is free to participate in."
+          : opp.costType === "scholarship_available"
+          ? "It's paid, but scholarships are available."
+          : "This is a paid program.",
+    });
+  }
+
+  return items;
+}
+
+function buildFaqJsonLd(items: FaqItem[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": items.map((item) => ({
+      "@type": "Question",
+      "name": item.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.answer,
+      },
+    })),
+  };
+}
+
+// ─── Related opportunities: same category or region, active only, max 4 ──────
+
+function getRelatedOpportunities(opp: Opportunity): Opportunity[] {
+  const today = new Date().toISOString().slice(0, 10);
+  const isActive = (o: Opportunity) => isRollingOpportunity(o) || o.deadline >= today;
+
+  const related = opportunities.filter(
+    (o) => o.id !== opp.id && isActive(o) && (o.category === opp.category || o.region === opp.region)
+  );
+
+  // Prefer same-category matches first, then same-region.
+  related.sort((a, b) => {
+    const aScore = (a.category === opp.category ? 2 : 0) + (a.region === opp.region ? 1 : 0);
+    const bScore = (b.category === opp.category ? 2 : 0) + (b.region === opp.region ? 1 : 0);
+    return bScore - aScore;
+  });
+
+  return related.slice(0, 4);
+}
+
 // ─── Page component ────────────────────────────────────────────────────────────
 
 export default function OpportunityPage({ params }: { params: { id: string } }) {
@@ -168,6 +252,9 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
   const googleCalendarUrl = makeGoogleCalendarUrl(opp);
   const costBadge = opp.costType ? COST_BADGES[opp.costType] : null;
   const jsonLd = buildJsonLd(opp);
+  const faqItems = buildFaqItems(opp);
+  const faqJsonLd = buildFaqJsonLd(faqItems);
+  const related = getRelatedOpportunities(opp);
 
   return (
     <>
@@ -179,6 +266,7 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
       ))}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
 
       <div className="max-w-2xl mx-auto py-4">
         {/* Item 5: Breadcrumb navigation */}
@@ -216,6 +304,41 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
 
           {/* H1 — must be the opportunity title for on-page SEO */}
           <h1 className="text-xl font-semibold text-gray-900 mb-4">{opp.title}</h1>
+
+          {/* Answer-ready facts block — plain server-rendered dl, no client JS,
+              so AI engines and snippet extractors can lift it directly. */}
+          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs border border-slate-100 rounded-lg p-3 mb-4 bg-slate-50/60">
+            <div>
+              <dt className="text-slate-400">Deadline</dt>
+              <dd className="text-slate-800 font-medium">{rolling ? "Rolling" : opp.deadline}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-400">Deadline type</dt>
+              <dd className="text-slate-800 font-medium capitalize">{rolling ? "Rolling" : "Fixed"}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-400">Region</dt>
+              <dd className="text-slate-800 font-medium">{opp.region}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-400">Category</dt>
+              <dd className="text-slate-800 font-medium capitalize">{CAT_LABELS[opp.category] ?? opp.category}</dd>
+            </div>
+            <div className="col-span-2">
+              <dt className="text-slate-400">Eligibility</dt>
+              <dd className="text-slate-800">{opp.eligibility}</dd>
+            </div>
+            <div>
+              <dt className="text-slate-400">Remote</dt>
+              <dd className="text-slate-800 font-medium">
+                {opp.isRemote === true ? "Yes" : opp.isRemote === false ? "No" : "Not specified"}
+              </dd>
+            </div>
+            <div>
+              <dt className="text-slate-400">Last verified</dt>
+              <dd className="text-slate-800 font-medium">Verified on {opp.lastVerified}</dd>
+            </div>
+          </dl>
 
           <div className="bg-indigo-50 rounded-lg p-3 mb-4 border border-indigo-100">
             <p className="text-sm text-indigo-800 font-medium">💡 {opp.hook}</p>
@@ -298,6 +421,38 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
         {!rolling && days !== null && days >= 0 && (
           <div className="mb-4">
             <FollowButton opportunityId={opp.id} />
+          </div>
+        )}
+
+        {/* FAQ — plain visible HTML, built only from fields already on this
+            entry; mirrored in FAQPage JSON-LD above. */}
+        <div className="card p-6 mb-4">
+          <h2 className="text-base font-semibold text-gray-900 mb-3">Frequently asked questions</h2>
+          <dl className="space-y-3">
+            {faqItems.map((item) => (
+              <div key={item.question}>
+                <dt className="text-sm font-medium text-slate-800">{item.question}</dt>
+                <dd className="text-sm text-slate-600 mt-0.5">{item.answer}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        {related.length > 0 && (
+          <div className="card p-6 mb-4">
+            <h2 className="text-base font-semibold text-gray-900 mb-3">Related opportunities</h2>
+            <ul className="space-y-2">
+              {related.map((r) => (
+                <li key={r.id}>
+                  <Link href={`/opportunities/${r.id}`} className="text-sm text-indigo-600 hover:underline">
+                    {r.title}
+                  </Link>
+                  <span className="text-xs text-slate-400 ml-2 capitalize">
+                    {CAT_LABELS[r.category] ?? r.category} · {r.region}
+                  </span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
 

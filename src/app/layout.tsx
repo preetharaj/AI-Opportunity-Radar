@@ -6,8 +6,29 @@ import { NavBar } from "@/components/ui/NavBar";
 import { Providers } from "@/components/Providers";
 import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { UmamiAnalytics } from "@/components/analytics/UmamiAnalytics";
+import { SiteFooter } from "@/components/ui/SiteFooter";
 
 const SITE_URL = (process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "https://mapd.cc").replace(/\/$/, "");
+
+// Site-level JSON-LD — injected once here so every page carries it.
+// No SearchAction: there's no dedicated /search route (the homepage `q` param
+// is a client-side filter, not a crawlable search endpoint), so we don't
+// claim one in structured data.
+const ORG_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "AI Opportunity Radar",
+  url: SITE_URL,
+  description:
+    "Curated catalog of AI grants, fellowships, internships, courses, and fractional jobs, verified and updated biweekly.",
+};
+
+const WEBSITE_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  name: "AI Opportunity Radar",
+  url: SITE_URL,
+};
 
 // Site-level default metadata. Individual pages override title/description/OG
 // via their own generateMetadata export — Next.js merges them automatically.
@@ -60,12 +81,18 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900 min-h-screen">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_JSON_LD) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(WEBSITE_JSON_LD) }} />
+        <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-white focus:px-3 focus:py-2 focus:rounded-md focus:shadow-md focus:text-sm focus:font-medium">
+          Skip to content
+        </a>
         <UmamiAnalytics />
         <Providers>
           <Suspense fallback={<div className="h-14 bg-white border-b border-gray-100" />}>
             <NavBar user={user} />
           </Suspense>
-          <main className="max-w-6xl mx-auto px-4 py-8">{children}</main>
+          <main id="main-content" className="max-w-6xl mx-auto px-4 py-8">{children}</main>
+          <SiteFooter />
         </Providers>
       </body>
     </html>
