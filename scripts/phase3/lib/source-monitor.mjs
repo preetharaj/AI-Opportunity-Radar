@@ -225,6 +225,21 @@ export const PRIMARY_SOURCES = {
       label: "Flexiple — Senior Freelance India [fractional_job]",
       note: "India-focused senior freelance/fractional tech roles — verify fractional framing per listing",
     },
+    {
+      url: "https://jobs.lever.co/levelai",
+      label: "Level AI Jobs Board (Lever) [internship]",
+      note: "Noida/Bangalore AI/agentic CX roles — watch for new Research Intern (RL) postings",
+    },
+    {
+      url: "https://osv-chegg.wd5.myworkdayjobs.com/en-US/Chegg",
+      label: "Chegg India Careers (Workday) [internship]",
+      note: "AI-native software engineering internships, Delhi — has real application deadlines, check each posting",
+    },
+    {
+      url: "https://ag.wd3.myworkdayjobs.com/en-US/airbus",
+      label: "Airbus India Careers (Workday) [internship]",
+      note: "Recurring AI/ML/GenAI internship postings in Bengaluru — rolling pipeline, new variants appear often",
+    },
   ],
 
   SEA: [
@@ -267,6 +282,21 @@ export const PRIMARY_SOURCES = {
       url: "https://arc.dev/remote-jobs/details/applied-ai-engineer-rag-knowledge-systems-ww-pt-p2vgi09suh",
       label: "Arc.dev — Applied AI Engineer RAG (WW, Singapore overlap) [fractional_job]",
       note: "Arc Exclusive part-time RAG/LLM engineer worldwide with Singapore timezone overlap — monitor for status changes",
+    },
+    {
+      url: "https://razer.wd3.myworkdayjobs.com/en-US/careers",
+      label: "Razer Careers (Workday) [internship]",
+      note: "Agentic AI Pod internships (LLM/RAG/agent orchestration), Singapore — verify each posting is core AI, not general gaming eng",
+    },
+    {
+      url: "https://acronis.wd502.myworkdayjobs.com/en-US/acronis_careers",
+      label: "Acronis Careers (Workday) [internship]",
+      note: "Machine Learning Intern roles in Singapore R&D — cybersecurity ML focus",
+    },
+    {
+      url: "https://www.opswat.com/careers/open-positions",
+      label: "OPSWAT Careers [internship]",
+      note: "Agentic AI / AI Engineering Intern roles, Ho Chi Minh City, Vietnam",
     },
   ],
 
@@ -320,6 +350,31 @@ export const PRIMARY_SOURCES = {
       url: "https://arc.dev/remote-jobs/details/senior-ai-technical-advisor-part-time-uk-eu-oqzau2emhc",
       label: "Arc.dev — Senior AI Technical Advisor PT UK/EU [fractional_job]",
       note: "Arc Exclusive part-time AI advisory role for UK/EU timezone — monitor for status changes",
+    },
+    {
+      url: "https://job-boards.eu.greenhouse.io/axiomaticai",
+      label: "Axiomatic_AI Jobs Board (Greenhouse) [internship]",
+      note: "AI-for-scientific-reasoning research lab, Barcelona — multiple rolling research/engineering internships",
+    },
+    {
+      url: "https://jobs.ashbyhq.com/manex",
+      label: "Manex AI Jobs Board (Ashby) [internship]",
+      note: "AI Software Engineer / Forward Deployed Engineer internships, Munich",
+    },
+    {
+      url: "https://cadence.wd1.myworkdayjobs.com/en-US/External_Careers",
+      label: "Cadence Careers (Workday) [internship]",
+      note: "AI-driven EDA/chip-design internships across Europe — recurring annual program",
+    },
+    {
+      url: "https://careers.thalesgroup.com/global/en/studentandgraduates2",
+      label: "Thales Student & Graduate Careers [internship]",
+      note: "AI technology/AI engineer internships, Gorgonzola Italy — recurring, check each new posting for AI-core content",
+    },
+    {
+      url: "https://lombardodier.wd3.myworkdayjobs.com/en-US/Lombard_Odier_Careers",
+      label: "Lombard Odier Careers (Workday) [internship]",
+      note: "Active GenAI/RAG/agentic-workflow internship pipeline, Geneva — several distinct roles rotate regularly",
     },
   ],
 
