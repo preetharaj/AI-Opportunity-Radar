@@ -63,6 +63,16 @@ export const PRIMARY_SOURCES = {
       note: "Fellows Program announcements appear here first",
     },
     {
+      url: "https://pathfinder.kairos-project.org/",
+      label: "Kairos — Pathfinder Fellowship [fellowship]",
+      note: "AI safety/policy university-group fellowship — recurring rounds (Spring/Fall), watch for new application windows",
+    },
+    {
+      url: "https://kairos-project.org/",
+      label: "Kairos Project — programs overview [fellowship, fractional_job]",
+      note: "Runs Pathfinder, SPAR, Generator Residency — check for new program rounds and part-time contractor postings",
+    },
+    {
       url: "https://openai.com/residency/",
       label: "OpenAI Residency",
       note: "6-month paid residency — reopens annually, check for 2027 cycle opening",
