@@ -240,6 +240,11 @@ export const PRIMARY_SOURCES = {
       label: "Airbus India Careers (Workday) [internship]",
       note: "Recurring AI/ML/GenAI internship postings in Bengaluru — rolling pipeline, new variants appear often",
     },
+    {
+      url: "https://mwirelabs.com/northeast-india-ai-research-fellowship/",
+      label: "MWire Labs — Northeast India AI Research Fellowship [fellowship]",
+      note: "Rolling remote NLP research fellowship, Shillong-based AI/language-tech company — check for cohort/status changes",
+    },
   ],
 
   SEA: [
@@ -297,6 +302,16 @@ export const PRIMARY_SOURCES = {
       url: "https://www.opswat.com/careers/open-positions",
       label: "OPSWAT Careers [internship]",
       note: "Agentic AI / AI Engineering Intern roles, Ho Chi Minh City, Vietnam",
+    },
+    {
+      url: "https://apply.workable.com/shae-group/j/308F8AFF4D",
+      label: "Shae Group — Fractional CTO/AI Strategy Council [fractional_job]",
+      note: "Hourly contractor AI advisory role, offshore-friendly to Singapore/Malaysia/SEA — check status periodically",
+    },
+    {
+      url: "https://www.mycareersfuture.gov.sg/companies/easmed-asia-201119016K",
+      label: "EASMED ASIA Careers (MyCareersFuture) [fractional_job]",
+      note: "Singapore medtech distributor — watch for Fractional CTO / AI-ML roadmap postings",
     },
   ],
 
@@ -433,6 +448,11 @@ export const PRIMARY_SOURCES = {
       url: "https://www.indeed.com/q-fractional-chief-ai-officer-jobs.html?l=United+States",
       label: "Indeed — Fractional AI Officer USA [fractional_job]",
       note: "US-scoped CAIO and fractional AI leadership postings on Indeed — exclude non-AI roles",
+    },
+    {
+      url: "https://www.procurityai.net/careers",
+      label: "Procurity.AI Careers [fractional_job]",
+      note: "Fractional CTO role for ProcurityIQ, an AI govtech procurement platform — direct company careers page",
     },
   ],
 
