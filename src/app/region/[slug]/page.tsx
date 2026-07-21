@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { opportunities } from "@/lib/data/opportunities";
 import { daysUntilDeadline, isFixedDeadlineOpportunity } from "@/lib/deadlines";
 import { PublicFeed } from "@/app/PublicFeed";
+import { SubscribeWidget } from "@/components/SubscribeWidget";
 import type { Region } from "@/lib/types";
 
 const SITE_URL = (process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "https://mapd.cc").replace(/\/$/, "");
@@ -152,6 +153,10 @@ export default function RegionPage({ params }: { params: { slug: string } }) {
       </div>
 
       <PublicFeed opportunities={active} />
+
+      <div className="pt-4 border-t border-slate-100">
+        <SubscribeWidget variant="inline" />
+      </div>
     </div>
   );
 }

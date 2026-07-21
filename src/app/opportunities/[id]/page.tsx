@@ -10,6 +10,7 @@ import { getOpportunityById, opportunities } from "@/lib/data/opportunities";
 import type { Opportunity } from "@/lib/types";
 import { EligibilityChecker } from "@/components/EligibilityChecker";
 import { FollowButton } from "@/components/opportunity/FollowButton";
+import { SubscribeWidget } from "@/components/SubscribeWidget";
 import {
   deadlineDisplay,
   daysUntilDeadline,
@@ -457,6 +458,14 @@ export default function OpportunityPage({ params }: { params: { id: string } }) 
         )}
 
         <EligibilityChecker opportunity={opp} />
+
+        {/* Reinforced subscribe ask — this is the highest-intent moment on
+            the site: someone reading a specific opportunity in full. The
+            homepage widget alone isn't seen again once a visitor clicks
+            into a detail page, so it's repeated here inline. */}
+        <div className="mt-6 pt-6 border-t border-slate-100">
+          <SubscribeWidget variant="inline" />
+        </div>
       </div>
     </>
   );
