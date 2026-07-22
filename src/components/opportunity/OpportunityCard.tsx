@@ -3,6 +3,7 @@
 import Link from "next/link";
 import type { ScoredOpportunity, ApplicationStatus } from "@/lib/types";
 import { deadlineShortDisplay, isRollingOpportunity } from "@/lib/deadlines";
+import { isAnywhereRemote } from "@/lib/remote";
 
 const TIER_STYLES = {
   likely: "bg-emerald-50 text-emerald-700 border-emerald-200",
@@ -53,6 +54,11 @@ export function OpportunityCard({ opp, onSave, onUnsave, showStatus }: Props) {
             <span className="text-xs text-gray-400">{opp.region}</span>
             {opp.newThisWeek && (
               <span className="badge bg-indigo-50 text-indigo-600 border border-indigo-100">New</span>
+            )}
+            {isAnywhereRemote(opp) && (
+              <span className="badge bg-emerald-50 text-emerald-700 border border-emerald-100" title="Genuinely open to applicants worldwide">
+                🌍 Remote-Anywhere
+              </span>
             )}
           </div>
 

@@ -107,6 +107,56 @@ export const PRIMARY_SOURCES = {
       label: "Cohere Labs Research",
       note: "Catalyst Grants and broader research program announcements",
     },
+    // ── Remote-anywhere OSS/fellowship internships (Phase 4 addition) ──────
+    // These are stipend/grant-funded programs, not employer-employee roles —
+    // that's what lets them be genuinely open to any country (see
+    // REMOTE_ANYWHERE_RULES in curation-rules.mjs for the classification
+    // test the agent should apply to anything new it finds here).
+    {
+      url: "https://summerofcode.withgoogle.com/",
+      label: "Google Summer of Code (GSoC) [internship]",
+      note: "Annual cycle — watch for timeline announcement and updated participating-org list (check for AI/ML orgs like TensorFlow, HumanAI Foundation)",
+    },
+    {
+      url: "https://www.outreachy.org/apply/",
+      label: "Outreachy [internship]",
+      note: "Two rounds per year (May, December) — watch for new project list and whether any are AI/ML-focused",
+    },
+    {
+      url: "https://mentorship.lfx.linuxfoundation.org/",
+      label: "LFX Mentorship [internship]",
+      note: "Multiple terms per year — watch for new term opening and ML/data-infrastructure project tracks",
+    },
+    {
+      url: "https://www.microsoft.com/en-us/research/academic-program/rl-open-source-fest/",
+      label: "Microsoft RL Open Source Fest [internship]",
+      note: "Reinforcement-learning-specific OSS fest — watch for next cycle's application window",
+    },
+    {
+      url: "https://julialang.org/jsoc/",
+      label: "Julia Summer of Code (JSoC) [internship]",
+      note: "Annual cycle tied to GSoC timeline — watch for project list update",
+    },
+    {
+      url: "https://numfocus.org/programs/john-hunter-technology-fellowship",
+      label: "NumFOCUS John Hunter Technology Fellowship [internship]",
+      note: "Rolling/annual fellowship for scientific Python stack contributors — watch for cycle/cohort announcement",
+    },
+    {
+      url: "https://www.sktime.net/en/latest/get_involved/mentoring.html",
+      label: "sktime Mentoring Program [internship]",
+      note: "Community mentoring, rolling — watch for new mentee intake announcements",
+    },
+    {
+      url: "https://ucsc-ospo.github.io/osre/",
+      label: "UC Santa Cruz OSPO — Open Source Research Experience (OSRE) [internship]",
+      note: "Project list rotates per cycle — watch specifically for AI/ML-adjacent research projects being added",
+    },
+    {
+      url: "https://summer-ospp.ac.cn/",
+      label: "Open Source Promotion Plan (OSPP), Chinese Academy of Sciences [internship]",
+      note: "GSoC-style annual program — watch for participating-org list and whether AI/ML orgs are included this cycle",
+    },
     {
       url: "https://huggingface.co/join-us",
       label: "Hugging Face — Join Us",

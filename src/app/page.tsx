@@ -8,6 +8,7 @@ import { FilterBar } from "@/components/opportunity/FilterBar";
 import { SubscribeWidget } from "@/components/SubscribeWidget";
 import { PublicFeed } from "./PublicFeed";
 import { daysUntilDeadline, isFixedDeadlineOpportunity, sortDeadlineValue } from "@/lib/deadlines";
+import { isAnywhereRemote, isRegionRestrictedRemote } from "@/lib/remote";
 
 // Build-time trust signals — plain text, computed once from the static
 // catalog. Not client state, so they show up in the first server-rendered
@@ -36,7 +37,7 @@ export const runtime = "nodejs";
 
 
 interface Props {
-  searchParams: { region?: string; category?: string; sort?: string; q?: string };
+  searchParams: { region?: string; category?: string; sort?: string; q?: string; remote?: string };
 }
 
 export default function HomePage({ searchParams }: Props) {
@@ -49,6 +50,11 @@ export default function HomePage({ searchParams }: Props) {
   }
   if (searchParams.category && searchParams.category !== "All") {
     list = list.filter((o) => o.category === searchParams.category);
+  }
+  if (searchParams.remote === "anywhere") {
+    list = list.filter(isAnywhereRemote);
+  } else if (searchParams.remote === "region") {
+    list = list.filter(isRegionRestrictedRemote);
   }
   if (searchParams.q) {
     const q = searchParams.q.toLowerCase();
@@ -103,6 +109,14 @@ export default function HomePage({ searchParams }: Props) {
         <FilterBar />
       </Suspense>
       <PublicFeed opportunities={list} />
+
+      {/* The hero's subscribe form is scroll-preserved out of view once
+          filters are applied (FilterBar uses { scroll: false } on purpose,
+          so picking a category doesn't yank the page back to top) — repeat
+          it here so it's still reachable without scrolling back up. */}
+      <div className="pt-4 border-t border-slate-100">
+        <SubscribeWidget variant="inline" />
+      </div>
     </div>
   );
 }

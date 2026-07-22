@@ -10,7 +10,7 @@
     "db:push": "npx @libsql/client && node scripts/db-init.js",
     "db:init": "node scripts/db-init.js",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/test-notification-policy.mjs && node scripts/test-notification-pipeline.mjs && npm run typecheck"
+    "test": "node scripts/test-notification-policy.mjs && node scripts/test-notification-pipeline.mjs && node scripts/test-exit-intent.mjs && npm run typecheck"
   },
   "dependencies": {
     "@auth/core": "^0.28.0",

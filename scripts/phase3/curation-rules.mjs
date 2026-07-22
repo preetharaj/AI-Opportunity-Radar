@@ -113,6 +113,64 @@ Fractional-job category rules (category: "fractional_job"):
   g. Preserve the exact source URL and a one-line rationale for every entry.
 `.trim();
 
+// ── Remote-anywhere internships (Phase 4 addition) ─────────────────────────
+// A recurring finding from market research: corporate "remote" internships
+// are almost always tied to one country (payroll/tax/work-authorization
+// triggers an employer-employee relationship). Genuinely anywhere-remote
+// internships instead cluster in OSS/fellowship programs structured as a
+// stipend or grant to the individual, not employment — because a stipend
+// doesn't create the same tax/legal exposure for the payer. This test lets
+// the agent tell the two apart instead of tagging every "remote" internship
+// as anywhere-open.
+
+export const REMOTE_ANYWHERE_SIGNALS = [
+  "stipend",
+  "grant",
+  "fellowship",
+  "mentorship",
+  "open source contribution",
+  "no country restriction",
+  "open worldwide",
+  "open globally",
+  "any country",
+];
+
+export const REMOTE_ANYWHERE_EXCLUSIONS = [
+  "remote (us)",
+  "remote (uk)",
+  "remote, must be based in",
+  "must have work authorization in",
+  "no visa sponsorship",
+  "eligible to work in",
+  "residents of",
+];
+
+export const REMOTE_ANYWHERE_RULES = `
+Remote-anywhere internship classification (isRemote: true with NO
+remoteEligibleRegions restriction):
+  a. Only mark an internship as genuinely anywhere-remote if the program is
+     structured as a STIPEND or GRANT paid to an individual by a nonprofit,
+     foundation, or open-source organization — NOT a standard
+     employer-employee arrangement. This is the actual reason these programs
+     can be open to any country: no payroll withholding, no work-authorization
+     check, no permanent-establishment tax exposure for the payer.
+  b. Signals that a program likely qualifies: ${REMOTE_ANYWHERE_SIGNALS.join(", ")}.
+  c. Signals that a "remote" posting is actually region-restricted (set
+     remoteEligibleRegions instead of leaving it empty): ${REMOTE_ANYWHERE_EXCLUSIONS.join(", ")}.
+  d. A standard corporate internship that merely says "remote" is NOT
+     anywhere-remote by default — assume it's tied to one country unless the
+     posting explicitly states otherwise. Corporate remote internships are
+     the common case; anywhere-remote is the exception, not the default.
+  e. If genuinely uncertain whether a program restricts by country, do NOT
+     guess open — leave remoteEligibleRegions unset only when the source
+     text explicitly says "open worldwide," "any country," or equivalent;
+     otherwise flag the ambiguity in uncertaintyNotes and default to treating
+     it as region-restricted.
+  f. Re-verify eligibility text each cycle — some of these programs' project
+     lists rotate yearly and may or may not include AI/ML-relevant work in a
+     given round.
+`.trim();
+
 /**
  * Renders the rules block injected into the discovery agent's prompt.
  * Kept as plain text (not JSON) because it's read by the model as
@@ -136,11 +194,13 @@ ${INCLUSION_RULE}
 
 5. ${FRACTIONAL_RULES}
 
-6. If you are not independently confident about a deadline, eligibility
+6. ${REMOTE_ANYWHERE_RULES}
+
+7. If you are not independently confident about a deadline, eligibility
    detail, or whether a source is official (vs. an aggregator), say so in
    "uncertaintyNotes". Do not omit doubt to make an entry look cleaner.
 
-7. If nothing found this pass clears the bar, return an empty "candidates"
+8. If nothing found this pass clears the bar, return an empty "candidates"
    array. An empty result is a correct result, not a failure.
 `.trim();
 }

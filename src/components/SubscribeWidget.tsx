@@ -1,12 +1,17 @@
 // src/components/SubscribeWidget.tsx
 "use client";
 import { useState } from "react";
+import { setSubscribedFlag } from "@/lib/subscribeStorage";
 
 interface Props {
   variant?: "card" | "inline";
+  /** Called after a successful subscribe or already-subscribed response.
+   * Used by ExitIntentSubscribe to auto-close its modal; optional so
+   * every other call site is unaffected. */
+  onSuccess?: (alreadySubscribed: boolean) => void;
 }
 
-export function SubscribeWidget({ variant = "card" }: Props) {
+export function SubscribeWidget({ variant = "card", onSuccess }: Props) {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "done" | "already" | "error">("idle");
   const [error, setError] = useState("");
@@ -27,12 +32,19 @@ export function SubscribeWidget({ variant = "card" }: Props) {
         setStatus("error");
         return;
       }
-      const nextStatus = data.alreadySubscribed ? "already" : "done";
+      const alreadySubscribed = Boolean(data.alreadySubscribed);
+      const nextStatus = alreadySubscribed ? "already" : "done";
       setStatus(nextStatus);
 
-      window.umami?.track(data.alreadySubscribed ? "newsletter_already_subscribed" : "newsletter_subscribed", {
+      // Persist "this visitor is subscribed" so the exit-intent prompt
+      // (and any future re-engagement prompts) never bother them again.
+      setSubscribedFlag();
+
+      window.umami?.track(alreadySubscribed ? "newsletter_already_subscribed" : "newsletter_subscribed", {
         source: variant,
       });
+
+      onSuccess?.(alreadySubscribed);
     } catch {
       setError("Network error. Try again.");
       setStatus("error");
