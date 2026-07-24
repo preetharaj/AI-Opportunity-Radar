@@ -63,6 +63,16 @@ export const PRIMARY_SOURCES = {
       note: "Fellows Program announcements appear here first",
     },
     {
+      url: "https://www.aialignmentfoundation.org/fellowship",
+      label: "AI Alignment Foundation — AIAF Fellowship [fellowship]",
+      note: "8-week paid remote AI alignment fellowship w/ AE Studio — recurring cohorts, watch for new application windows",
+    },
+    {
+      url: "https://github.com/DataTalksClub/ai-dev-tools-zoomcamp",
+      label: "DataTalksClub — AI Dev Tools Zoomcamp [course]",
+      note: "Free self-paced course + recurring live cohorts (DataTalksClub also runs other zoomcamps worth periodic checks)",
+    },
+    {
       url: "https://pathfinder.kairos-project.org/",
       label: "Kairos — Pathfinder Fellowship [fellowship]",
       note: "AI safety/policy university-group fellowship — recurring rounds (Spring/Fall), watch for new application windows",
@@ -454,6 +464,11 @@ export const PRIMARY_SOURCES = {
   ],
 
   USA: [
+    {
+      url: "https://www.livetheresidency.com/",
+      label: "The Residency — Founder Residency [fellowship]",
+      note: "Global applications, in-person SF cohort, recurring seasonal (Fall/Spring) — includes compute credits, relevant to AI founders",
+    },
     {
       url: "https://www.grants.gov/search-results.html?oppStatuses=forecasted%7Cposted&fundingCategories=ST&agencyCode=NSF",
       label: "grants.gov — NSF STEM (live feed)",
