@@ -105,6 +105,9 @@ export function PublicFeed({ opportunities }: { opportunities: PublicOpp[] }) {
             <Link href={`/opportunities/${opp.id}`} className="hover:text-indigo-600 transition-colors">
               <h3 className="text-[15px] font-semibold text-slate-950 leading-snug mb-1">{opp.title}</h3>
             </Link>
+            {opp.hook && (
+              <p className="text-xs text-indigo-700/90 leading-snug mb-2 line-clamp-2">💡 {opp.hook}</p>
+            )}
             {opp.costType && (
               <div className="mb-2">
                 <CostBadge costType={opp.costType} />

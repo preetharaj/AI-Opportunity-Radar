@@ -2264,6 +2264,28 @@ export const opportunities: Opportunity[] = [
     eligibleEducationLevels: ["any"],
     eligibleFields: ["AI", "Software Engineering", "Computer Science"],
   },
+  {
+    id: "era-frontier-ai-security-residency-2026",
+    title: "Frontier AI Security Residency (FASR)",
+    category: "fellowship",
+    region: "Europe",
+    deadline: "2026-08-02",
+    eligibility: "Security engineers, cybersecurity professionals, hardware/embedded systems specialists, cryptography researchers, and AI safety practitioners aged 18+. Prior research experience helpful but not required; the applied track generally expects ~5+ years of industry experience.",
+    minScore: 6,
+    maybeScore: 3,
+    targetStatus: ["early_career", "other"],
+    tags: ["AI", "fellowship", "AI safety", "cybersecurity", "hardware verification", "UK"],
+    source: "https://www.securefrontier.ai/",
+    description: "8-week, fully funded, in-person research and engineering residency in Cambridge, UK, run by ERA in partnership with Heron and the Oxford Hardware AI Governance Lab. Residents work on frontier AI security, cybersecurity, and hardware verification — securing frontier AI systems, verifying AI compute, and building mechanisms to make AI systems more trustworthy and verifiable. Covers travel, accommodation, visas, workspace, and meals, plus a pro-rated salary (based on an annual rate of £34,125). Runs October 12 – December 4, 2026; applications close August 2, 2026.",
+    hook: "Fully funded 8-week residency tackling AI security and hardware verification — a much rarer angle than model-building fellowships.",
+    effortLevel: "high",
+    lastVerified: "2026-07-25",
+    newThisWeek: true,
+    isRemote: false,
+    eligibleEducationLevels: ["any"],
+    eligibleFields: ["AI", "AI Safety", "Cybersecurity", "Hardware Engineering"],
+    eligibleResidenceRegions: ["Europe"],
+  },
 ];
 
 export function getOpportunityById(id: string): Opportunity | undefined {
