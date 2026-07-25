@@ -387,6 +387,11 @@ export const PRIMARY_SOURCES = {
 
   Europe: [
     {
+      url: "https://www.securefrontier.ai/",
+      label: "ERA — Frontier AI Security Residency (FASR) [fellowship]",
+      note: "Fully funded AI security/hardware-verification residency, Cambridge UK — recurring annual cohorts, watch for new application windows",
+    },
+    {
       url: "https://ec.europa.eu/info/funding-tenders/opportunities/portal/screen/opportunities/horizon-results-platform",
       label: "EU Horizon Funding Opportunities",
       note: "Horizon Europe AI grants and calls — changes when new call opens",
