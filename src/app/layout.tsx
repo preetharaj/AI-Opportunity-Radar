@@ -8,6 +8,7 @@ import { FEATURE_FLAGS } from "@/lib/featureFlags";
 import { UmamiAnalytics } from "@/components/analytics/UmamiAnalytics";
 import { SiteFooter } from "@/components/ui/SiteFooter";
 import { ExitIntentSubscribe } from "@/components/ExitIntentSubscribe";
+import { FreezeBanner } from "@/components/ui/FreezeBanner";
 
 const SITE_URL = (process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "https://mapd.cc").replace(/\/$/, "");
 
@@ -92,6 +93,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <Suspense fallback={<div className="h-14 bg-white border-b border-gray-100" />}>
             <NavBar user={user} />
           </Suspense>
+          <FreezeBanner />
           <main id="main-content" className="max-w-6xl mx-auto px-4 py-8">{children}</main>
           <SiteFooter />
           <ExitIntentSubscribe />

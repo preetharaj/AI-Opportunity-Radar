@@ -11,6 +11,7 @@ import {
   hasShownExitIntentThisSession,
   setShownExitIntentThisSession,
 } from "@/lib/subscribeStorage";
+import { PROJECT_STATUS } from "@/lib/projectStatus";
 
 /** How long to leave the modal open after a successful subscribe before
  * auto-closing it, so the person sees the confirmation state. */
@@ -37,6 +38,10 @@ export function ExitIntentSubscribe() {
   }, []);
 
   useEffect(() => {
+    // Project paused — don't even attach the listener, let alone show the
+    // modal. Popping up "sorry, we're not taking subscribers" on exit is
+    // exactly the kind of annoying popup this feature was built to avoid.
+    if (!PROJECT_STATUS.active) return;
     if (isExitIntentExcludedPath(pathname)) return;
 
     function handleMouseOut(e: MouseEvent) {

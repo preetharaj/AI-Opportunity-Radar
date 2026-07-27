@@ -3,6 +3,7 @@
 // and the subscription model. Server-rendered, no client JS required.
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PROJECT_STATUS } from "@/lib/projectStatus";
 
 const SITE_URL = (process.env.NEXTAUTH_URL ?? process.env.SITE_URL ?? "https://mapd.cc").replace(/\/$/, "");
 const canonicalUrl = `${SITE_URL}/about`;
@@ -46,11 +47,34 @@ export default function AboutPage() {
       <div>
         <h1 className="text-3xl sm:text-4xl font-semibold text-slate-950 tracking-tight">About &amp; Methodology</h1>
         <p className="mt-4 text-slate-600 leading-7">
-          AI Opportunity Radar curates AI grants, fellowships, internships, courses, and fractional jobs.
-          This page explains how listings get in, how they're kept accurate, and how the free
-          subscription works.
+          {PROJECT_STATUS.active ? (
+            <>
+              AI Opportunity Radar curates AI grants, fellowships, internships, courses, and fractional jobs.
+              This page explains how listings get in, how they're kept accurate, and how the free
+              subscription works.
+            </>
+          ) : (
+            <>
+              AI Opportunity Radar curated AI grants, fellowships, internships, courses, and fractional jobs.
+              This page explains how listings were sourced and verified while the project was active, and
+              why it's since been paused.
+            </>
+          )}
         </p>
       </div>
+
+      {!PROJECT_STATUS.active && (
+        <section className="card p-6 border-amber-200 bg-amber-50">
+          <h2 className="text-lg font-semibold text-amber-900 mb-2">This project is paused</h2>
+          <p className="text-sm text-amber-900/90 leading-6">
+            As of {PROJECT_STATUS.frozenSince}, this project is no longer being actively curated — no new
+            opportunities are being added, and the automated discovery pipeline described below is turned
+            off. The listings already on the site remain visible and are accurate as of each entry's
+            last-verified date; nothing has been deleted or left to silently go stale. The site is kept
+            live as a working demonstration of the project rather than taken down.
+          </p>
+        </section>
+      )}
 
       <section className="card p-6">
         <h2 className="text-lg font-semibold text-slate-900 mb-2">Curation policy</h2>

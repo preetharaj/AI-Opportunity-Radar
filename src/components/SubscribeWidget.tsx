@@ -2,6 +2,7 @@
 "use client";
 import { useState } from "react";
 import { setSubscribedFlag } from "@/lib/subscribeStorage";
+import { PROJECT_STATUS } from "@/lib/projectStatus";
 
 interface Props {
   variant?: "card" | "inline";
@@ -52,6 +53,25 @@ export function SubscribeWidget({ variant = "card", onSuccess }: Props) {
   }
 
   const wrapperClass = variant === "card" ? "card p-6 max-w-md bg-white/90 backdrop-blur" : "max-w-md";
+
+  // Project paused (see PROJECT_STATUS / the site-wide freeze banner) —
+  // don't collect new subscribers into a list nobody's actively servicing.
+  // Gated here, in one place, rather than removed from each of the 5+ call
+  // sites individually, so there's no risk of missing one.
+  if (!PROJECT_STATUS.active) {
+    return (
+      <div className={wrapperClass}>
+        <div className="flex items-center gap-2 mb-1.5">
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-base ring-1 ring-slate-200">📬</span>
+          <p className="text-sm font-semibold text-slate-950">Biweekly opportunity digest</p>
+        </div>
+        <p className="text-xs text-slate-500 leading-5">
+          This project is no longer being actively updated, so new subscriptions are currently closed. See{" "}
+          <a href="/about" className="underline hover:text-slate-700">/about</a> for details.
+        </p>
+      </div>
+    );
+  }
 
   if (status === "done" || status === "already") {
     return (
